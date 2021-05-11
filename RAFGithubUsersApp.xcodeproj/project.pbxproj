@@ -21,8 +21,9 @@
 		E189A157264ACC6600CBD45A /* RAFGithubUsersApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E160EBC5264A6D44002820EC /* RAFGithubUsersApp.xcdatamodeld */; };
 		E189A15A264ACE7F00CBD45A /* User+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A158264ACE7F00CBD45A /* User+CoreDataClass.swift */; };
 		E189A15B264ACE7F00CBD45A /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A159264ACE7F00CBD45A /* User+CoreDataProperties.swift */; };
-		E189A15C264ACE8300CBD45A /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A159264ACE7F00CBD45A /* User+CoreDataProperties.swift */; };
-		E189A15D264ACED600CBD45A /* User+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A158264ACE7F00CBD45A /* User+CoreDataClass.swift */; };
+		E189A162264AD85B00CBD45A /* AppConfigHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A161264AD85B00CBD45A /* AppConfigHelperTests.swift */; };
+		E189A165264AD86600CBD45A /* AppConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = E189A15F264AD5CF00CBD45A /* AppConfig.plist */; };
+		E189A166264AD86600CBD45A /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A160264AD6CD00CBD45A /* AppConfig.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,9 @@
 		E189A155264ACC2A00CBD45A /* UserDataModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataModelTest.swift; sourceTree = "<group>"; };
 		E189A158264ACE7F00CBD45A /* User+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User+CoreDataClass.swift"; sourceTree = "<group>"; };
 		E189A159264ACE7F00CBD45A /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		E189A15F264AD5CF00CBD45A /* AppConfig.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = AppConfig.plist; sourceTree = "<group>"; };
+		E189A160264AD6CD00CBD45A /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
+		E189A161264AD85B00CBD45A /* AppConfigHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfigHelperTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,8 +80,6 @@
 		E160EBB0264A6D44002820EC = {
 			isa = PBXGroup;
 			children = (
-				E189A158264ACE7F00CBD45A /* User+CoreDataClass.swift */,
-				E189A159264ACE7F00CBD45A /* User+CoreDataProperties.swift */,
 				E160EBBB264A6D44002820EC /* RAFGithubUsersApp */,
 				E160EBD5264A6D47002820EC /* RAFGithubUsersAppTests */,
 				E160EBBA264A6D44002820EC /* Products */,
@@ -96,6 +98,7 @@
 		E160EBBB264A6D44002820EC /* RAFGithubUsersApp */ = {
 			isa = PBXGroup;
 			children = (
+				E189A15E264AD5BB00CBD45A /* AppConfig */,
 				E189A152264ACA3300CBD45A /* Entities */,
 				E160EBE1264A7586002820EC /* ViewControllers */,
 				E160EBBC264A6D44002820EC /* AppDelegate.swift */,
@@ -114,6 +117,7 @@
 			children = (
 				E160EBD6264A6D47002820EC /* RAFGithubUsersAppTests.swift */,
 				E189A155264ACC2A00CBD45A /* UserDataModelTest.swift */,
+				E189A161264AD85B00CBD45A /* AppConfigHelperTests.swift */,
 				E160EBD8264A6D47002820EC /* Info.plist */,
 			);
 			path = RAFGithubUsersAppTests;
@@ -132,8 +136,19 @@
 		E189A152264ACA3300CBD45A /* Entities */ = {
 			isa = PBXGroup;
 			children = (
+				E189A158264ACE7F00CBD45A /* User+CoreDataClass.swift */,
+				E189A159264ACE7F00CBD45A /* User+CoreDataProperties.swift */,
 			);
 			path = Entities;
+			sourceTree = "<group>";
+		};
+		E189A15E264AD5BB00CBD45A /* AppConfig */ = {
+			isa = PBXGroup;
+			children = (
+				E189A15F264AD5CF00CBD45A /* AppConfig.plist */,
+				E189A160264AD6CD00CBD45A /* AppConfig.swift */,
+			);
+			path = AppConfig;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -217,6 +232,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E189A165264AD86600CBD45A /* AppConfig.plist in Resources */,
 				E160EBCC264A6D46002820EC /* LaunchScreen.storyboard in Resources */,
 				E160EBC9264A6D46002820EC /* Assets.xcassets in Resources */,
 				E160EBC4264A6D44002820EC /* Main.storyboard in Resources */,
@@ -239,6 +255,7 @@
 			files = (
 				E160EBC1264A6D44002820EC /* UsersListViewController.swift in Sources */,
 				E160EBE5264A76FF002820EC /* UserProfileViewController.swift in Sources */,
+				E189A166264AD86600CBD45A /* AppConfig.swift in Sources */,
 				E189A15B264ACE7F00CBD45A /* User+CoreDataProperties.swift in Sources */,
 				E160EBE3264A7686002820EC /* ViewControllersFactory.swift in Sources */,
 				E160EBC7264A6D44002820EC /* RAFGithubUsersApp.xcdatamodeld in Sources */,
@@ -254,9 +271,8 @@
 			files = (
 				E160EBD7264A6D47002820EC /* RAFGithubUsersAppTests.swift in Sources */,
 				E189A156264ACC2A00CBD45A /* UserDataModelTest.swift in Sources */,
-				E189A15C264ACE8300CBD45A /* User+CoreDataProperties.swift in Sources */,
+				E189A162264AD85B00CBD45A /* AppConfigHelperTests.swift in Sources */,
 				E189A157264ACC6600CBD45A /* RAFGithubUsersApp.xcdatamodeld in Sources */,
-				E189A15D264ACED600CBD45A /* User+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
