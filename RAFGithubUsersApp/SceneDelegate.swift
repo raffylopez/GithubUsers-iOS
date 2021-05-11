@@ -27,8 +27,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.windowScene = scene
-        setupViewControllers()
+        
+        GithubUsersApi().fetchUsersList { result in
+            switch result {
+            case let .success(users):
+                print(users)
+            case let .failure(error):
+                print(error)
+            }
+        }
 
+        setupViewControllers()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
