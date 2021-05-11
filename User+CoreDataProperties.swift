@@ -34,6 +34,6 @@ extension User {
     @NSManaged public var type: String?
     @NSManaged public var updatedAt: Date?
     @NSManaged public var seen: Bool
-    @NSManaged public var note: NSObject?
+    @NSManaged public var note: String?
 
 }
