@@ -13,17 +13,21 @@ public struct AppConfig: Decodable {
     private enum CodingKeys: String, CodingKey {
         case githubUsersListUri = "URI_GITHUBAPI_USERSLIST"
         case githubUserDetailsUriPrefix = "URI_GITHUBAPI_USERDETAILS_PREFIX"
+        case xcPersisentContainerName = "XC_PERSISTENT_CONTAINER_NAME"
     }
     let githubUsersListUri: String
     let githubUserDetailsUriPrefix: String
+    let xcPersisentContainerName: String
 }
 
-public func getConfig() -> AppConfig? {
+public func getConfig() -> AppConfig {
     let url = Bundle.main.url(forResource: "AppConfig", withExtension: "plist")!
     do {
         let data = try? Data(contentsOf: url)
         let decoder = PropertyListDecoder()
-        let decoded = try? decoder.decode(AppConfig.self, from: data!)
+        guard let decoded = try? decoder.decode(AppConfig.self, from: data!) else {
+            fatalError("Unable to load configuration")
+        }
         return decoded
-    }
+    } 
 }

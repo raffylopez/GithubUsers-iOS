@@ -6,5 +6,7 @@
 	<string>https://api.github.com/users</string>
 	<key>URI_GITHUBAPI_USERDETAILS_PREFIX</key>
 	<string>https://api.github.com/users/</string>
+	<key>XC_PERSISTENT_CONTAINER_NAME</key>
+	<string>RAFGithubUsersApp</string>
 </dict>
 </plist>
