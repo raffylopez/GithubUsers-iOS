@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E1510C60264BFAD300E59C35 /* GithubApiMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A184264AE7A000CBD45A /* GithubApiMock.swift */; };
+		E1510C61264BFAD700E59C35 /* fakeuserslist.json in Resources */ = {isa = PBXBuildFile; fileRef = E189A182264AE77800CBD45A /* fakeuserslist.json */; };
 		E160EBBD264A6D44002820EC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E160EBBC264A6D44002820EC /* AppDelegate.swift */; };
 		E160EBBF264A6D44002820EC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E160EBBE264A6D44002820EC /* SceneDelegate.swift */; };
 		E160EBC1264A6D44002820EC /* UsersListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E160EBC0264A6D44002820EC /* UsersListViewController.swift */; };
@@ -25,12 +27,12 @@
 		E189A17A264AE08300CBD45A /* GithubUsersApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A179264AE08300CBD45A /* GithubUsersApi.swift */; };
 		E189A17D264AE0D400CBD45A /* GithubUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A17C264AE0D400CBD45A /* GithubUser.swift */; };
 		E189A180264AE3FD00CBD45A /* ErrorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A17F264AE35000CBD45A /* ErrorType.swift */; };
-		E189A188264AEBDC00CBD45A /* GithubApiMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A184264AE7A000CBD45A /* GithubApiMock.swift */; };
-		E189A189264AEBE100CBD45A /* fakeuserslist.json in Resources */ = {isa = PBXBuildFile; fileRef = E189A182264AE77800CBD45A /* fakeuserslist.json */; };
 		E1D04A78264BAF1900C4E5FD /* UserDataModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A155264ACC2A00CBD45A /* UserDataModelTest.swift */; };
 		E1D04A79264BAF1900C4E5FD /* UserInfoDataModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FA390F264BA90C001EFA5C /* UserInfoDataModelTest.swift */; };
 		E1D04A7A264BAF1900C4E5FD /* AppConfigHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A161264AD85B00CBD45A /* AppConfigHelperTests.swift */; };
 		E1D04A7B264BAF1900C4E5FD /* MockApiTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A186264AE9AC00CBD45A /* MockApiTests.swift */; };
+		E1D04A7E264BB58300C4E5FD /* AmiiboCharacterListViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D04A7D264BB57F00C4E5FD /* AmiiboCharacterListViewCell.swift */; };
+		E1D04A80264BB5CF00C4E5FD /* UIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D04A7F264BB5CF00C4E5FD /* UIHelper.swift */; };
 		E1FA38F0264B07D1001EFA5C /* UsersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A18C264AF8F900CBD45A /* UsersViewModel.swift */; };
 		E1FA38F1264B07D7001EFA5C /* ImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A18E264AF96300CBD45A /* ImageStore.swift */; };
 		E1FA38F2264B083A001EFA5C /* UserPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FA38EF264B05E4001EFA5C /* UserPresenter.swift */; };
@@ -83,6 +85,8 @@
 		E189A18C264AF8F900CBD45A /* UsersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersViewModel.swift; sourceTree = "<group>"; };
 		E189A18E264AF96300CBD45A /* ImageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStore.swift; sourceTree = "<group>"; };
 		E189A190264AFA4700CBD45A /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		E1D04A7D264BB57F00C4E5FD /* AmiiboCharacterListViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmiiboCharacterListViewCell.swift; sourceTree = "<group>"; };
+		E1D04A7F264BB5CF00C4E5FD /* UIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIHelper.swift; sourceTree = "<group>"; };
 		E1FA38EF264B05E4001EFA5C /* UserPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPresenter.swift; sourceTree = "<group>"; };
 		E1FA38F4264B0867001EFA5C /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		E1FA38F6264B0B9D001EFA5C /* ImageSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSource.swift; sourceTree = "<group>"; };
@@ -170,6 +174,7 @@
 		E160EBE1264A7586002820EC /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				E1D04A7C264BB56F00C4E5FD /* TableViewCells */,
 				E160EBE2264A7592002820EC /* ViewControllersFactory.swift */,
 				E160EBE4264A76FF002820EC /* UserProfileViewController.swift */,
 				E160EBC0264A6D44002820EC /* UsersListViewController.swift */,
@@ -245,6 +250,7 @@
 		E189A18D264AF95500CBD45A /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				E1D04A7F264BB5CF00C4E5FD /* UIHelper.swift */,
 				E189A18E264AF96300CBD45A /* ImageStore.swift */,
 				E1FA38FC264B1BB7001EFA5C /* JSONSchemaSupport.swift */,
 			);
@@ -257,6 +263,14 @@
 				E189A190264AFA4700CBD45A /* Localizable.strings */,
 			);
 			path = Localization;
+			sourceTree = "<group>";
+		};
+		E1D04A7C264BB56F00C4E5FD /* TableViewCells */ = {
+			isa = PBXGroup;
+			children = (
+				E1D04A7D264BB57F00C4E5FD /* AmiiboCharacterListViewCell.swift */,
+			);
+			path = TableViewCells;
 			sourceTree = "<group>";
 		};
 		E1FA38EE264B05B8001EFA5C /* Presenters */ = {
@@ -369,7 +383,6 @@
 				E160EBCC264A6D46002820EC /* LaunchScreen.storyboard in Resources */,
 				E160EBC9264A6D46002820EC /* Assets.xcassets in Resources */,
 				E160EBC4264A6D44002820EC /* Main.storyboard in Resources */,
-				E189A189264AEBE100CBD45A /* fakeuserslist.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -377,6 +390,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E1510C61264BFAD700E59C35 /* fakeuserslist.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -398,6 +412,7 @@
 				E1FA38F2264B083A001EFA5C /* UserPresenter.swift in Sources */,
 				E160EBE3264A7686002820EC /* ViewControllersFactory.swift in Sources */,
 				E189A16D264ADD3000CBD45A /* Api.swift in Sources */,
+				E1D04A7E264BB58300C4E5FD /* AmiiboCharacterListViewCell.swift in Sources */,
 				E1FA38FD264B1BB7001EFA5C /* JSONSchemaSupport.swift in Sources */,
 				E160EBC7264A6D44002820EC /* RAFGithubUsersApp.xcdatamodeld in Sources */,
 				E1FA38FB264B1B4D001EFA5C /* GithubUserInfo.swift in Sources */,
@@ -407,8 +422,8 @@
 				E1FA38F1264B07D7001EFA5C /* ImageStore.swift in Sources */,
 				E160EBBD264A6D44002820EC /* AppDelegate.swift in Sources */,
 				E1FA390C264BA390001EFA5C /* User+CoreDataProperties.swift in Sources */,
-				E189A188264AEBDC00CBD45A /* GithubApiMock.swift in Sources */,
 				E160EBBF264A6D44002820EC /* SceneDelegate.swift in Sources */,
+				E1D04A80264BB5CF00C4E5FD /* UIHelper.swift in Sources */,
 				E189A15A264ACE7F00CBD45A /* User+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -421,6 +436,7 @@
 				E1D04A79264BAF1900C4E5FD /* UserInfoDataModelTest.swift in Sources */,
 				E160EBD7264A6D47002820EC /* RAFGithubUsersAppTests.swift in Sources */,
 				E1D04A78264BAF1900C4E5FD /* UserDataModelTest.swift in Sources */,
+				E1510C60264BFAD300E59C35 /* GithubApiMock.swift in Sources */,
 				E1D04A7B264BAF1900C4E5FD /* MockApiTests.swift in Sources */,
 				E189A157264ACC6600CBD45A /* RAFGithubUsersApp.xcdatamodeld in Sources */,
 			);

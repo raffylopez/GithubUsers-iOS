@@ -136,12 +136,12 @@ class UsersViewModel {
         }
     }
     
-    func fetchImage(for user: GithubUser, completion: @escaping (Result<(UIImage, ImageSource), Error>) -> Void) {
-        guard !user.avatarURL.isEmpty else {
+    func fetchImage(for user: User, completion: @escaping (Result<(UIImage, ImageSource), Error>) -> Void) {
+        guard let urlString = user.urlAvatar, !urlString.isEmpty else {
             completion(.failure(ErrorType.missingImageUrl))
             return
         }
-        let imageUrl = URL(string: user.avatarURL)!
+        let imageUrl = URL(string: urlString)!
 
         let key = "\(user.id)"
         if let image = imageStore.image(forKey: key) {

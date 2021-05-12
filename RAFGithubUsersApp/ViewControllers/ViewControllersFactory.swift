@@ -9,7 +9,7 @@
 import UIKit
 
 enum VcType {
-    case usersList
+    case usersList(UsersViewModel)
     case userProfile
 }
 
@@ -17,8 +17,10 @@ enum VcType {
 class ViewControllersFactory {
     public static func instance(vcType: VcType) -> UIViewController {
         switch vcType {
-        case .usersList:
-            return UsersListViewController()
+        case let .usersList(viewModel):
+            let controller = UsersListViewController()
+            controller.viewModel = viewModel
+            return controller
         case .userProfile:
             return UserProfileViewController()
         }

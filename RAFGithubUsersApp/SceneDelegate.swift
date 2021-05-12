@@ -15,7 +15,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     private func setupViewControllers() {
         // constructor dependency injection
-        let top = ViewControllersFactory.instance(vcType: .usersList)
+        let viewModel = UsersViewModel(apiService: GithubUsersApi())
+        let top = ViewControllersFactory.instance(vcType: .usersList(viewModel))
         let navController = UINavigationController(rootViewController: top)
         navController.navigationBar.barStyle = .black
         navController.navigationBar.isTranslucent = false
@@ -37,8 +38,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //            }
 //        }
 
-        let viewModel = UsersViewModel(apiService: GithubUsersApi())
-        viewModel.fetchUsers()
         setupViewControllers()
     }
 

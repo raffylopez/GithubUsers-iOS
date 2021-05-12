@@ -8,6 +8,7 @@
 
 import Foundation
 
+@testable import RAFGithubUsersApp
 class GithubUsersAPIMock: UserApi {
     typealias T = GithubUser
 
