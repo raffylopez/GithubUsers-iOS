@@ -20,7 +20,7 @@ struct GithubUser: Codable {
     let subscriptionsURL, organizationsURL, reposURL: String
     let eventsURL: String
     let receivedEventsURL: String
-    let type: TypeEnum
+    let type: String
     let siteAdmin: Bool
 
     enum CodingKeys: String, CodingKey {
@@ -79,7 +79,7 @@ extension GithubUser {
         reposURL: String? = nil,
         eventsURL: String? = nil,
         receivedEventsURL: String? = nil,
-        type: TypeEnum? = nil,
+        type: String? = nil,
         siteAdmin: Bool? = nil
     ) -> GithubUser {
         return GithubUser(

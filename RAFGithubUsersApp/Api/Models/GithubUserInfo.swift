@@ -4,8 +4,6 @@
 //
 //  Created by Volare on 5/11/21.
 //  Copyright © 2021 Raf. All rights reserved.
-//
-// This file was generated from JSON Schema using quicktype, do not modify it directly.
 
 import Foundation
 
@@ -25,8 +23,7 @@ struct GithubUserInfo: Codable {
     let siteAdmin: Bool
     let name, company: String
     let blog: String
-    let location: String
-    let email, hireable, bio: JSONNull?
+    let location, email, hireable, bio: String
     let twitterUsername: String
     let publicRepos, publicGists, followers, following: Int
     let createdAt, updatedAt: Date
@@ -100,9 +97,9 @@ extension GithubUserInfo {
         company: String? = nil,
         blog: String? = nil,
         location: String? = nil,
-        email: JSONNull?? = nil,
-        hireable: JSONNull?? = nil,
-        bio: JSONNull?? = nil,
+        email: String? = nil,
+        hireable: String? = nil,
+        bio: String? = nil,
         twitterUsername: String? = nil,
         publicRepos: Int? = nil,
         publicGists: Int? = nil,
@@ -174,33 +171,3 @@ extension URLSession {
     }
 }
 
-// MARK: - Encode/decode helpers
-
-class JSONNull: Codable, Hashable {
-
-    public static func == (lhs: JSONNull, rhs: JSONNull) -> Bool {
-        return true
-    }
-
-    public var hashValue: Int {
-        return 0
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        // No-op
-    }
-
-    public init() {}
-
-    public required init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if !container.decodeNil() {
-            throw DecodingError.typeMismatch(JSONNull.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for JSONNull"))
-        }
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encodeNil()
-    }
-}

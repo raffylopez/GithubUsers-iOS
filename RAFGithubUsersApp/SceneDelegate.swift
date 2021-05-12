@@ -28,15 +28,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.windowScene = scene
         
-        GithubUsersApi().fetchUsersList { result in
-            switch result {
-            case let .success(users):
-                print(users)
-            case let .failure(error):
-                print(error)
-            }
-        }
+//        GithubUsersApi().fetchUsersList { result in
+//            switch result {
+//            case let .success(users):
+//                break
+//            case let .failure(error):
+//                print(error)
+//            }
+//        }
 
+        let viewModel = UsersViewModel(apiService: GithubUsersApi())
+        viewModel.fetchUsers()
         setupViewControllers()
     }
 

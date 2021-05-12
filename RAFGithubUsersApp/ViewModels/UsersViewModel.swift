@@ -68,6 +68,35 @@ class UsersViewModel {
         fetchUsers()
     }
     
+    func fetchUserDetails(for user: User , completion: @escaping (Result<UserInfo, Error>)->Void) {
+        guard let login = user.login else {
+            return completion(.failure(ErrorType.emptyResult))
+        }
+        self.apiService.fetchUserDetails(username: login) { result in
+            let context = self.persistentContainer.viewContext
+            switch result {
+            case let .success(githubuserInfo):
+                let userInfo = UserInfo(context: context)
+                userInfo.bio = githubuserInfo.bio
+                userInfo.company = githubuserInfo.company
+                userInfo.createdAt = githubuserInfo.createdAt
+                userInfo.email = githubuserInfo.email
+                userInfo.followers = Int32(githubuserInfo.followers)
+                userInfo.following = Int32(githubuserInfo.following)
+                userInfo.isHireable = githubuserInfo.hireable == ""
+                userInfo.location = githubuserInfo.location
+                userInfo.name = githubuserInfo.name
+                userInfo.publicGists = Int32(githubuserInfo.publicGists)
+                userInfo.publicRepos = Int32(githubuserInfo.publicRepos)
+                userInfo.twitterUsername = githubuserInfo.twitterUsername
+                userInfo.updatedAt = githubuserInfo.updatedAt
+                return completion(.success(userInfo))
+            case .failure(let error):
+                preconditionFailure("\(error.localizedDescription)")
+            }
+        }
+
+    }
 
     func fetchUsers() {
         self.apiService.fetchUsersList { (result :Result<[GithubUser], Error>) in
@@ -79,7 +108,23 @@ class UsersViewModel {
                     context.performAndWait {
                         user = User(context: context)
                         user.login = githubUser.login
-                        user.ava githubUser.avatarURL
+                        user.id = Int32(githubUser.id)
+                        user.nodeId = githubUser.nodeID
+                        user.urlAvatar = githubUser.avatarURL
+                        user.gravatarId = githubUser.gravatarID
+                        user.url = githubUser.url
+                        user.urlHtml = githubUser.htmlURL
+                        user.urlFollowers = githubUser.followersURL
+                        user.urlFollowing = githubUser.followingURL
+                        user.urlGists = githubUser.gistsURL
+                        user.urlStarred = githubUser.starredURL
+                        user.urlSubscriptions = githubUser.subscriptionsURL
+                        user.urlOrganizations = githubUser.organizationsURL
+                        user.urlRepos = githubUser.reposURL
+                        user.urlEvents = githubUser.eventsURL
+                        user.urlReceivedEvents = githubUser.receivedEventsURL
+                        user.userType = githubUser.type
+                        user.isSiteAdmin = githubUser.siteAdmin
                     }
                     return user
                 }

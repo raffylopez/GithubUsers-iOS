@@ -9,5 +9,5 @@ enum ErrorType: Error {
     case appConfigLoadError
     case missingImageUrl
     case imageCreationError
-    case empty(String)
+    case emptyResult
 }

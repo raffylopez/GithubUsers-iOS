@@ -37,6 +37,9 @@
 		E1FA38F7264B0B9D001EFA5C /* ImageSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FA38F6264B0B9D001EFA5C /* ImageSource.swift */; };
 		E1FA38FB264B1B4D001EFA5C /* GithubUserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FA38FA264B1B4D001EFA5C /* GithubUserInfo.swift */; };
 		E1FA38FD264B1BB7001EFA5C /* JSONSchemaSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FA38FC264B1BB7001EFA5C /* JSONSchemaSupport.swift */; };
+		E1FA390C264BA390001EFA5C /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FA3909264BA390001EFA5C /* User+CoreDataProperties.swift */; };
+		E1FA390D264BA390001EFA5C /* UserInfo+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FA390A264BA390001EFA5C /* UserInfo+CoreDataClass.swift */; };
+		E1FA390E264BA390001EFA5C /* UserInfo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FA390B264BA390001EFA5C /* UserInfo+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,6 +87,9 @@
 		E1FA38F6264B0B9D001EFA5C /* ImageSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSource.swift; sourceTree = "<group>"; };
 		E1FA38FA264B1B4D001EFA5C /* GithubUserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GithubUserInfo.swift; sourceTree = "<group>"; };
 		E1FA38FC264B1BB7001EFA5C /* JSONSchemaSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONSchemaSupport.swift; sourceTree = "<group>"; };
+		E1FA3909264BA390001EFA5C /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "User+CoreDataProperties.swift"; path = "RAFGithubUsersApp/Persistence/Models/User+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		E1FA390A264BA390001EFA5C /* UserInfo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UserInfo+CoreDataClass.swift"; path = "RAFGithubUsersApp/Persistence/Models/UserInfo+CoreDataClass.swift"; sourceTree = "<group>"; };
+		E1FA390B264BA390001EFA5C /* UserInfo+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UserInfo+CoreDataProperties.swift"; path = "RAFGithubUsersApp/Persistence/Models/UserInfo+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +113,9 @@
 		E160EBB0264A6D44002820EC = {
 			isa = PBXGroup;
 			children = (
+				E1FA3909264BA390001EFA5C /* User+CoreDataProperties.swift */,
+				E1FA390A264BA390001EFA5C /* UserInfo+CoreDataClass.swift */,
+				E1FA390B264BA390001EFA5C /* UserInfo+CoreDataProperties.swift */,
 				E160EBBB264A6D44002820EC /* RAFGithubUsersApp */,
 				E160EBD5264A6D47002820EC /* RAFGithubUsersAppTests */,
 				E160EBBA264A6D44002820EC /* Products */,
@@ -128,7 +137,6 @@
 				E1FA38FE264B1F19001EFA5C /* Persistence */,
 				E189A167264ADC5800CBD45A /* Api */,
 				E189A18D264AF95500CBD45A /* Utilities */,
-				E189A16F264ADE3500CBD45A /* Models */,
 				E189A18B264AF8C900CBD45A /* ViewModels */,
 				E1FA38EE264B05B8001EFA5C /* Presenters */,
 				E160EBE1264A7586002820EC /* ViewControllers */,
@@ -194,13 +202,6 @@
 				E189A171264ADE5400CBD45A /* Models */,
 			);
 			path = Api;
-			sourceTree = "<group>";
-		};
-		E189A16F264ADE3500CBD45A /* Models */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Models;
 			sourceTree = "<group>";
 		};
 		E189A171264ADE5400CBD45A /* Models */ = {
@@ -397,9 +398,12 @@
 				E1FA38FD264B1BB7001EFA5C /* JSONSchemaSupport.swift in Sources */,
 				E160EBC7264A6D44002820EC /* RAFGithubUsersApp.xcdatamodeld in Sources */,
 				E1FA38FB264B1B4D001EFA5C /* GithubUserInfo.swift in Sources */,
+				E1FA390D264BA390001EFA5C /* UserInfo+CoreDataClass.swift in Sources */,
 				E1FA38F5264B086F001EFA5C /* StringExtensions.swift in Sources */,
+				E1FA390E264BA390001EFA5C /* UserInfo+CoreDataProperties.swift in Sources */,
 				E1FA38F1264B07D7001EFA5C /* ImageStore.swift in Sources */,
 				E160EBBD264A6D44002820EC /* AppDelegate.swift in Sources */,
+				E1FA390C264BA390001EFA5C /* User+CoreDataProperties.swift in Sources */,
 				E189A188264AEBDC00CBD45A /* GithubApiMock.swift in Sources */,
 				E160EBBF264A6D44002820EC /* SceneDelegate.swift in Sources */,
 				E189A15A264ACE7F00CBD45A /* User+CoreDataClass.swift in Sources */,

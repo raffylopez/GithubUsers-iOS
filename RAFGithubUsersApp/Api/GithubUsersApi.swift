@@ -10,13 +10,20 @@ import Foundation
 
 class GithubUsersApi {
     typealias T = GithubUser
-    let usersListUri = getConfig().githubUsersListUri
-    let userInfoUriPrefix = getConfig().githubUserDetailsUriPrefix
+    let usersListUri: String
+    let queryParams: String
+    let userInfoUriPrefix: String
     
+    init() {
+        queryParams = "?access_token=\(getConfig().githubAccessToken)"
+        userInfoUriPrefix = "\(getConfig().githubUserDetailsUriPrefix)\(queryParams)"
+        usersListUri = "\(getConfig().githubUsersListUri)"
+    }
+
     func fetchUserDetails(username: String, completion: ((Result<GithubUserInfo, Error>) -> Void)? = nil ) {
         let userInfoUri = "\(userInfoUriPrefix)\(username)"
         let semaphore = DispatchSemaphore(value: 0)
-        let task = URLSession.shared.githubUserInfoTask(with: URL(string: userInfoUri)!, completionHandler: { (githubUserInfo, _, error) in
+        URLSession.shared.githubUserInfoTask(with: URL(string: userInfoUri + queryParams)!, completionHandler: { (githubUserInfo, _, error) in
             if let error = error {
                 semaphore.signal()
                 completion?(.failure(error))
@@ -27,24 +34,26 @@ class GithubUsersApi {
                 completion?(.success(githubUserInfo))
                 return
             }
-        })
-        task.resume()
+            completion?(.failure(ErrorType.emptyResult))
+            }).resume()
         semaphore.wait()
     }
     
     func fetchUsersList(completion: ((Result<[GithubUser], Error>) -> Void)? = nil ) {
         let semaphore = DispatchSemaphore(value: 0) /* force synchronous queueing */
-        let task = URLSession.shared.githubUsersTask(with: URL(string: usersListUri)!, completionHandler: { (githubUsers, _, error) in
+
+        let task = URLSession.shared.githubUsersTask(with: URL(string: usersListUri + queryParams)!, completionHandler: { (githubUsers, _, error) in
             if let error = error {
-                semaphore.signal()
                 completion?(.failure(error))
+                semaphore.signal()
                 return
             }
             if let githubUsers = githubUsers {
-                semaphore.signal()
                 completion?(.success(githubUsers))
+                semaphore.signal()
                 return
             }
+            completion?(.failure(ErrorType.emptyResult))
         })
         task.resume()
         semaphore.wait()

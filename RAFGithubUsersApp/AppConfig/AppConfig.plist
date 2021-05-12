@@ -8,5 +8,7 @@
 	<string>https://api.github.com/users/</string>
 	<key>XC_PERSISTENT_CONTAINER_NAME</key>
 	<string>RAFGithubUsersApp</string>
+	<key>URI_GITHUBAPI_ACCESS_TOKEN</key>
+	<string>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</string>
 </dict>
 </plist>
