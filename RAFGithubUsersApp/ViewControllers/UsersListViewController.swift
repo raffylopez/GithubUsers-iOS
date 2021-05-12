@@ -31,6 +31,7 @@ class UsersListViewController: UITableViewController {
     override func loadView() {
         super.loadView()
         self.tableView?.register(AmiiboCharacterListViewCell.self, forCellReuseIdentifier: "AmiiboCharacterListViewCell")
+        self.tableView.scrollsToTop = true
         self.view.backgroundColor = UIColor.systemBackground
     }
     
@@ -43,11 +44,16 @@ class UsersListViewController: UITableViewController {
         setupViews()
         let onDataAvailable = {
             OperationQueue.main.addOperation {
+                self.tableView.alpha = 0
                 UIView.transition(with: self.tableView,
-                                  duration: 1,
+                                  duration: 0.5,
                                   options: .transitionFlipFromTop,
                                   animations: {
+                                    self.tableView.alpha = 1
                                     self.tableView?.reloadSections(IndexSet(integer: 0), with: .none)
+                }, completion: { _ in
+                    /* fixes graphical glitch when pull-to-refresh is started when navbar is collapsed */
+                    self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
                 })
                 self.refreshControl?.endRefreshing()
             }
