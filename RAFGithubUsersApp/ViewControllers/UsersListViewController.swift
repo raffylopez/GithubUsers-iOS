@@ -23,14 +23,14 @@ class UsersListViewController: UITableViewController {
     }()
     
     var tap: UITapGestureRecognizer!
-    
+
     @objc func dismissKeyboard() {
         search.dismiss(animated: true, completion: nil)
     }
     
     override func loadView() {
         super.loadView()
-        self.tableView?.register(AmiiboCharacterListViewCell.self, forCellReuseIdentifier: "AmiiboCharacterListViewCell")
+        self.tableView?.register(AmiiboCharacterListViewCell.self, forCellReuseIdentifier: String(describing: AmiiboCharacterListViewCell.self))
         self.tableView.scrollsToTop = true
         self.view.backgroundColor = UIColor.systemBackground
     }
@@ -143,7 +143,7 @@ class UsersListViewController: UITableViewController {
     
     // MARK: - UITableViewDatasource methods
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "AmiiboCharacterListViewCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: AmiiboCharacterListViewCell.self), for: indexPath)
         if let cell = cell as? AmiiboCharacterListViewCell {
             cell.delegate = self
             cell.amiiboElement = viewModel.users[indexPath.row]
