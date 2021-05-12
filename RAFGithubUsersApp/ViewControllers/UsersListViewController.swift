@@ -30,7 +30,7 @@ class UsersListViewController: UITableViewController {
     
     override func loadView() {
         super.loadView()
-        self.tableView?.register(AmiiboCharacterListViewCell.self, forCellReuseIdentifier: String(describing: AmiiboCharacterListViewCell.self))
+        self.tableView?.register(NormalUserTableViewCell.self, forCellReuseIdentifier: String(describing: NormalUserTableViewCell.self))
         self.tableView.scrollsToTop = true
         self.view.backgroundColor = UIColor.systemBackground
     }
@@ -59,7 +59,6 @@ class UsersListViewController: UITableViewController {
             }
         }
         self.viewModel.bind(availability: onDataAvailable)
-//        tableView?.refreshControl?.beginRefreshing()
         self.navigationController?.navigationBar.prefersLargeTitles = true
     }
     func resizeImage(image: UIImage, newWidth: CGFloat) -> UIImage? {
@@ -122,7 +121,7 @@ class UsersListViewController: UITableViewController {
                 case let .success(image) = result else {
                     return
             }
-            if let cell = self.tableView.cellForRow(at: IndexPath(item: photoIndex, section: 0)) as? AmiiboCharacterListViewCell {
+            if let cell = self.tableView.cellForRow(at: IndexPath(item: photoIndex, section: 0)) as? NormalUserTableViewCell {
                 cell.update(displaying: image)
             }
         }
@@ -143,8 +142,8 @@ class UsersListViewController: UITableViewController {
     
     // MARK: - UITableViewDatasource methods
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: AmiiboCharacterListViewCell.self), for: indexPath)
-        if let cell = cell as? AmiiboCharacterListViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: NormalUserTableViewCell.self), for: indexPath)
+        if let cell = cell as? NormalUserTableViewCell {
             cell.delegate = self
             cell.amiiboElement = viewModel.users[indexPath.row]
             cell.lblName?.text = viewModel.presentedElements[indexPath.row].login
@@ -155,13 +154,13 @@ class UsersListViewController: UITableViewController {
 }
 
 // MARK: - Cell Delegate Methods
-extension UsersListViewController: AmiiboCharacterListViewCellDelegate {
-    func didTouchImageThumbnail(view: UIImageView, cell: AmiiboCharacterListViewCell, element: User) {
+extension UsersListViewController: UserListTableViewCellDelegate {
+    func didTouchImageThumbnail(view: UIImageView, cell: UserTableViewCell, element: User) {
 //        let viewModel = UsersViewModel(apiService: GithubUsersApi())
         self.navigationController?.pushViewController(ViewControllersFactory.instance(vcType: .userProfile), animated: true)
     }
     
-    func didTouchCellPanel(cell: AmiiboCharacterListViewCell) {
+    func didTouchCellPanel(cell: UserTableViewCell) {
         self.navigationController?.pushViewController(
             ViewControllersFactory.instance(vcType: .userProfile),
             animated: true)

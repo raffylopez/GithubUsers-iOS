@@ -8,16 +8,9 @@
 
 import UIKit
 
-// MARK: - AmiiboCharacterListViewCellDelegate
-protocol AmiiboCharacterListViewCellDelegate: class {
-    func didTouchImageThumbnail(view: UIImageView, cell: AmiiboCharacterListViewCell, element: User)
-    func didTouchCellPanel(cell: AmiiboCharacterListViewCell)
-}
-
-// MARK: - AmiiboCharacterListViewCell
-class AmiiboCharacterListViewCell: UITableViewCell {
+class UserTableViewCellBase: UITableViewCell {
     var amiiboElement: User!
-    weak var delegate: AmiiboCharacterListViewCellDelegate?
+    weak var delegate: UserListTableViewCellDelegate?
     
     var spinner: UIActivityIndicatorView! = {
        let spinner = UIActivityIndicatorView()
@@ -25,26 +18,26 @@ class AmiiboCharacterListViewCell: UITableViewCell {
         return spinner
     }()
     
-    private var imgViewChar: UIImageView! = {
+    internal var imgViewChar: UIImageView! = {
         let imgCharacter = UIImageView()
         imgCharacter.backgroundColor = .systemBackground
         imgCharacter.isUserInteractionEnabled = true
         imgCharacter.contentMode = .scaleAspectFit
         return imgCharacter }()
     
-    lazy var lblName: UILabel! = {
+    internal var lblName: UILabel! = {
         let lblName = UILabel()
         lblName.font = UIFont.boldSystemFont(ofSize: 18)
         return lblName }()
     
-    lazy var lblSeries: UILabel! = {
+    internal lazy var lblSeries: UILabel! = {
         let lblSeries = UILabel()
         lblSeries.font = UIFont.systemFont(ofSize: 15)
         let graylvl: CGFloat = 100
         lblSeries.textColor = UIColor(red: graylvl/255, green: graylvl/255, blue: graylvl/255, alpha: 1)
         return lblSeries }()
 
-    private lazy var stackView: UIStackView? = {
+    internal lazy var stackView: UIStackView? = {
         let stackView = UIStackView()
         stackView.spacing = 8
         stackView.axis = .vertical
@@ -61,7 +54,7 @@ class AmiiboCharacterListViewCell: UITableViewCell {
         super.init(coder: coder)
     }
     
-    fileprivate func setupViews() {
+    internal func setupViews() {
         guard let lblName = lblName,
             let lblSeries = lblSeries,
             let imgCharacter = imgViewChar,
@@ -82,7 +75,7 @@ class AmiiboCharacterListViewCell: UITableViewCell {
         spinner.startAnimating()
     }
     
-    fileprivate func setupLayout() {
+    internal func setupLayout() {
         guard let imgCharacter = imgViewChar,
             let stackView = stackView else { return }
         
@@ -101,7 +94,7 @@ class AmiiboCharacterListViewCell: UITableViewCell {
 }
 
 // MARK: - Custom Methods
-extension AmiiboCharacterListViewCell {
+extension UserTableViewCellBase {
     
     override func prepareForReuse() {
         imgViewChar.backgroundColor = .systemBackground
@@ -109,50 +102,10 @@ extension AmiiboCharacterListViewCell {
         spinner.startAnimating()
     }
     
-    func update(displaying image: (UIImage, ImageSource)?) {
-        if let imageResultSet = image {
-            let image = imageResultSet.0
-            let imageSource = imageResultSet.1
-            
-            switch imageSource {
-            case .network:
-                UIView.transition(with: self.imgViewChar, duration: 0.25, options: .transitionCrossDissolve, animations: {
-                    self.imgViewChar.image = image
-                }, completion: { _ in
-                    self.spinner.stopAnimating()
-                })
-            case .cache:
-                    self.imgViewChar.image = image
-                    self.spinner.stopAnimating()
-            }
-            return
-        }
-    }
-    
     fileprivate func makeImageVisible(img: UIImage) {
         self.imgViewChar.layer.opacity = 1
         self.imgViewChar.image = img
     }
 
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let touch = touches.first else { return }
-        switch touch.view {
-        case imgViewChar:
-            guard let imgCharThumbnail = imgViewChar else { break }
-            delegate?.didTouchImageThumbnail(view: imgCharThumbnail, cell: self, element: self.amiiboElement)
-        default:
-            delegate?.didTouchCellPanel(cell: self)
-        }
-    }
 }
 
-fileprivate extension UIView {
-    func resizeDimensions(height: CGFloat? = nil, width: CGFloat? = nil) {
-        if let height = height {
-            self.heightAnchor.constraint(equalToConstant: height).isActive = true
-        }
-        if let width = width {
-            self.widthAnchor.constraint(equalToConstant: width).isActive = true
-        }
-    }
-}
