@@ -10,7 +10,7 @@ import XCTest
 import CoreData
 @testable import RAFGithubUsersApp
 
-class UserDataModelTest: XCTestCase {
+class UserInfoDataModelTest: XCTestCase {
 
     // MARK: - Core Data stack
     
@@ -41,8 +41,8 @@ class UserDataModelTest: XCTestCase {
     
     // MARK: - Utility methods
     private func fetchUserUsing(id: Int32) throws -> User?  {
-        let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
-        let predicate = NSPredicate(format: "\(#keyPath(User.id)) == 111")
+        let fetchRequest: NSFetchRequest<User> = UserInfo.fetchRequest()
+        let predicate = NSPredicate(format: "\(#keyPath(UserInfo.id)) == 111")
         fetchRequest.predicate = predicate
         let result = try? persistentContainer.viewContext.fetch(fetchRequest)
         return result?.first
@@ -56,31 +56,31 @@ class UserDataModelTest: XCTestCase {
 
     // MARK: - Test cases
     func testCreate() throws {
-        let user = User(context: persistentContainer.viewContext)
+        let userInfo = UserInfo(context: persistentContainer.viewContext)
         persistentContainer.viewContext.performAndWait {
-            user.id = 111
-            user.login = "test"
+            userInfo.id = 111
+            userInfo.login = "test"
         }
     }
 
     func testFetch() throws {
-        if let user = try? fetchUserUsing(id: 111) {
-            XCTAssert(user.id == 111)
-            XCTAssert(user.login == "test")
+        if let userInfo = try? fetchUserUsing(id: 111) {
+            XCTAssert(userInfo.id == 111)
+            XCTAssert(userInfo.login == "test")
         }
     }
     
     func testUpdate() throws {
-        if let userForUpdate = try? fetchUserUsing(id: 111) {
+        if let userInfoForUpdate = try? fetchUserUsing(id: 111) {
             persistentContainer.viewContext.performAndWait {
-                userForUpdate.id = 111
-                userForUpdate.login = "test"
+                userInfoForUpdate.id = 111
+                userInfoForUpdate.login = "test"
             }
         }
 
-        if let user = try? fetchUserUsing(id: 111) {
-            XCTAssert(user.id == 111)
-            XCTAssert(user.login == "test")
+        if let userInfo = try? fetchUserUsing(id: 111) {
+            XCTAssert(userInfo.id == 111)
+            XCTAssert(userInfo.login == "test")
         }
     }
     

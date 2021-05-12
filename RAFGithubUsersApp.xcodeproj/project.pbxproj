@@ -17,19 +17,20 @@
 		E160EBD7264A6D47002820EC /* RAFGithubUsersAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E160EBD6264A6D47002820EC /* RAFGithubUsersAppTests.swift */; };
 		E160EBE3264A7686002820EC /* ViewControllersFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E160EBE2264A7592002820EC /* ViewControllersFactory.swift */; };
 		E160EBE5264A76FF002820EC /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E160EBE4264A76FF002820EC /* UserProfileViewController.swift */; };
-		E189A156264ACC2A00CBD45A /* UserDataModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A155264ACC2A00CBD45A /* UserDataModelTest.swift */; };
 		E189A157264ACC6600CBD45A /* RAFGithubUsersApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E160EBC5264A6D44002820EC /* RAFGithubUsersApp.xcdatamodeld */; };
 		E189A15A264ACE7F00CBD45A /* User+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A158264ACE7F00CBD45A /* User+CoreDataClass.swift */; };
-		E189A162264AD85B00CBD45A /* AppConfigHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A161264AD85B00CBD45A /* AppConfigHelperTests.swift */; };
 		E189A165264AD86600CBD45A /* AppConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = E189A15F264AD5CF00CBD45A /* AppConfig.plist */; };
 		E189A166264AD86600CBD45A /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A160264AD6CD00CBD45A /* AppConfig.swift */; };
 		E189A16D264ADD3000CBD45A /* Api.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A16C264ADD3000CBD45A /* Api.swift */; };
 		E189A17A264AE08300CBD45A /* GithubUsersApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A179264AE08300CBD45A /* GithubUsersApi.swift */; };
 		E189A17D264AE0D400CBD45A /* GithubUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A17C264AE0D400CBD45A /* GithubUser.swift */; };
 		E189A180264AE3FD00CBD45A /* ErrorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A17F264AE35000CBD45A /* ErrorType.swift */; };
-		E189A187264AE9AC00CBD45A /* MockApiTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A186264AE9AC00CBD45A /* MockApiTests.swift */; };
 		E189A188264AEBDC00CBD45A /* GithubApiMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A184264AE7A000CBD45A /* GithubApiMock.swift */; };
 		E189A189264AEBE100CBD45A /* fakeuserslist.json in Resources */ = {isa = PBXBuildFile; fileRef = E189A182264AE77800CBD45A /* fakeuserslist.json */; };
+		E1D04A78264BAF1900C4E5FD /* UserDataModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A155264ACC2A00CBD45A /* UserDataModelTest.swift */; };
+		E1D04A79264BAF1900C4E5FD /* UserInfoDataModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FA390F264BA90C001EFA5C /* UserInfoDataModelTest.swift */; };
+		E1D04A7A264BAF1900C4E5FD /* AppConfigHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A161264AD85B00CBD45A /* AppConfigHelperTests.swift */; };
+		E1D04A7B264BAF1900C4E5FD /* MockApiTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A186264AE9AC00CBD45A /* MockApiTests.swift */; };
 		E1FA38F0264B07D1001EFA5C /* UsersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A18C264AF8F900CBD45A /* UsersViewModel.swift */; };
 		E1FA38F1264B07D7001EFA5C /* ImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A18E264AF96300CBD45A /* ImageStore.swift */; };
 		E1FA38F2264B083A001EFA5C /* UserPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FA38EF264B05E4001EFA5C /* UserPresenter.swift */; };
@@ -87,9 +88,10 @@
 		E1FA38F6264B0B9D001EFA5C /* ImageSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSource.swift; sourceTree = "<group>"; };
 		E1FA38FA264B1B4D001EFA5C /* GithubUserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GithubUserInfo.swift; sourceTree = "<group>"; };
 		E1FA38FC264B1BB7001EFA5C /* JSONSchemaSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONSchemaSupport.swift; sourceTree = "<group>"; };
-		E1FA3909264BA390001EFA5C /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "User+CoreDataProperties.swift"; path = "RAFGithubUsersApp/Persistence/Models/User+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		E1FA390A264BA390001EFA5C /* UserInfo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UserInfo+CoreDataClass.swift"; path = "RAFGithubUsersApp/Persistence/Models/UserInfo+CoreDataClass.swift"; sourceTree = "<group>"; };
-		E1FA390B264BA390001EFA5C /* UserInfo+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UserInfo+CoreDataProperties.swift"; path = "RAFGithubUsersApp/Persistence/Models/UserInfo+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		E1FA3909264BA390001EFA5C /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		E1FA390A264BA390001EFA5C /* UserInfo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserInfo+CoreDataClass.swift"; sourceTree = "<group>"; };
+		E1FA390B264BA390001EFA5C /* UserInfo+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserInfo+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		E1FA390F264BA90C001EFA5C /* UserInfoDataModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoDataModelTest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,9 +115,6 @@
 		E160EBB0264A6D44002820EC = {
 			isa = PBXGroup;
 			children = (
-				E1FA3909264BA390001EFA5C /* User+CoreDataProperties.swift */,
-				E1FA390A264BA390001EFA5C /* UserInfo+CoreDataClass.swift */,
-				E1FA390B264BA390001EFA5C /* UserInfo+CoreDataProperties.swift */,
 				E160EBBB264A6D44002820EC /* RAFGithubUsersApp */,
 				E160EBD5264A6D47002820EC /* RAFGithubUsersAppTests */,
 				E160EBBA264A6D44002820EC /* Products */,
@@ -160,6 +159,7 @@
 				E189A181264AE76900CBD45A /* ApiMock */,
 				E160EBD6264A6D47002820EC /* RAFGithubUsersAppTests.swift */,
 				E189A155264ACC2A00CBD45A /* UserDataModelTest.swift */,
+				E1FA390F264BA90C001EFA5C /* UserInfoDataModelTest.swift */,
 				E189A161264AD85B00CBD45A /* AppConfigHelperTests.swift */,
 				E189A186264AE9AC00CBD45A /* MockApiTests.swift */,
 				E160EBD8264A6D47002820EC /* Info.plist */,
@@ -180,6 +180,9 @@
 		E189A152264ACA3300CBD45A /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				E1FA3909264BA390001EFA5C /* User+CoreDataProperties.swift */,
+				E1FA390A264BA390001EFA5C /* UserInfo+CoreDataClass.swift */,
+				E1FA390B264BA390001EFA5C /* UserInfo+CoreDataProperties.swift */,
 				E189A158264ACE7F00CBD45A /* User+CoreDataClass.swift */,
 			);
 			path = Models;
@@ -414,10 +417,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E1D04A7A264BAF1900C4E5FD /* AppConfigHelperTests.swift in Sources */,
+				E1D04A79264BAF1900C4E5FD /* UserInfoDataModelTest.swift in Sources */,
 				E160EBD7264A6D47002820EC /* RAFGithubUsersAppTests.swift in Sources */,
-				E189A187264AE9AC00CBD45A /* MockApiTests.swift in Sources */,
-				E189A156264ACC2A00CBD45A /* UserDataModelTest.swift in Sources */,
-				E189A162264AD85B00CBD45A /* AppConfigHelperTests.swift in Sources */,
+				E1D04A78264BAF1900C4E5FD /* UserDataModelTest.swift in Sources */,
+				E1D04A7B264BAF1900C4E5FD /* MockApiTests.swift in Sources */,
 				E189A157264ACC6600CBD45A /* RAFGithubUsersApp.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

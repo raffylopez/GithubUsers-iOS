@@ -19,7 +19,7 @@
         <attribute name="urlStarred" optional="YES" attributeType="String"/>
         <attribute name="urlSubscriptions" optional="YES" attributeType="String"/>
         <attribute name="userType" optional="YES" attributeType="String"/>
-        <relationship name="userInfo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserInfo"/>
+        <relationship name="userInfo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserInfo" inverseName="user" inverseEntity="UserInfo"/>
     </entity>
     <entity name="UserInfo" representedClassName="UserInfo" parentEntity="User" syncable="YES">
         <attribute name="bio" optional="YES" attributeType="String"/>
@@ -28,7 +28,7 @@
         <attribute name="email" optional="YES" attributeType="String"/>
         <attribute name="followers" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="following" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="isHireable" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="isHireable" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
         <attribute name="location" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="note" optional="YES" attributeType="String"/>
@@ -37,9 +37,10 @@
         <attribute name="seen" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="twitterUsername" optional="YES" attributeType="String"/>
         <attribute name="updatedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="userInfo" inverseEntity="User"/>
     </entity>
     <elements>
-        <element name="UserInfo" positionX="-63" positionY="-18" width="128" height="268"/>
         <element name="User" positionX="-63" positionY="135" width="128" height="328"/>
+        <element name="UserInfo" positionX="-63" positionY="-18" width="128" height="283"/>
     </elements>
 </model>

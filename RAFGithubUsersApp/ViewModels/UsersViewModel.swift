@@ -77,6 +77,7 @@ class UsersViewModel {
             switch result {
             case let .success(githubuserInfo):
                 let userInfo = UserInfo(context: context)
+                userInfo.id = Int32(githubuserInfo.id)
                 userInfo.bio = githubuserInfo.bio
                 userInfo.company = githubuserInfo.company
                 userInfo.createdAt = githubuserInfo.createdAt
@@ -135,41 +136,42 @@ class UsersViewModel {
         }
     }
     
-//    func fetchImage(for element: AmiiboElement, completion: @escaping (Result<(UIImage, ImageSource), Error>) -> Void) {
-//        guard let imageUrl = element.imageUrl else {
-//            completion(.failure(AmiiboError.missingImageUrl))
-//            return
-//        }
-//
-//        let key = "\(imageUrl.absoluteString.hashValue)"
-//        if let image = imageStore.image(forKey: key) {
-//            DispatchQueue.main.async {
-//                completion(.success((image, .cache)))
-//            }
-//        }
-//
-//        let request = URLRequest(url: imageUrl)
-//        let task = session.dataTask(with: request) { data, _, error in
-//            let result = self.processImageRequest(data: data, error: error)
-//            // Save to cache
-//            if case let .success(image) = result {
-//                self.imageStore.setImage(forKey: key, image: image.0)
-//            }
-//
-//            OperationQueue.main.addOperation {
-//                completion(result)
-//            }
-//        }
-//        task.resume()
-//    }
+    func fetchImage(for user: GithubUser, completion: @escaping (Result<(UIImage, ImageSource), Error>) -> Void) {
+        guard !user.avatarURL.isEmpty else {
+            completion(.failure(ErrorType.missingImageUrl))
+            return
+        }
+        let imageUrl = URL(string: user.avatarURL)!
+
+        let key = "\(user.id)"
+        if let image = imageStore.image(forKey: key) {
+            DispatchQueue.main.async {
+                completion(.success((image, .cache)))
+            }
+        }
+
+        let request = URLRequest(url: imageUrl)
+        let task = session.dataTask(with: request) { data, _, error in
+            let result = self.processImageRequest(data: data, error: error)
+            // Save to cache
+            if case let .success(image) = result {
+                self.imageStore.setImage(forKey: key, image: image.0)
+            }
+
+            OperationQueue.main.addOperation {
+                completion(result)
+            }
+        }
+        task.resume()
+    }
     
-//    private func processImageRequest(data: Data?, error: Error?) -> Result<(UIImage, ImageSource), Error> {
-//        guard let imageData = data, let image = UIImage(data: imageData) else {
-//            if data == nil {
-//                return .failure(error!)
-//            }
-//            return .failure(ErrorType.imageCreationError)
-//        }
-//        return .success((image, .network))
-//    }
+    private func processImageRequest(data: Data?, error: Error?) -> Result<(UIImage, ImageSource), Error> {
+        guard let imageData = data, let image = UIImage(data: imageData) else {
+            if data == nil {
+                return .failure(error!)
+            }
+            return .failure(ErrorType.imageCreationError)
+        }
+        return .success((image, .network))
+    }
 }
