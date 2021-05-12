@@ -9,7 +9,15 @@
 import UIKit
 
 class UserProfileViewController: UIViewController {
-
+    let label = UILabel()
+    override func loadView() {
+        super.loadView()
+        self.view.backgroundColor = UIColor.systemBackground
+        label.text = "Foobar"
+        label.center = self.view.center
+        label.sizeToFit()
+        self.view.addSubview(label)
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
     }

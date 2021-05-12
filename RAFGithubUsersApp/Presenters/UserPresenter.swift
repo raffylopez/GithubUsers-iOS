@@ -17,6 +17,10 @@ class UserPresenter {
     }
 
     var login: String {
-        return "Login".localized() + ": " + (self.user.userInfo?.name ?? "")
+        return self.user.login ?? ""
+    }
+    
+    var urlHtml: String {
+        return self.user.urlHtml ?? ""
     }
 }

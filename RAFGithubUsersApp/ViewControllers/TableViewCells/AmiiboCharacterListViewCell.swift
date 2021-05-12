@@ -27,7 +27,7 @@ class AmiiboCharacterListViewCell: UITableViewCell {
     
     private var imgViewChar: UIImageView! = {
         let imgCharacter = UIImageView()
-        imgCharacter.backgroundColor = .systemYellow
+        imgCharacter.backgroundColor = .systemBackground
         imgCharacter.isUserInteractionEnabled = true
         imgCharacter.contentMode = .scaleAspectFit
         return imgCharacter }()
@@ -40,6 +40,8 @@ class AmiiboCharacterListViewCell: UITableViewCell {
     lazy var lblSeries: UILabel! = {
         let lblSeries = UILabel()
         lblSeries.font = UIFont.systemFont(ofSize: 15)
+        let graylvl: CGFloat = 100
+        lblSeries.textColor = UIColor(red: graylvl/255, green: graylvl/255, blue: graylvl/255, alpha: 1)
         return lblSeries }()
 
     private lazy var stackView: UIStackView? = {
@@ -73,8 +75,10 @@ class AmiiboCharacterListViewCell: UITableViewCell {
         UIHelper.initializeView(view: imgCharacter, parent: self)
         UIHelper.initializeView(view: stackView, parent: self)
         UIHelper.initializeView(view: spinner, parent: self)
+        
         spinner.centerYAnchor.constraint(equalTo: imgCharacter.centerYAnchor).isActive = true
         spinner.centerXAnchor.constraint(equalTo: imgCharacter.centerXAnchor).isActive = true
+//        imgCharacter.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         spinner.startAnimating()
     }
     
@@ -83,7 +87,7 @@ class AmiiboCharacterListViewCell: UITableViewCell {
             let stackView = stackView else { return }
         
         stackView.resizeDimensions(width: 200)
-        imgCharacter.resizeDimensions(height: 130, width: 100)
+        imgCharacter.resizeDimensions(height: 100, width: 100)
         
         let views = ["nm": stackView, "img": imgCharacter]
         NSLayoutConstraint(item: stackView, attribute: .centerY, relatedBy: .equal,
@@ -100,7 +104,7 @@ class AmiiboCharacterListViewCell: UITableViewCell {
 extension AmiiboCharacterListViewCell {
     
     override func prepareForReuse() {
-        imgViewChar.backgroundColor = .systemYellow
+        imgViewChar.backgroundColor = .systemBackground
         imgViewChar.image = nil
         spinner.startAnimating()
     }
@@ -123,8 +127,6 @@ extension AmiiboCharacterListViewCell {
             }
             return
         }
-//        imgCharacter.layer.opacity = 0
-//        imgCharacter.image = nil
     }
     
     fileprivate func makeImageVisible(img: UIImage) {

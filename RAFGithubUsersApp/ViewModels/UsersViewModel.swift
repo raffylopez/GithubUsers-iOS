@@ -136,7 +136,7 @@ class UsersViewModel {
         }
     }
     
-    func fetchImage(for user: User, completion: @escaping (Result<(UIImage, ImageSource), Error>) -> Void) {
+    func fetchImage(for user: User, completion: @escaping (Result<(UIImage, ImageSource), Error>) -> Void, synchronous: Bool = false) {
         guard let urlString = user.urlAvatar, !urlString.isEmpty else {
             completion(.failure(ErrorType.missingImageUrl))
             return
@@ -151,6 +151,9 @@ class UsersViewModel {
         }
 
         let request = URLRequest(url: imageUrl)
+        let group = DispatchGroup()
+        if (synchronous) { group.enter() }
+        
         let task = session.dataTask(with: request) { data, _, error in
             let result = self.processImageRequest(data: data, error: error)
             // Save to cache
@@ -158,11 +161,14 @@ class UsersViewModel {
                 self.imageStore.setImage(forKey: key, image: image.0)
             }
 
+            if (synchronous) { group.leave() }
+            
             OperationQueue.main.addOperation {
                 completion(result)
             }
         }
         task.resume()
+        if (synchronous) { group.wait() }
     }
     
     private func processImageRequest(data: Data?, error: Error?) -> Result<(UIImage, ImageSource), Error> {

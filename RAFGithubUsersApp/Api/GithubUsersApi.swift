@@ -40,22 +40,22 @@ class GithubUsersApi {
     }
     
     func fetchUsersList(completion: ((Result<[GithubUser], Error>) -> Void)? = nil ) {
-        let semaphore = DispatchSemaphore(value: 0) /* force synchronous queueing */
+        let dispatchGroup = DispatchGroup()
+        dispatchGroup.enter()
 
         let task = URLSession.shared.githubUsersTask(with: URL(string: usersListUri + queryParams)!, completionHandler: { (githubUsers, _, error) in
+            dispatchGroup.leave()
             if let error = error {
                 completion?(.failure(error))
-                semaphore.signal()
                 return
             }
             if let githubUsers = githubUsers {
                 completion?(.success(githubUsers))
-                semaphore.signal()
                 return
             }
             completion?(.failure(ErrorType.emptyResult))
         })
         task.resume()
-        semaphore.wait()
+        dispatchGroup.wait()
     }
 }
