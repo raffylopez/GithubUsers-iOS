@@ -12,7 +12,6 @@ class UserProfileViewController: UIViewController {
     let label = UILabel()
     override func loadView() {
         super.loadView()
-        self.view.backgroundColor = UIColor.systemBackground
         label.text = "Foobar"
         label.center = self.view.center
         label.sizeToFit()
@@ -20,6 +19,7 @@ class UserProfileViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.backgroundColor = UIColor.systemBackground
     }
 
 

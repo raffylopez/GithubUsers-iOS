@@ -8,7 +8,21 @@
 
 import UIKit
 
+extension UINavigationController {
 
+    func setStatusBar(backgroundColor: UIColor) {
+        let statusBarFrame: CGRect
+        if #available(iOS 13.0, *) {
+            statusBarFrame = view.window?.windowScene?.statusBarManager?.statusBarFrame ?? CGRect.zero
+        } else {
+            statusBarFrame = UIApplication.shared.statusBarFrame
+        }
+        let statusBarView = UIView(frame: statusBarFrame)
+        statusBarView.backgroundColor = backgroundColor
+        view.addSubview(statusBarView)
+    }
+
+}
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
@@ -18,8 +32,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let viewModel = UsersViewModel(apiService: GithubUsersApi())
         let top = ViewControllersFactory.instance(vcType: .usersList(viewModel))
         let navController = UINavigationController(rootViewController: top)
-        navController.navigationBar.barStyle = .black
-        navController.navigationBar.isTranslucent = false
+        navController.navigationBar.barStyle = .default
         window?.rootViewController = navController
         window?.makeKeyAndVisible()
     }
@@ -28,15 +41,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.windowScene = scene
-        
-//        GithubUsersApi().fetchUsersList { result in
-//            switch result {
-//            case let .success(users):
-//                break
-//            case let .failure(error):
-//                print(error)
-//            }
-//        }
 
         setupViewControllers()
     }

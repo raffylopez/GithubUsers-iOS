@@ -8,35 +8,38 @@
 
 import UIKit
 
-class UsersListViewController: UITableViewController, UISearchBarDelegate {
+class UsersListViewController: UITableViewController {
     
     var viewModel: UsersViewModel!
-    lazy var searchBar:UISearchBar = UISearchBar()
-
-    func setupSearchBar()
-    {
-        searchBar.searchBarStyle = .minimal
-        searchBar.placeholder = " Search..."
-        searchBar.sizeToFit()
-        searchBar.isTranslucent = false
-        searchBar.backgroundImage = UIImage()
-        searchBar.delegate = self
-        navigationItem.titleView = searchBar
-        
+    lazy var search: UISearchController = {
+        let search = UISearchController(searchResultsController: nil)
+        search.searchResultsUpdater = self
+        search.obscuresBackgroundDuringPresentation = false
+        search.searchBar.placeholder = "Search (quote for exact match)"
+        search.searchBar.autocapitalizationType = .none
+        search.searchBar.autocorrectionType = .no
+        search.searchBar.sizeToFit()
+        return search
+    }()
+    
+    var tap: UITapGestureRecognizer!
+    
+    @objc func dismissKeyboard() {
+        search.dismiss(animated: true, completion: nil)
     }
-
-
+    
     override func loadView() {
         super.loadView()
         self.tableView?.register(AmiiboCharacterListViewCell.self, forCellReuseIdentifier: "AmiiboCharacterListViewCell")
         self.view.backgroundColor = UIColor.systemBackground
-        searchBar = UISearchBar()
-        self.view.addSubview(searchBar)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .systemBackground
+        tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        self.tableView.addGestureRecognizer(tap)
         setupViews()
         let onDataAvailable = {
             OperationQueue.main.addOperation {
@@ -50,7 +53,8 @@ class UsersListViewController: UITableViewController, UISearchBarDelegate {
             }
         }
         self.viewModel.bind(availability: onDataAvailable)
-        tableView?.refreshControl?.beginRefreshing()
+//        tableView?.refreshControl?.beginRefreshing()
+        self.navigationController?.navigationBar.prefersLargeTitles = true
     }
     func resizeImage(image: UIImage, newWidth: CGFloat) -> UIImage? {
         
@@ -76,7 +80,7 @@ class UsersListViewController: UITableViewController, UISearchBarDelegate {
         imageView.image = img
         let container = UIView()
         let label = UILabel()
-        label.text = "Browse Github Users"
+        label.text = "Github"
         label.sizeToFit()
         UIHelper.initializeView(view: label, parent: container)
         label.centerXAnchor.constraint(equalTo: container.centerXAnchor, constant: (imgSize + spacing)/2).isActive = true
@@ -89,12 +93,12 @@ class UsersListViewController: UITableViewController, UISearchBarDelegate {
         imageView.heightAnchor.constraint(equalToConstant: imgSize).isActive = true
 
         self.navigationItem.titleView = container
-        self.title = "Github Users".localized()
+        self.navigationItem.searchController = search
+        self.title = "Browse Users".localized()
     }
     
     private func setupViews() {
         setNavbar()
-        setupSearchBar()
         self.refreshControl = UIRefreshControl()
         self.refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
     }
@@ -158,3 +162,9 @@ extension UsersListViewController: AmiiboCharacterListViewCellDelegate {
     }
 }
 
+extension UsersListViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        // TODO
+    }
+    
+}
