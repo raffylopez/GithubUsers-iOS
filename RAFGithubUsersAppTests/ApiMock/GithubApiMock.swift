@@ -7,6 +7,7 @@
 //
 
 import Foundation
+@testable import GithubApp
 
 class GithubUsersAPIMock: UserApi {
     typealias T = GithubUser

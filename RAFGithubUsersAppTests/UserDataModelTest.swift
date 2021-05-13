@@ -8,7 +8,7 @@
 
 import XCTest
 import CoreData
-@testable import RAFGithubUsersApp
+@testable import GithubApp
 
 class UserDataModelTest: XCTestCase {
     

@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import RAFGithubUsersApp
+@testable import GithubApp
 
 class ApiTests: XCTestCase {
 
