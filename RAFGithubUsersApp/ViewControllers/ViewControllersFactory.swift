@@ -10,7 +10,7 @@ import UIKit
 
 enum VcType {
     case usersList(UsersViewModel)
-    case userProfile
+    case userProfile(ProfileViewModel)
 }
 
 // MARK: - ViewControllers
@@ -28,8 +28,10 @@ class ViewControllersFactory {
             let controller = UsersViewController()
             controller.viewModel = viewModel
             return controller
-        case .userProfile:
-            return StoryBoard.main.instantiateViewController(identifier: String(describing: ProfileViewController.self))
+        case let .userProfile(viewModel):
+            let controller = StoryBoard.main.instantiateViewController(identifier: String(describing: ProfileViewController.self)) as! ProfileViewController
+            controller.viewModel = viewModel
+            return controller
         }
     }
 }

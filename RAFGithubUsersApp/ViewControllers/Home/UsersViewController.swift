@@ -9,8 +9,20 @@
 import UIKit
 
 class UsersViewController: UITableViewController {
+    // MARK: - Configurables
+    /**
+     Enables look-ahead prefetching for table cells for infinite-scroll implementation.
+     If false, tail-end fetching is used.
+     */
     let isPrefetchingEnabled: Bool = false
     
+    // MARK: Configure table cell types
+    typealias StandardTableViewCell = ShimmerTableViewCell
+    typealias NoteTableViewCell = NoteUserTableViewCell
+    typealias AlternativeTableViewCell = InvertedUserTableViewCell
+    typealias DummyTableViewCell = StubUserTableViewCell
+
+    // MARK: - Properties and attributes
     var viewModel: UsersViewModel!
     lazy var search: UISearchController = {
         let search = UISearchController(searchResultsController: nil)
@@ -28,28 +40,20 @@ class UsersViewController: UITableViewController {
         tap.cancelsTouchesInView = false
         return tap
     }()
-    
 
-    /**
-     Selectable method for tap gesture recognizer, for dismissing search
-     when user clicks out of keyboard/searchbox. Needs gesture recognizer
-     to have cancelsTouchesInView set to false
-     */
-    @objc func dismissKeyboard() {
-        search.dismiss(animated: true, completion: nil)
-    }
+    lazy var tapButton: UITapGestureRecognizer = {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tableViewScrollToTop))
+        tap.cancelsTouchesInView = false
+        return tap
+    }()
 
+    // MARK: - Table cell registration
     /**
      Registers table cell types with reuse identifiers, used for dequeueing cells
      */
     private func registerReuseId<T>(_ type: T.Type) where T: UserTableViewCellBase {
         self.tableView?.register(T.self, forCellReuseIdentifier: String(describing: T.self))
     }
-
-    typealias StandardTableViewCell = ShimmerTableViewCell
-    typealias NoteTableViewCell = NoteUserTableViewCell
-    typealias AlternativeTableViewCell = InvertedUserTableViewCell
-    typealias DummyTableViewCell = StubUserTableViewCell
 
     private func registerTableCellTypes() {
         registerReuseId(StandardTableViewCell.self)
@@ -70,23 +74,15 @@ class UsersViewController: UITableViewController {
         fatalError("Cannot dequeue to \(String(describing:T.self))")
     }
 
+    // MARK: - Setup
     private func setupTableView() {
         self.tableView.addGestureRecognizer(tap)
         self.tableView.scrollsToTop = true
         self.tableView.prefetchDataSource = self
         registerTableCellTypes()
     }
-    
-    override func loadView() {
-        super.loadView()
-        setupTableView()
-        self.view.backgroundColor = UIColor.systemBackground
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.view.backgroundColor = .systemBackground
-        setupViews()
+
+    private func setupHandlers() {
         let onDataAvailable = {
             var newIndexPathsToReload: [IndexPath] = []
             if self.viewModel.currentPage > 1 {
@@ -94,7 +90,7 @@ class UsersViewController: UITableViewController {
             }
             
             OperationQueue.main.addOperation {
-                if self.viewModel.currentPage <= 1 { // user did a refresh
+                if self.viewModel.currentPage <= 1 { /* User performed a refresh */
                     self.tableView.alpha = 0
                     UIView.transition(with: self.tableView,
                                       duration: 0.5,
@@ -103,34 +99,31 @@ class UsersViewController: UITableViewController {
                                         self.tableView.alpha = 1
                                         self.tableView?.reloadSections(IndexSet(integer: 0), with: .none)
                     }, completion: { _ in
-                        /* fixes graphical glitch when pull-to-refresh is started when navbar is collapsed */
+                        /* Fix graphical glitch when pull-to-refresh is started when navbar is collapsed */
                         self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
                     })
                     self.refreshControl?.endRefreshing()
                     return
                 }
                 let indexPathsToReload = self.visibleIndexPathsToReload(intersecting: newIndexPathsToReload)
-
-                self.tableView?.insertRows(at: newIndexPathsToReload, with: .fade)
+                
+                /* Ensure slide animations are disabled on row insertion (slide animation used by default on insert) */
+                UIView.setAnimationsEnabled(false)
+                self.tableView?.beginUpdates()
+                self.tableView?.insertRows(at: newIndexPathsToReload, with: .none)
+                self.tableView?.endUpdates()
+                
+                UIView.setAnimationsEnabled(true)
+                
                 self.tableView?.reloadRows(at: indexPathsToReload, with: .fade)
-//                self.tableView?.reloadRows(at: [IndexPath(row: 29, section: 0)], with: .none)
-//                self.tableView?.reloadSections(IndexSet(integer: 0), with: .fade)
+                //                self.tableView?.reloadRows(at: [IndexPath(row: 29, section: 0)], with: .none)
+                //                self.tableView?.reloadSections(IndexSet(integer: 0), with: .fade)
             }
         }
         self.viewModel.bind(availability: onDataAvailable)
     }
-    
-    lazy var tapButton: UITapGestureRecognizer = {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(tableViewScrollToTop))
-        tap.cancelsTouchesInView = false
-        return tap
-    }()
 
-    @objc func tableViewScrollToTop() {
-        self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
-    }
-    
-    private func setNavbar() {
+    private func setupNavbar() {
         self.navigationController?.navigationBar.prefersLargeTitles = true
         let imgSize = CGFloat(20)
         let imgHeight = CGFloat(imgSize)
@@ -153,29 +146,57 @@ class UsersViewController: UITableViewController {
         imageView.centerYAnchor.constraint(equalTo: container.centerYAnchor).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: imgSize).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: imgSize).isActive = true
-
+        
         self.navigationItem.titleView = container
-//        let bbi: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .bookmarks, target: self, action: #selector(tableViewScrollToTop))
-//        let leftBarItem: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(tableViewScrollToTop))
-//        let rightBarItem: UIBarButtonItem = UIBarButtonItem(image: img.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: nil)
+        //        let bbi: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .bookmarks, target: self, action: #selector(tableViewScrollToTop))
+        //        let leftBarItem: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(tableViewScrollToTop))
+        //        let rightBarItem: UIBarButtonItem = UIBarButtonItem(image: img.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: nil)
         let rightBarItem = UIBarButtonItem(title: "Scroll to Top".localized(), style: .plain, target: self, action: #selector(tableViewScrollToTop))
-//        navigationItem.leftBarButtonItem = leftBarItem
+        //        navigationItem.leftBarButtonItem = leftBarItem
         navigationItem.rightBarButtonItem = rightBarItem
         self.navigationItem.searchController = search
         self.title = "Browse Users".localized()
     }
     
     private func setupViews() {
-        setNavbar()
+        setupNavbar()
         self.refreshControl = UIRefreshControl()
-        self.refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        self.refreshControl?.addTarget(self, action: #selector(refreshPulled), for: .valueChanged)
     }
     
-    @objc private func refresh() {
+    // MARK: - ViewController methods
+    override func loadView() {
+        super.loadView()
+        setupTableView()
+        self.view.backgroundColor = UIColor.systemBackground
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.view.backgroundColor = .systemBackground
+        setupViews()
+        setupHandlers()
+    }
+    
+    // MARK: - Selector targets
+    @objc private func refreshPulled() {
         self.refreshControl?.beginRefreshing()
         self.viewModel.fetchUsers()
     }
     
+    @objc func tableViewScrollToTop() {
+        self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+    }
+    
+    /**
+     Selectable method for tap gesture recognizer, for dismissing search
+     when user clicks out of keyboard/searchbox. Needs gesture recognizer
+     to have cancelsTouchesInView set to false
+     */
+    @objc func dismissKeyboard() {
+        search.dismiss(animated: true, completion: nil)
+    }
+
     // MARK: - UITableViewDelegate methods
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let element = self.viewModel.users[indexPath.row]
@@ -225,7 +246,11 @@ class UsersViewController: UITableViewController {
     func isLoadingCell2(for indexPath: IndexPath) -> Bool {
         return indexPath.row + 1 >= self.viewModel.currentCount
     }
-    // MARK: - UITableViewDatasource methods
+}
+
+// MARK: - Delegate Methods
+// MARK: • UITableViewDatasource methods
+extension UsersViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 //        let rowMultipleOfFour = (indexPath.row + 1) % 4 == 0
 //        let rowNotZero = indexPath.row != 0
@@ -245,16 +270,14 @@ class UsersViewController: UITableViewController {
     }
 }
 
-// MARK: - Cell Delegate Methods
+// MARK: • Cell Touch Delegate Methods
 extension UsersViewController: UserListTableViewCellDelegate {
     func didTouchImageThumbnail(view: UIImageView, cell: UserTableViewCellBase, element: User) {
-        self.navigationController?.pushViewController(ViewControllersFactory.instance(vcType: .userProfile), animated: true)
     }
     
     func didTouchCellPanel(cell: UserTableViewCellBase) {
-        self.navigationController?.pushViewController(
-            ViewControllersFactory.instance(vcType: .userProfile),
-            animated: true)
+        let viewModel = ProfileViewModel(apiService: GithubUsersApi())
+        self.navigationController?.pushViewController(ViewControllersFactory.instance(vcType: .userProfile(viewModel)), animated: true)
     }
 }
 

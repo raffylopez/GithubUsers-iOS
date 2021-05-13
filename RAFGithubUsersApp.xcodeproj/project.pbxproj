@@ -46,6 +46,7 @@
 		E1D04A80264BB5CF00C4E5FD /* UIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D04A7F264BB5CF00C4E5FD /* UIHelper.swift */; };
 		E1F6E025264D08E800A023A8 /* ShimmerUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F6E024264D08E800A023A8 /* ShimmerUserTableViewCell.swift */; };
 		E1F6E027264D648700A023A8 /* fakeuserslist.json in Resources */ = {isa = PBXBuildFile; fileRef = E189A182264AE77800CBD45A /* fakeuserslist.json */; };
+		E1F6E029264D765000A023A8 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F6E028264D764F00A023A8 /* ProfileViewModel.swift */; };
 		E1FA38F0264B07D1001EFA5C /* UsersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A18C264AF8F900CBD45A /* UsersViewModel.swift */; };
 		E1FA38F1264B07D7001EFA5C /* ImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A18E264AF96300CBD45A /* ImageStore.swift */; };
 		E1FA38F2264B083A001EFA5C /* UserPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FA38EF264B05E4001EFA5C /* UserPresenter.swift */; };
@@ -114,6 +115,7 @@
 		E1D04A7D264BB57F00C4E5FD /* NormalUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NormalUserTableViewCell.swift; sourceTree = "<group>"; };
 		E1D04A7F264BB5CF00C4E5FD /* UIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIHelper.swift; sourceTree = "<group>"; };
 		E1F6E024264D08E800A023A8 /* ShimmerUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmerUserTableViewCell.swift; sourceTree = "<group>"; };
+		E1F6E028264D764F00A023A8 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		E1FA38EF264B05E4001EFA5C /* UserPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPresenter.swift; sourceTree = "<group>"; };
 		E1FA38F4264B0867001EFA5C /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		E1FA38F6264B0B9D001EFA5C /* ImageSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSource.swift; sourceTree = "<group>"; };
@@ -329,6 +331,7 @@
 		E189A18B264AF8C900CBD45A /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				E1F6E028264D764F00A023A8 /* ProfileViewModel.swift */,
 				E189A18C264AF8F900CBD45A /* UsersViewModel.swift */,
 			);
 			path = ViewModels;
@@ -520,6 +523,7 @@
 				E189A180264AE3FD00CBD45A /* ErrorType.swift in Sources */,
 				E189A17D264AE0D400CBD45A /* GithubUser.swift in Sources */,
 				E1FA38F7264B0B9D001EFA5C /* ImageSource.swift in Sources */,
+				E1F6E029264D765000A023A8 /* ProfileViewModel.swift in Sources */,
 				E160EBE5264A76FF002820EC /* ProfileViewController.swift in Sources */,
 				E1510C69264C428B00E59C35 /* UIImageExtensions.swift in Sources */,
 				E1FA38F0264B07D1001EFA5C /* UsersViewModel.swift in Sources */,
