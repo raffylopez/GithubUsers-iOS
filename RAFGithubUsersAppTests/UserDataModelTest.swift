@@ -11,7 +11,7 @@ import CoreData
 @testable import RAFGithubUsersApp
 
 class UserDataModelTest: XCTestCase {
-
+    
     // MARK: - Core Data stack
     
     private static let persistentContainerName = "RAFGithubUsersApp"
@@ -50,10 +50,10 @@ class UserDataModelTest: XCTestCase {
     
     override func setUpWithError() throws {
     }
-
+    
     override func tearDownWithError() throws {
     }
-
+    
     // MARK: - Test cases
     func testCreate() throws {
         let user = User(context: persistentContainer.viewContext)
@@ -62,7 +62,7 @@ class UserDataModelTest: XCTestCase {
             user.login = "test"
         }
     }
-
+    
     func testFetch() throws {
         if let user = try? fetchUserUsing(id: 111) {
             XCTAssert(user.id == 111)
@@ -77,7 +77,7 @@ class UserDataModelTest: XCTestCase {
                 userForUpdate.login = "test"
             }
         }
-
+        
         if let user = try? fetchUserUsing(id: 111) {
             XCTAssert(user.id == 111)
             XCTAssert(user.login == "test")
@@ -90,5 +90,5 @@ class UserDataModelTest: XCTestCase {
             // Put the code you want to measure the time of here.
         }
     }
-
+    
 }

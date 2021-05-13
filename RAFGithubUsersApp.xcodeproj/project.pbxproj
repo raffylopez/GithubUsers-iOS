@@ -16,16 +16,20 @@
 		E1510C6F264C478100E59C35 /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1510C6E264C478100E59C35 /* UserTableViewCell.swift */; };
 		E1510C71264C4A9800E59C35 /* UserTableViewCellBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1510C70264C4A9800E59C35 /* UserTableViewCellBase.swift */; };
 		E1510C75264C4D7A00E59C35 /* UserListTableViewCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1510C74264C4D7A00E59C35 /* UserListTableViewCellDelegate.swift */; };
+		E1510C7A264C6A1000E59C35 /* StubUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1510C79264C6A0F00E59C35 /* StubUserTableViewCell.swift */; };
+		E1510C7C264C6A7A00E59C35 /* NoteUserTableViewCell copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1510C7B264C6A7A00E59C35 /* NoteUserTableViewCell copy.swift */; };
+		E1510C80264C9B9300E59C35 /* AdminUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1510C7F264C9B9200E59C35 /* AdminUserTableViewCell.swift */; };
+		E1510C84264CF45100E59C35 /* SkeletonView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1510C83264CF45100E59C35 /* SkeletonView.framework */; };
 		E160EBBD264A6D44002820EC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E160EBBC264A6D44002820EC /* AppDelegate.swift */; };
 		E160EBBF264A6D44002820EC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E160EBBE264A6D44002820EC /* SceneDelegate.swift */; };
-		E160EBC1264A6D44002820EC /* UsersListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E160EBC0264A6D44002820EC /* UsersListViewController.swift */; };
+		E160EBC1264A6D44002820EC /* UsersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E160EBC0264A6D44002820EC /* UsersViewController.swift */; };
 		E160EBC4264A6D44002820EC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E160EBC2264A6D44002820EC /* Main.storyboard */; };
 		E160EBC7264A6D44002820EC /* RAFGithubUsersApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E160EBC5264A6D44002820EC /* RAFGithubUsersApp.xcdatamodeld */; };
 		E160EBC9264A6D46002820EC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E160EBC8264A6D46002820EC /* Assets.xcassets */; };
 		E160EBCC264A6D46002820EC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E160EBCA264A6D46002820EC /* LaunchScreen.storyboard */; };
 		E160EBD7264A6D47002820EC /* RAFGithubUsersAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E160EBD6264A6D47002820EC /* RAFGithubUsersAppTests.swift */; };
 		E160EBE3264A7686002820EC /* ViewControllersFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E160EBE2264A7592002820EC /* ViewControllersFactory.swift */; };
-		E160EBE5264A76FF002820EC /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E160EBE4264A76FF002820EC /* UserProfileViewController.swift */; };
+		E160EBE5264A76FF002820EC /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E160EBE4264A76FF002820EC /* ProfileViewController.swift */; };
 		E189A157264ACC6600CBD45A /* RAFGithubUsersApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E160EBC5264A6D44002820EC /* RAFGithubUsersApp.xcdatamodeld */; };
 		E189A15A264ACE7F00CBD45A /* User+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A158264ACE7F00CBD45A /* User+CoreDataClass.swift */; };
 		E189A165264AD86600CBD45A /* AppConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = E189A15F264AD5CF00CBD45A /* AppConfig.plist */; };
@@ -40,6 +44,7 @@
 		E1D04A7B264BAF1900C4E5FD /* MockApiTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A186264AE9AC00CBD45A /* MockApiTests.swift */; };
 		E1D04A7E264BB58300C4E5FD /* NormalUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D04A7D264BB57F00C4E5FD /* NormalUserTableViewCell.swift */; };
 		E1D04A80264BB5CF00C4E5FD /* UIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D04A7F264BB5CF00C4E5FD /* UIHelper.swift */; };
+		E1F6E025264D08E800A023A8 /* ShimmerUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F6E024264D08E800A023A8 /* ShimmerUserTableViewCell.swift */; };
 		E1FA38F0264B07D1001EFA5C /* UsersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A18C264AF8F900CBD45A /* UsersViewModel.swift */; };
 		E1FA38F1264B07D7001EFA5C /* ImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A18E264AF96300CBD45A /* ImageStore.swift */; };
 		E1FA38F2264B083A001EFA5C /* UserPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FA38EF264B05E4001EFA5C /* UserPresenter.swift */; };
@@ -72,10 +77,14 @@
 		E1510C6E264C478100E59C35 /* UserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
 		E1510C70264C4A9800E59C35 /* UserTableViewCellBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableViewCellBase.swift; sourceTree = "<group>"; };
 		E1510C74264C4D7A00E59C35 /* UserListTableViewCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListTableViewCellDelegate.swift; sourceTree = "<group>"; };
-		E160EBB9264A6D44002820EC /* RAFGithubUsersApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RAFGithubUsersApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E1510C79264C6A0F00E59C35 /* StubUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubUserTableViewCell.swift; sourceTree = "<group>"; };
+		E1510C7B264C6A7A00E59C35 /* NoteUserTableViewCell copy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NoteUserTableViewCell copy.swift"; sourceTree = "<group>"; };
+		E1510C7F264C9B9200E59C35 /* AdminUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminUserTableViewCell.swift; sourceTree = "<group>"; };
+		E1510C83264CF45100E59C35 /* SkeletonView.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SkeletonView.framework; path = Carthage/Build/iOS/SkeletonView.framework; sourceTree = "<group>"; };
+		E160EBB9264A6D44002820EC /* GithubApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GithubApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E160EBBC264A6D44002820EC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E160EBBE264A6D44002820EC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		E160EBC0264A6D44002820EC /* UsersListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersListViewController.swift; sourceTree = "<group>"; };
+		E160EBC0264A6D44002820EC /* UsersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersViewController.swift; sourceTree = "<group>"; };
 		E160EBC3264A6D44002820EC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E160EBC6264A6D44002820EC /* RAFGithubUsersApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = RAFGithubUsersApp.xcdatamodel; sourceTree = "<group>"; };
 		E160EBC8264A6D46002820EC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -85,7 +94,7 @@
 		E160EBD6264A6D47002820EC /* RAFGithubUsersAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RAFGithubUsersAppTests.swift; sourceTree = "<group>"; };
 		E160EBD8264A6D47002820EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E160EBE2264A7592002820EC /* ViewControllersFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllersFactory.swift; sourceTree = "<group>"; };
-		E160EBE4264A76FF002820EC /* UserProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
+		E160EBE4264A76FF002820EC /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		E189A155264ACC2A00CBD45A /* UserDataModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataModelTest.swift; sourceTree = "<group>"; };
 		E189A158264ACE7F00CBD45A /* User+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User+CoreDataClass.swift"; sourceTree = "<group>"; };
 		E189A15F264AD5CF00CBD45A /* AppConfig.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = AppConfig.plist; sourceTree = "<group>"; };
@@ -103,6 +112,7 @@
 		E189A190264AFA4700CBD45A /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		E1D04A7D264BB57F00C4E5FD /* NormalUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NormalUserTableViewCell.swift; sourceTree = "<group>"; };
 		E1D04A7F264BB5CF00C4E5FD /* UIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIHelper.swift; sourceTree = "<group>"; };
+		E1F6E024264D08E800A023A8 /* ShimmerUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmerUserTableViewCell.swift; sourceTree = "<group>"; };
 		E1FA38EF264B05E4001EFA5C /* UserPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPresenter.swift; sourceTree = "<group>"; };
 		E1FA38F4264B0867001EFA5C /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		E1FA38F6264B0B9D001EFA5C /* ImageSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSource.swift; sourceTree = "<group>"; };
@@ -119,6 +129,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E1510C84264CF45100E59C35 /* SkeletonView.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -132,24 +143,62 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		E1510C63264C109700E59C35 /* New Group */ = {
+		E1510C63264C109700E59C35 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
 				E1510C65264C10A600E59C35 /* FFBadgedBarButtonItem.m */,
 				E1510C67264C10B000E59C35 /* FFBadgedBarButtonItem.h */,
 				E1510C64264C10A500E59C35 /* RAFGithubUsersApp-Bridging-Header.h */,
 			);
-			path = "New Group";
+			path = Vendor;
 			sourceTree = "<group>";
 		};
-		E1510C78264C4E0000E59C35 /* Types */ = {
+		E1510C78264C4E0000E59C35 /* Base Types */ = {
 			isa = PBXGroup;
 			children = (
 				E1510C6E264C478100E59C35 /* UserTableViewCell.swift */,
 				E1510C74264C4D7A00E59C35 /* UserListTableViewCellDelegate.swift */,
 				E1510C70264C4A9800E59C35 /* UserTableViewCellBase.swift */,
 			);
-			path = Types;
+			path = "Base Types";
+			sourceTree = "<group>";
+		};
+		E1510C7D264C70C300E59C35 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				E160EBE4264A76FF002820EC /* ProfileViewController.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		E1510C7E264C710F00E59C35 /* TableCells */ = {
+			isa = PBXGroup;
+			children = (
+				E1510C79264C6A0F00E59C35 /* StubUserTableViewCell.swift */,
+				E1F6E024264D08E800A023A8 /* ShimmerUserTableViewCell.swift */,
+				E1510C7F264C9B9200E59C35 /* AdminUserTableViewCell.swift */,
+				E1510C7B264C6A7A00E59C35 /* NoteUserTableViewCell copy.swift */,
+				E1510C6A264C459200E59C35 /* InvertedUserTableViewCell.swift */,
+				E1D04A7D264BB57F00C4E5FD /* NormalUserTableViewCell.swift */,
+				E1510C78264C4E0000E59C35 /* Base Types */,
+			);
+			path = TableCells;
+			sourceTree = "<group>";
+		};
+		E1510C82264CF45000E59C35 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E1510C83264CF45100E59C35 /* SkeletonView.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E1510C85264CF75800E59C35 /* InferfaceBuilder */ = {
+			isa = PBXGroup;
+			children = (
+				E160EBC2264A6D44002820EC /* Main.storyboard */,
+			);
+			path = InferfaceBuilder;
 			sourceTree = "<group>";
 		};
 		E160EBB0264A6D44002820EC = {
@@ -158,13 +207,14 @@
 				E160EBBB264A6D44002820EC /* RAFGithubUsersApp */,
 				E160EBD5264A6D47002820EC /* RAFGithubUsersAppTests */,
 				E160EBBA264A6D44002820EC /* Products */,
+				E1510C82264CF45000E59C35 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
 		E160EBBA264A6D44002820EC /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E160EBB9264A6D44002820EC /* RAFGithubUsersApp.app */,
+				E160EBB9264A6D44002820EC /* GithubApp.app */,
 				E160EBD2264A6D47002820EC /* RAFGithubUsersAppTests.xctest */,
 			);
 			name = Products;
@@ -173,20 +223,17 @@
 		E160EBBB264A6D44002820EC /* RAFGithubUsersApp */ = {
 			isa = PBXGroup;
 			children = (
-				E1510C63264C109700E59C35 /* New Group */,
+				E1510C85264CF75800E59C35 /* InferfaceBuilder */,
 				E1FA38FE264B1F19001EFA5C /* Persistence */,
 				E189A167264ADC5800CBD45A /* Api */,
-				E189A18D264AF95500CBD45A /* Utilities */,
 				E189A18B264AF8C900CBD45A /* ViewModels */,
 				E1FA38EE264B05B8001EFA5C /* Presenters */,
 				E160EBE1264A7586002820EC /* ViewControllers */,
-				E189A17E264AE33C00CBD45A /* Types */,
+				E189A17E264AE33C00CBD45A /* Support */,
 				E189A15E264AD5BB00CBD45A /* AppConfig */,
 				E189A18F264AFA2E00CBD45A /* Localization */,
 				E160EBBC264A6D44002820EC /* AppDelegate.swift */,
 				E160EBBE264A6D44002820EC /* SceneDelegate.swift */,
-				E1FA38F3264B0867001EFA5C /* Extensions */,
-				E160EBC2264A6D44002820EC /* Main.storyboard */,
 				E160EBC8264A6D46002820EC /* Assets.xcassets */,
 				E160EBCA264A6D46002820EC /* LaunchScreen.storyboard */,
 				E160EBCD264A6D46002820EC /* Info.plist */,
@@ -211,10 +258,9 @@
 		E160EBE1264A7586002820EC /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				E1D04A7C264BB56F00C4E5FD /* TableViewCells */,
 				E160EBE2264A7592002820EC /* ViewControllersFactory.swift */,
-				E160EBE4264A76FF002820EC /* UserProfileViewController.swift */,
-				E160EBC0264A6D44002820EC /* UsersListViewController.swift */,
+				E1D04A7C264BB56F00C4E5FD /* Home */,
+				E1510C7D264C70C300E59C35 /* Profile */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -258,13 +304,16 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		E189A17E264AE33C00CBD45A /* Types */ = {
+		E189A17E264AE33C00CBD45A /* Support */ = {
 			isa = PBXGroup;
 			children = (
 				E1FA38F6264B0B9D001EFA5C /* ImageSource.swift */,
 				E189A17F264AE35000CBD45A /* ErrorType.swift */,
+				E1FA38F3264B0867001EFA5C /* Extensions */,
+				E189A18D264AF95500CBD45A /* Utilities */,
+				E1510C63264C109700E59C35 /* Vendor */,
 			);
-			path = Types;
+			path = Support;
 			sourceTree = "<group>";
 		};
 		E189A181264AE76900CBD45A /* ApiMock */ = {
@@ -302,14 +351,13 @@
 			path = Localization;
 			sourceTree = "<group>";
 		};
-		E1D04A7C264BB56F00C4E5FD /* TableViewCells */ = {
+		E1D04A7C264BB56F00C4E5FD /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				E1510C78264C4E0000E59C35 /* Types */,
-				E1510C6A264C459200E59C35 /* InvertedUserTableViewCell.swift */,
-				E1D04A7D264BB57F00C4E5FD /* NormalUserTableViewCell.swift */,
+				E160EBC0264A6D44002820EC /* UsersViewController.swift */,
+				E1510C7E264C710F00E59C35 /* TableCells */,
 			);
-			path = TableViewCells;
+			path = Home;
 			sourceTree = "<group>";
 		};
 		E1FA38EE264B05B8001EFA5C /* Presenters */ = {
@@ -349,6 +397,7 @@
 				E160EBB5264A6D44002820EC /* Sources */,
 				E160EBB6264A6D44002820EC /* Frameworks */,
 				E160EBB7264A6D44002820EC /* Resources */,
+				E1510C81264CF36700E59C35 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -356,7 +405,7 @@
 			);
 			name = RAFGithubUsersApp;
 			productName = RAFGithubUsersApp;
-			productReference = E160EBB9264A6D44002820EC /* RAFGithubUsersApp.app */;
+			productReference = E160EBB9264A6D44002820EC /* GithubApp.app */;
 			productType = "com.apple.product-type.application";
 		};
 		E160EBD1264A6D47002820EC /* RAFGithubUsersAppTests */ = {
@@ -438,26 +487,51 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		E1510C81264CF36700E59C35 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/SkeletonView.framework",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ncarthage copy-frameworks\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		E160EBB5264A6D44002820EC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				E1510C6D264C462200E59C35 /* UIViewExtensions.swift in Sources */,
-				E160EBC1264A6D44002820EC /* UsersListViewController.swift in Sources */,
+				E160EBC1264A6D44002820EC /* UsersViewController.swift in Sources */,
 				E189A180264AE3FD00CBD45A /* ErrorType.swift in Sources */,
 				E189A17D264AE0D400CBD45A /* GithubUser.swift in Sources */,
 				E1FA38F7264B0B9D001EFA5C /* ImageSource.swift in Sources */,
-				E160EBE5264A76FF002820EC /* UserProfileViewController.swift in Sources */,
+				E160EBE5264A76FF002820EC /* ProfileViewController.swift in Sources */,
 				E1510C69264C428B00E59C35 /* UIImageExtensions.swift in Sources */,
 				E1FA38F0264B07D1001EFA5C /* UsersViewModel.swift in Sources */,
+				E1510C80264C9B9300E59C35 /* AdminUserTableViewCell.swift in Sources */,
 				E189A17A264AE08300CBD45A /* GithubUsersApi.swift in Sources */,
 				E189A166264AD86600CBD45A /* AppConfig.swift in Sources */,
 				E1FA38F2264B083A001EFA5C /* UserPresenter.swift in Sources */,
 				E160EBE3264A7686002820EC /* ViewControllersFactory.swift in Sources */,
 				E1510C66264C10A600E59C35 /* FFBadgedBarButtonItem.m in Sources */,
+				E1F6E025264D08E800A023A8 /* ShimmerUserTableViewCell.swift in Sources */,
 				E1510C75264C4D7A00E59C35 /* UserListTableViewCellDelegate.swift in Sources */,
 				E1510C71264C4A9800E59C35 /* UserTableViewCellBase.swift in Sources */,
+				E1510C7A264C6A1000E59C35 /* StubUserTableViewCell.swift in Sources */,
+				E1510C7C264C6A7A00E59C35 /* NoteUserTableViewCell copy.swift in Sources */,
 				E189A16D264ADD3000CBD45A /* Api.swift in Sources */,
 				E1D04A7E264BB58300C4E5FD /* NormalUserTableViewCell.swift in Sources */,
 				E1FA38FD264B1BB7001EFA5C /* JSONSchemaSupport.swift in Sources */,
@@ -571,7 +645,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -625,7 +699,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -642,14 +716,18 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = BV7ZYWZYR7;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = RAFGithubUsersApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.raf.software.RAFGithubUsersApp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "RAFGithubUsersApp/New Group/RAFGithubUsersApp-Bridging-Header.h";
+				PRODUCT_NAME = GithubApp;
+				SWIFT_OBJC_BRIDGING_HEADER = "RAFGithubUsersApp/Support/Vendor/RAFGithubUsersApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -663,14 +741,18 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = BV7ZYWZYR7;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = RAFGithubUsersApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.raf.software.RAFGithubUsersApp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "RAFGithubUsersApp/New Group/RAFGithubUsersApp-Bridging-Header.h";
+				PRODUCT_NAME = GithubApp;
+				SWIFT_OBJC_BRIDGING_HEADER = "RAFGithubUsersApp/Support/Vendor/RAFGithubUsersApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -694,7 +776,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RAFGithubUsersApp.app/RAFGithubUsersApp";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GithubApp.app/GithubApp";
 			};
 			name = Debug;
 		};
@@ -716,7 +798,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RAFGithubUsersApp.app/RAFGithubUsersApp";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GithubApp.app/GithubApp";
 			};
 			name = Release;
 		};

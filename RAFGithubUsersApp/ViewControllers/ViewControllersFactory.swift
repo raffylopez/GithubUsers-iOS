@@ -14,15 +14,22 @@ enum VcType {
 }
 
 // MARK: - ViewControllers
+class StoryBoard {
+    static var main: UIStoryboard = {
+        let storyboard = UIStoryboard(name:"Main", bundle: nil)
+        return storyboard
+    }()
+}
+
 class ViewControllersFactory {
     public static func instance(vcType: VcType) -> UIViewController {
         switch vcType {
         case let .usersList(viewModel):
-            let controller = UsersListViewController()
+            let controller = UsersViewController()
             controller.viewModel = viewModel
             return controller
         case .userProfile:
-            return UserProfileViewController()
+            return StoryBoard.main.instantiateViewController(identifier: String(describing: ProfileViewController.self))
         }
     }
 }

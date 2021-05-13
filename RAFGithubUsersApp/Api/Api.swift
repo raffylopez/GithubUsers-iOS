@@ -5,6 +5,7 @@
 
 import Foundation
 
+// TODO
 protocol Api {
     associatedtype T
     func fetchResult(completion: ((Result<[T], Error>) -> Void)?)

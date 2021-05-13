@@ -161,5 +161,9 @@ extension URLSession {
     func githubUsersTask(with url: URL, completionHandler: @escaping ([GithubUser]?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
         return self.codableTask(with: url, completionHandler: completionHandler)
     }
+    
+    func githubUsersTask(urlRequest: URLRequest, completionHandler: @escaping ([GithubUser]?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
+        return self.codableTask(with: urlRequest.url!, completionHandler: completionHandler)
+    }
 }
 

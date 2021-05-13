@@ -11,19 +11,21 @@ import Foundation
 class GithubUsersApi {
     typealias T = GithubUser
     let usersListUri: String
-    let queryParams: String
     let userInfoUriPrefix: String
     
     init() {
-        queryParams = "?access_token=\(getConfig().githubAccessToken)"
-        userInfoUriPrefix = "\(getConfig().githubUserDetailsUriPrefix)\(queryParams)"
+        userInfoUriPrefix = "\(getConfig().githubUserDetailsUriPrefix)"
         usersListUri = "\(getConfig().githubUsersListUri)"
     }
 
     func fetchUserDetails(username: String, completion: ((Result<GithubUserInfo, Error>) -> Void)? = nil ) {
         let userInfoUri = "\(userInfoUriPrefix)\(username)"
         let semaphore = DispatchSemaphore(value: 0)
-        URLSession.shared.githubUserInfoTask(with: URL(string: userInfoUri + queryParams)!, completionHandler: { (githubUserInfo, _, error) in
+        var uri = URLComponents(string: userInfoUri)
+        uri?.queryItems = [
+            URLQueryItem(name: "access_token", value: getConfig().githubAccessToken)
+        ]
+        URLSession.shared.githubUserInfoTask(with: uri!.url!, completionHandler: { (githubUserInfo, _, error) in
             if let error = error {
                 semaphore.signal()
                 completion?(.failure(error))
@@ -39,11 +41,16 @@ class GithubUsersApi {
         semaphore.wait()
     }
     
-    func fetchUsersList(completion: ((Result<[GithubUser], Error>) -> Void)? = nil ) {
+    func fetchUsers(since: Int = 0, completion: ((Result<[GithubUser], Error>) -> Void)? = nil) {
         let dispatchGroup = DispatchGroup()
         dispatchGroup.enter()
+        var uri = URLComponents(string: usersListUri)
+        uri?.queryItems = [
+            URLQueryItem(name: "access_token", value: getConfig().githubAccessToken),
+            URLQueryItem(name: "since", value: "\(since)")
+        ]
 
-        let task = URLSession.shared.githubUsersTask(with: URL(string: usersListUri + queryParams)!, completionHandler: { (githubUsers, _, error) in
+        let task = URLSession.shared.githubUsersTask(with: uri!.url!, completionHandler: { (githubUsers, _, error) in
             dispatchGroup.leave()
             if let error = error {
                 completion?(.failure(error))

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class UsersListViewController: UITableViewController {
+class UsersViewController: UITableViewController {
     
     var viewModel: UsersViewModel!
     lazy var search: UISearchController = {
@@ -28,9 +28,11 @@ class UsersListViewController: UITableViewController {
         search.dismiss(animated: true, completion: nil)
     }
     
+
     override func loadView() {
         super.loadView()
         self.tableView?.register(NormalUserTableViewCell.self, forCellReuseIdentifier: String(describing: NormalUserTableViewCell.self))
+        self.tableView?.register(InvertedUserTableViewCell.self, forCellReuseIdentifier: String(describing: InvertedUserTableViewCell.self))
         self.tableView.scrollsToTop = true
         self.view.backgroundColor = UIColor.systemBackground
     }
@@ -123,6 +125,11 @@ class UsersListViewController: UITableViewController {
             }
             if let cell = self.tableView.cellForRow(at: IndexPath(item: photoIndex, section: 0)) as? NormalUserTableViewCell {
                 cell.update(displaying: image)
+                return
+            }
+            if let cell = self.tableView.cellForRow(at: IndexPath(item: photoIndex, section: 0)) as? InvertedUserTableViewCell {
+                cell.update(displaying: image)
+                return
             }
         }
     }
@@ -140,34 +147,47 @@ class UsersListViewController: UITableViewController {
         return 130
     }
     
+    /**
+     Generic method that uses reflection to obtain a table view cell subtype instance,
+     with dequeue identifier based on reflected type
+     */
+    private func getTableViewCell<T:UserTableViewCellBase>(_ type: T.Type, cellForRowAt indexPath: IndexPath) -> T {
+        let cell  = tableView.dequeueReusableCell(withIdentifier: String(describing: T.self), for: indexPath)
+        if let cell = cell as? T {
+            cell.delegate = self
+            cell.updateWith(user: viewModel.users[indexPath.row])
+            return cell
+        }
+        fatalError("Cannot dequeue to \(String(describing:T.self))")
+    }
+    
     // MARK: - UITableViewDatasource methods
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: NormalUserTableViewCell.self), for: indexPath)
-        if let cell = cell as? NormalUserTableViewCell {
-            cell.delegate = self
-            cell.amiiboElement = viewModel.users[indexPath.row]
-            cell.lblName?.text = viewModel.presentedElements[indexPath.row].login
-            cell.lblSeries?.text = viewModel.presentedElements[indexPath.row].urlHtml
+        let rowMultipleOfFour = (indexPath.row + 1) % 4 == 0
+        let rowNotZero = indexPath.row != 0
+        
+        if rowMultipleOfFour && rowNotZero {
+            return getTableViewCell(InvertedUserTableViewCell.self, cellForRowAt: indexPath)
         }
-        return cell
+
+        return getTableViewCell(NormalUserTableViewCell.self, cellForRowAt: indexPath)
     }
 }
 
 // MARK: - Cell Delegate Methods
-extension UsersListViewController: UserListTableViewCellDelegate {
-    func didTouchImageThumbnail(view: UIImageView, cell: UserTableViewCell, element: User) {
-//        let viewModel = UsersViewModel(apiService: GithubUsersApi())
+extension UsersViewController: UserListTableViewCellDelegate {
+    func didTouchImageThumbnail(view: UIImageView, cell: UserTableViewCellBase, element: User) {
         self.navigationController?.pushViewController(ViewControllersFactory.instance(vcType: .userProfile), animated: true)
     }
     
-    func didTouchCellPanel(cell: UserTableViewCell) {
+    func didTouchCellPanel(cell: UserTableViewCellBase) {
         self.navigationController?.pushViewController(
             ViewControllersFactory.instance(vcType: .userProfile),
             animated: true)
     }
 }
 
-extension UsersListViewController: UISearchResultsUpdating {
+extension UsersViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         // TODO
     }

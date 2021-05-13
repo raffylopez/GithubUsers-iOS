@@ -12,5 +12,7 @@ import CoreData
 
 @objc(User)
 public class User: NSManagedObject {
-
+    func present() -> UserPresenter {
+        return UserPresenter(self)
+    }
 }

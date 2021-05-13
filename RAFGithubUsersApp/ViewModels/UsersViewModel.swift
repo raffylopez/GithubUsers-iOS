@@ -14,8 +14,25 @@ import CoreData
 class UsersViewModel {
     typealias OnDataAvailable = ( () -> Void )
     var onDataAvailable: OnDataAvailable = {}
+    var onFetchInProgress: (() -> Void) = {}
+    var onFetchNotInProgress: (() -> Void) = {}
+    
+    var currentCount: Int {
+        return users.count
+    }
+    
     let imageStore: ImageStore!
     let apiService: GithubUsersApi
+    var isFetchInProgress: Bool = false {
+        didSet {
+            print("Fetch in progress: \(isFetchInProgress)")
+            if (isFetchInProgress) {
+                onFetchInProgress()
+                return
+            }
+            onFetchNotInProgress()
+        }
+    }
 
     private static let persistentContainerName = getConfig().xcPersisentContainerName
     private lazy var persistentContainer: NSPersistentContainer = {
@@ -63,11 +80,18 @@ class UsersViewModel {
         imageStore = ImageStore()
     }
     
+    
+    /**
+     Binds closure to model describing what to perform when data becomes available
+     */
     func bind(availability: @escaping OnDataAvailable) {
         self.onDataAvailable = availability
         fetchUsers()
     }
     
+    /**
+     API call to user profiles
+     */
     func fetchUserDetails(for user: User , completion: @escaping (Result<UserInfo, Error>)->Void) {
         guard let login = user.login else {
             return completion(.failure(ErrorType.emptyResult))
@@ -99,11 +123,29 @@ class UsersViewModel {
 
     }
 
+    var since: Int = 0
+    var currentPage: Int = 0
+    var lastBatchCount: Int = 0
+    
+    /**
+     Starts fetching user data from api service. Additional calls to this method
+     are terminated at the onset, while a fetch is already in progress.
+     */
     func fetchUsers() {
-        self.apiService.fetchUsersList { (result :Result<[GithubUser], Error>) in
+        guard !isFetchInProgress else {
+            return
+        }
+        
+        isFetchInProgress = true
+        
+        self.apiService.fetchUsers(since: since) { (result: Result<[GithubUser], Error>) in
             let context = self.persistentContainer.viewContext
             switch result {
             case let .success(githubUsers):
+                self.isFetchInProgress = false
+                self.lastBatchCount = githubUsers.count
+                self.currentPage += 1
+
                 let users: [User] = githubUsers.map { githubUser in
                     var user: User!
                     context.performAndWait {
@@ -129,13 +171,20 @@ class UsersViewModel {
                     }
                     return user
                 }
-                self.users = users
+                self.users.append(contentsOf: users)
+                guard let user = self.users.last else { return }
+                self.since = Int(user.id)
             case .failure(let error):
+                self.isFetchInProgress = false
                 preconditionFailure("\(error.localizedDescription)")
             }
         }
     }
     
+    /**
+     Fetches photo media (based on avatar url). Call is asynchronous. Can be set to synchronous fetching, but
+     doing so leads to severe performance degradation.
+     */
     func fetchImage(for user: User, completion: @escaping (Result<(UIImage, ImageSource), Error>) -> Void, synchronous: Bool = false) {
         guard let urlString = user.urlAvatar, !urlString.isEmpty else {
             completion(.failure(ErrorType.missingImageUrl))
@@ -171,6 +220,9 @@ class UsersViewModel {
         if (synchronous) { group.wait() }
     }
     
+    /**
+     Performs Data to UIImage conversion
+     */
     private func processImageRequest(data: Data?, error: Error?) -> Result<(UIImage, ImageSource), Error> {
         guard let imageData = data, let image = UIImage(data: imageData) else {
             if data == nil {
