@@ -90,6 +90,7 @@ class UsersViewController: UITableViewController {
             }
             
             OperationQueue.main.addOperation {
+                self.navigationController?.view.makeToast("Data loaded", duration: 3, position: .bottom)
                 if self.viewModel.currentPage <= 1 { /* User performed a refresh */
                     self.tableView.alpha = 0
                     UIView.transition(with: self.tableView,

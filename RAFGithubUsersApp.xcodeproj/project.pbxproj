@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E146CC2B264D883400C3FA51 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = E146CC2A264D883400C3FA51 /* Reachability.swift */; };
+		E146CC2D264D887400C3FA51 /* ConnectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E146CC2C264D887400C3FA51 /* ConnectionManager.swift */; };
 		E1510C60264BFAD300E59C35 /* GithubApiMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A184264AE7A000CBD45A /* GithubApiMock.swift */; };
 		E1510C61264BFAD700E59C35 /* fakeuserslist.json in Resources */ = {isa = PBXBuildFile; fileRef = E189A182264AE77800CBD45A /* fakeuserslist.json */; };
 		E1510C66264C10A600E59C35 /* FFBadgedBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = E1510C65264C10A600E59C35 /* FFBadgedBarButtonItem.m */; };
@@ -44,6 +46,7 @@
 		E1D04A7B264BAF1900C4E5FD /* MockApiTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A186264AE9AC00CBD45A /* MockApiTests.swift */; };
 		E1D04A7E264BB58300C4E5FD /* NormalUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D04A7D264BB57F00C4E5FD /* NormalUserTableViewCell.swift */; };
 		E1D04A80264BB5CF00C4E5FD /* UIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D04A7F264BB5CF00C4E5FD /* UIHelper.swift */; };
+		E1F2C142264D826200041F03 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F2C141264D826200041F03 /* Toast.swift */; };
 		E1F6E025264D08E800A023A8 /* ShimmerUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F6E024264D08E800A023A8 /* ShimmerUserTableViewCell.swift */; };
 		E1F6E027264D648700A023A8 /* fakeuserslist.json in Resources */ = {isa = PBXBuildFile; fileRef = E189A182264AE77800CBD45A /* fakeuserslist.json */; };
 		E1F6E029264D765000A023A8 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F6E028264D764F00A023A8 /* ProfileViewModel.swift */; };
@@ -70,6 +73,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E146CC2A264D883400C3FA51 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		E146CC2C264D887400C3FA51 /* ConnectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionManager.swift; sourceTree = "<group>"; };
 		E1510C64264C10A500E59C35 /* RAFGithubUsersApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RAFGithubUsersApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		E1510C65264C10A600E59C35 /* FFBadgedBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFBadgedBarButtonItem.m; sourceTree = "<group>"; };
 		E1510C67264C10B000E59C35 /* FFBadgedBarButtonItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FFBadgedBarButtonItem.h; sourceTree = "<group>"; };
@@ -114,6 +119,7 @@
 		E189A190264AFA4700CBD45A /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		E1D04A7D264BB57F00C4E5FD /* NormalUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NormalUserTableViewCell.swift; sourceTree = "<group>"; };
 		E1D04A7F264BB5CF00C4E5FD /* UIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIHelper.swift; sourceTree = "<group>"; };
+		E1F2C141264D826200041F03 /* Toast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		E1F6E024264D08E800A023A8 /* ShimmerUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmerUserTableViewCell.swift; sourceTree = "<group>"; };
 		E1F6E028264D764F00A023A8 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		E1FA38EF264B05E4001EFA5C /* UserPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPresenter.swift; sourceTree = "<group>"; };
@@ -146,11 +152,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		E1510C63264C109700E59C35 /* Vendor */ = {
+		E146CC26264D877600C3FA51 /* FFBadgedBarButtonItem */ = {
 			isa = PBXGroup;
 			children = (
 				E1510C65264C10A600E59C35 /* FFBadgedBarButtonItem.m */,
 				E1510C67264C10B000E59C35 /* FFBadgedBarButtonItem.h */,
+			);
+			path = FFBadgedBarButtonItem;
+			sourceTree = "<group>";
+		};
+		E146CC29264D881A00C3FA51 /* Reachability */ = {
+			isa = PBXGroup;
+			children = (
+				E146CC2A264D883400C3FA51 /* Reachability.swift */,
+			);
+			path = Reachability;
+			sourceTree = "<group>";
+		};
+		E1510C63264C109700E59C35 /* Vendor */ = {
+			isa = PBXGroup;
+			children = (
+				E146CC29264D881A00C3FA51 /* Reachability */,
+				E146CC26264D877600C3FA51 /* FFBadgedBarButtonItem */,
+				E1F2C143264D826600041F03 /* Toast */,
 				E1510C64264C10A500E59C35 /* RAFGithubUsersApp-Bridging-Header.h */,
 			);
 			path = Vendor;
@@ -341,6 +365,7 @@
 			isa = PBXGroup;
 			children = (
 				E1D04A7F264BB5CF00C4E5FD /* UIHelper.swift */,
+				E146CC2C264D887400C3FA51 /* ConnectionManager.swift */,
 				E189A18E264AF96300CBD45A /* ImageStore.swift */,
 				E1FA38FC264B1BB7001EFA5C /* JSONSchemaSupport.swift */,
 			);
@@ -362,6 +387,14 @@
 				E1510C7E264C710F00E59C35 /* TableCells */,
 			);
 			path = Home;
+			sourceTree = "<group>";
+		};
+		E1F2C143264D826600041F03 /* Toast */ = {
+			isa = PBXGroup;
+			children = (
+				E1F2C141264D826200041F03 /* Toast.swift */,
+			);
+			path = Toast;
 			sourceTree = "<group>";
 		};
 		E1FA38EE264B05B8001EFA5C /* Presenters */ = {
@@ -518,7 +551,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E1F2C142264D826200041F03 /* Toast.swift in Sources */,
 				E1510C6D264C462200E59C35 /* UIViewExtensions.swift in Sources */,
+				E146CC2B264D883400C3FA51 /* Reachability.swift in Sources */,
 				E160EBC1264A6D44002820EC /* UsersViewController.swift in Sources */,
 				E189A180264AE3FD00CBD45A /* ErrorType.swift in Sources */,
 				E189A17D264AE0D400CBD45A /* GithubUser.swift in Sources */,
@@ -539,6 +574,7 @@
 				E1510C7A264C6A1000E59C35 /* StubUserTableViewCell.swift in Sources */,
 				E1510C7C264C6A7A00E59C35 /* NoteUserTableViewCell copy.swift in Sources */,
 				E189A16D264ADD3000CBD45A /* Api.swift in Sources */,
+				E146CC2D264D887400C3FA51 /* ConnectionManager.swift in Sources */,
 				E1D04A7E264BB58300C4E5FD /* NormalUserTableViewCell.swift in Sources */,
 				E1FA38FD264B1BB7001EFA5C /* JSONSchemaSupport.swift in Sources */,
 				E160EBC7264A6D44002820EC /* RAFGithubUsersApp.xcdatamodeld in Sources */,
