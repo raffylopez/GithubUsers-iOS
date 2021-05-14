@@ -10,17 +10,8 @@ import Foundation
 import UIKit
 import CoreData
 
-
-protocol UsersViewModelDelegate {
-    func onDataAvailable()
-    func onRetryError(n: Int, nextAttemptInMilliseconds: Int, error:Error)
-    func onFetchInProgress()
-    func onFetchDone()
-}
-
-// MARK: - AmiiboElementsViewModel
 class UsersViewModel {
-    var delegate: UsersViewModelDelegate? = nil
+    var delegate: ViewModelDelegate? = nil
     
     typealias OnDataAvailable = ( () -> Void )
     var onDataAvailable: OnDataAvailable = {}
@@ -103,36 +94,36 @@ class UsersViewModel {
     /**
      API call to user profiles
      */
-    func fetchUserDetails(for user: User , completion: @escaping (Result<UserInfo, Error>)->Void) {
-        guard let login = user.login else {
-            return completion(.failure(ErrorType.emptyResult))
-        }
-        self.apiService.fetchUserDetails(username: login) { result in
-            let context = self.persistentContainer.viewContext
-            switch result {
-            case let .success(githubuserInfo):
-                let userInfo = UserInfo(context: context)
-                userInfo.id = Int32(githubuserInfo.id)
-                userInfo.bio = githubuserInfo.bio
-                userInfo.company = githubuserInfo.company
-                userInfo.createdAt = githubuserInfo.createdAt
-                userInfo.email = githubuserInfo.email
-                userInfo.followers = Int32(githubuserInfo.followers)
-                userInfo.following = Int32(githubuserInfo.following)
-                userInfo.isHireable = githubuserInfo.hireable == ""
-                userInfo.location = githubuserInfo.location
-                userInfo.name = githubuserInfo.name
-                userInfo.publicGists = Int32(githubuserInfo.publicGists)
-                userInfo.publicRepos = Int32(githubuserInfo.publicRepos)
-                userInfo.twitterUsername = githubuserInfo.twitterUsername
-                userInfo.updatedAt = githubuserInfo.updatedAt
-                return completion(.success(userInfo))
-            case .failure(let error):
-                preconditionFailure("\(error.localizedDescription)")
-            }
-        }
-
-    }
+//    func fetchUserDetailsDEPRECATED(for user: User , completion: @escaping (Result<UserInfo, Error>)->Void) {
+//        guard let login = user.login else {
+//            return completion(.failure(ErrorType.emptyResult))
+//        }
+//        self.apiService.fetchUserDetails(username: login) { result in
+//            let context = self.persistentContainer.viewContext
+//            switch result {
+//            case let .success(githubuserInfo):
+//                let userInfo = UserInfo(context: context)
+//                userInfo.id = Int32(githubuserInfo.id)
+//                userInfo.bio = githubuserInfo.bio
+//                userInfo.company = githubuserInfo.company
+//                userInfo.createdAt = githubuserInfo.createdAt
+//                userInfo.email = githubuserInfo.email
+//                userInfo.followers = Int32(githubuserInfo.followers)
+//                userInfo.following = Int32(githubuserInfo.following)
+//                userInfo.isHireable = githubuserInfo.hireable == ""
+//                userInfo.location = githubuserInfo.location
+//                userInfo.name = githubuserInfo.name
+//                userInfo.publicGists = Int32(githubuserInfo.publicGists)
+//                userInfo.publicRepos = Int32(githubuserInfo.publicRepos)
+//                userInfo.twitterUsername = githubuserInfo.twitterUsername
+//                userInfo.updatedAt = githubuserInfo.updatedAt
+//                return completion(.success(userInfo))
+//            case .failure(let error):
+//                preconditionFailure("\(error.localizedDescription)")
+//            }
+//        }
+//
+//    }
 
     var since: Int = 0
     var currentPage: Int = 0
@@ -152,6 +143,7 @@ class UsersViewModel {
         isFetchInProgress = true
 
         let onTaskSuccess = { (githubUsers: [GithubUser]) in
+            self.isFetchInProgress = false
             let context = self.persistentContainer.viewContext
                 self.isFetchInProgress = false
                 self.lastBatchCount = githubUsers.count
@@ -160,6 +152,8 @@ class UsersViewModel {
                 let users: [User] = githubUsers.map { githubUser in
                     var user: User!
                     context.performAndWait {
+                        
+                        // TODO: Transfer to managedUserInfo in CoreData User entity class
                         user = User(context: context)
                         user.login = githubUser.login
                         user.id = Int32(githubUser.id)
@@ -186,6 +180,8 @@ class UsersViewModel {
                 guard let user = self.users.last else { return }
                 self.since = Int(user.id)
             completion?(.success(users))
+            
+            // TODO: Delegate success
         }
         
         let onTaskError: ((Int, Int, Error)->Void)? = { attemptCount, delayTillNext, error in

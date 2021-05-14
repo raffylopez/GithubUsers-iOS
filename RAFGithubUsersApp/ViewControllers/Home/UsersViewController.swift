@@ -66,9 +66,10 @@ class UsersViewController: UITableViewController {
      Generic method that uses reflection to obtain a table view cell subtype instance,
      with dequeue identifier based on reflected type
      */
-    private func getTableViewCell<T>(_ type: T.Type, cellForRowAt indexPath: IndexPath) -> T where T:UserTableViewCellBase {
+    private func getUserTableViewCell<T>(associatedUser: User, _ type: T.Type, cellForRowAt indexPath: IndexPath) -> T where T:UserTableViewCellBase {
         let cell  = tableView.dequeueReusableCell(withIdentifier: String(describing: T.self), for: indexPath)
         if let cell = cell as? T {
+            cell.user = associatedUser
             return cell
         }
         fatalError("Cannot dequeue to \(String(describing:T.self))")
@@ -282,14 +283,14 @@ extension UsersViewController {
 //        if rowMultipleOfFour && rowNotZero {
 //            return getTableViewCell(AlternativeTableViewCell.self, cellForRowAt: indexPath)
 //        }
-
-        let cell = getTableViewCell(StandardTableViewCell.self, cellForRowAt: indexPath)
+        let user = viewModel.users[indexPath.row]
+        let cell = getUserTableViewCell(associatedUser: user, StandardTableViewCell.self, cellForRowAt: indexPath)
         cell.delegate = self
 //        if isLoadingCell2(for: indexPath) {
 //            cell.updateWith(user: viewModel.users[indexPath.row])
 //            return cell
 //        }
-        cell.updateWith(user: viewModel.users[indexPath.row])
+        cell.updateWith(user: user)
         return cell
     }
 }
@@ -300,8 +301,7 @@ extension UsersViewController: UserListTableViewCellDelegate {
     }
     
     func didTouchCellPanel(cell: UserTableViewCellBase) {
-        let viewModel = ProfileViewModel(apiService: GithubUsersApi())
-//        navigationItem.title = ""
+        let viewModel = ProfileViewModel(user: cell.user, apiService: GithubUsersApi())
         self.navigationController?.pushViewController(ViewControllersFactory.instance(vcType: .userProfile(viewModel)), animated: true)
     }
     
@@ -335,7 +335,7 @@ private extension UsersViewController {
 }
 
 
-extension UsersViewController: UsersViewModelDelegate {
+extension UsersViewController: ViewModelDelegate {
 
     func onRetryError(n: Int, nextAttemptInMilliseconds: Int, error: Error) {
         DispatchQueue.main.async {

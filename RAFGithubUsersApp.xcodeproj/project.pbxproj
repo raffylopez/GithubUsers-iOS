@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E129A665264EB4130035A99B /* UserInfoPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E129A664264EB4130035A99B /* UserInfoPresenter.swift */; };
 		E146CC2D264D887400C3FA51 /* ConnectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E146CC2C264D887400C3FA51 /* ConnectionManager.swift */; };
 		E146CC2F264D8FEC00C3FA51 /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E146CC2E264D8FEC00C3FA51 /* Reachability.framework */; };
 		E146CC30264D8FEC00C3FA51 /* Reachability.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E146CC2E264D8FEC00C3FA51 /* Reachability.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -36,6 +37,7 @@
 		E160EBD7264A6D47002820EC /* RAFGithubUsersAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E160EBD6264A6D47002820EC /* RAFGithubUsersAppTests.swift */; };
 		E160EBE3264A7686002820EC /* ViewControllersFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E160EBE2264A7592002820EC /* ViewControllersFactory.swift */; };
 		E160EBE5264A76FF002820EC /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E160EBE4264A76FF002820EC /* ProfileViewController.swift */; };
+		E1880BE5264E8BEA0026D6DC /* ViewModelDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1880BE4264E8BEA0026D6DC /* ViewModelDelegate.swift */; };
 		E189A157264ACC6600CBD45A /* RAFGithubUsersApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E160EBC5264A6D44002820EC /* RAFGithubUsersApp.xcdatamodeld */; };
 		E189A15A264ACE7F00CBD45A /* User+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A158264ACE7F00CBD45A /* User+CoreDataClass.swift */; };
 		E189A165264AD86600CBD45A /* AppConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = E189A15F264AD5CF00CBD45A /* AppConfig.plist */; };
@@ -92,6 +94,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E129A664264EB4130035A99B /* UserInfoPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoPresenter.swift; sourceTree = "<group>"; };
 		E146CC2C264D887400C3FA51 /* ConnectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionManager.swift; sourceTree = "<group>"; };
 		E146CC2E264D8FEC00C3FA51 /* Reachability.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Reachability.framework; path = Carthage/Build/iOS/Reachability.framework; sourceTree = "<group>"; };
 		E146CC34264D937600C3FA51 /* GithubApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GithubApp.entitlements; sourceTree = "<group>"; };
@@ -124,6 +127,7 @@
 		E160EBD8264A6D47002820EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E160EBE2264A7592002820EC /* ViewControllersFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllersFactory.swift; sourceTree = "<group>"; };
 		E160EBE4264A76FF002820EC /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		E1880BE4264E8BEA0026D6DC /* ViewModelDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelDelegate.swift; sourceTree = "<group>"; };
 		E189A155264ACC2A00CBD45A /* UserDataModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataModelTest.swift; sourceTree = "<group>"; };
 		E189A158264ACE7F00CBD45A /* User+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User+CoreDataClass.swift"; sourceTree = "<group>"; };
 		E189A15F264AD5CF00CBD45A /* AppConfig.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = AppConfig.plist; sourceTree = "<group>"; };
@@ -271,9 +275,9 @@
 				E1510C85264CF75800E59C35 /* InferfaceBuilder */,
 				E1FA38FE264B1F19001EFA5C /* Persistence */,
 				E189A167264ADC5800CBD45A /* Api */,
+				E160EBE1264A7586002820EC /* ViewControllers */,
 				E189A18B264AF8C900CBD45A /* ViewModels */,
 				E1FA38EE264B05B8001EFA5C /* Presenters */,
-				E160EBE1264A7586002820EC /* ViewControllers */,
 				E189A17E264AE33C00CBD45A /* Support */,
 				E189A15E264AD5BB00CBD45A /* AppConfig */,
 				E189A18F264AFA2E00CBD45A /* Localization */,
@@ -313,10 +317,10 @@
 		E189A152264ACA3300CBD45A /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				E189A158264ACE7F00CBD45A /* User+CoreDataClass.swift */,
 				E1FA3909264BA390001EFA5C /* User+CoreDataProperties.swift */,
 				E1FA390A264BA390001EFA5C /* UserInfo+CoreDataClass.swift */,
 				E1FA390B264BA390001EFA5C /* UserInfo+CoreDataProperties.swift */,
-				E189A158264ACE7F00CBD45A /* User+CoreDataClass.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -373,6 +377,7 @@
 		E189A18B264AF8C900CBD45A /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				E1880BE4264E8BEA0026D6DC /* ViewModelDelegate.swift */,
 				E1F6E028264D764F00A023A8 /* ProfileViewModel.swift */,
 				E189A18C264AF8F900CBD45A /* UsersViewModel.swift */,
 			);
@@ -419,6 +424,7 @@
 		E1FA38EE264B05B8001EFA5C /* Presenters */ = {
 			isa = PBXGroup;
 			children = (
+				E129A664264EB4130035A99B /* UserInfoPresenter.swift */,
 				E1FA38EF264B05E4001EFA5C /* UserPresenter.swift */,
 			);
 			path = Presenters;
@@ -575,6 +581,7 @@
 				E1F2C142264D826200041F03 /* Toast.swift in Sources */,
 				E1510C6D264C462200E59C35 /* UIViewExtensions.swift in Sources */,
 				E160EBC1264A6D44002820EC /* UsersViewController.swift in Sources */,
+				E129A665264EB4130035A99B /* UserInfoPresenter.swift in Sources */,
 				E189A180264AE3FD00CBD45A /* ErrorType.swift in Sources */,
 				E189A17D264AE0D400CBD45A /* GithubUser.swift in Sources */,
 				E1FA38F7264B0B9D001EFA5C /* ImageSource.swift in Sources */,
@@ -593,6 +600,7 @@
 				E1510C71264C4A9800E59C35 /* UserTableViewCellBase.swift in Sources */,
 				E1510C7A264C6A1000E59C35 /* StubUserTableViewCell.swift in Sources */,
 				E1510C7C264C6A7A00E59C35 /* NoteUserTableViewCell copy.swift in Sources */,
+				E1880BE5264E8BEA0026D6DC /* ViewModelDelegate.swift in Sources */,
 				E189A16D264ADD3000CBD45A /* Api.swift in Sources */,
 				E146CC2D264D887400C3FA51 /* ConnectionManager.swift in Sources */,
 				E1D04A7E264BB58300C4E5FD /* NormalUserTableViewCell.swift in Sources */,

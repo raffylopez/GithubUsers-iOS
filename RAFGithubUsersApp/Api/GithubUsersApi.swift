@@ -22,25 +22,29 @@ class GithubUsersApi {
 
     func fetchUserDetails(username: String, completion: ((Result<GithubUserInfo, Error>) -> Void)? = nil ) {
         let userInfoUri = "\(userInfoUriPrefix)\(username)"
-        let semaphore = DispatchSemaphore(value: 0)
-        var uri = URLComponents(string: userInfoUri)
-        uri?.queryItems = [
+        guard var uri = URLComponents(string: userInfoUri) else {
+            preconditionFailure("Can't construct urlcomponents")
+        }
+
+        uri.queryItems = [
             URLQueryItem(name: "access_token", value: getConfig().githubAccessToken)
         ]
-        URLSession.shared.githubUserInfoTask(with: uri!.url!, completionHandler: { (githubUserInfo, _, error) in
+        
+        guard let url = uri.url else {
+            preconditionFailure("Can't build url")
+        }
+        URLSession.shared.githubUserInfoTask(with: URL(string: userInfoUri)!, completionHandler: { githubUserInfo, response, error in
             if let error = error {
-                semaphore.signal()
                 completion?(.failure(error))
                 return
             }
             if let githubUserInfo = githubUserInfo {
-                semaphore.signal()
                 completion?(.success(githubUserInfo))
                 return
             }
+            print(url)
             completion?(.failure(ErrorType.emptyResult))
             }).resume()
-        semaphore.wait()
     }
     
     var synchronous = false

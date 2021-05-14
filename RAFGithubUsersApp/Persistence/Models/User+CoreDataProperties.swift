@@ -23,6 +23,7 @@ extension User {
     @NSManaged public var urlAvatar: String?
     @NSManaged public var gravatarId: String?
     @NSManaged public var url: String?
+    @NSManaged public var blog: String?
     @NSManaged public var urlHtml: String?
     @NSManaged public var urlFollowers: String?
     @NSManaged public var urlFollowing: String?

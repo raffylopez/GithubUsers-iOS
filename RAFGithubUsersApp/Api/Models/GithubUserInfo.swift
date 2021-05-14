@@ -9,24 +9,25 @@ import Foundation
 
 // MARK: - GithubUserInfo
 struct GithubUserInfo: Codable {
-    let login: String
-    let id: Int
-    let nodeID: String
-    let avatarURL: String
-    let gravatarID: String
-    let url, htmlURL, followersURL: String
-    let followingURL, gistsURL, starredURL: String
-    let subscriptionsURL, organizationsURL, reposURL: String
-    let eventsURL: String
-    let receivedEventsURL: String
-    let type: String
-    let siteAdmin: Bool
-    let name, company: String
-    let blog: String
-    let location, email, hireable, bio: String
-    let twitterUsername: String
-    let publicRepos, publicGists, followers, following: Int
-    let createdAt, updatedAt: Date
+    let login: String?
+    let id: Int?
+    let nodeID: String?
+    let avatarURL: String?
+    let gravatarID: String?
+    let url, htmlURL, followersURL: String?
+    let followingURL, gistsURL, starredURL: String?
+    let subscriptionsURL, organizationsURL, reposURL: String?
+    let eventsURL: String?
+    let receivedEventsURL: String?
+    let type: String?
+    let siteAdmin: Bool?
+    let name, company: String?
+    let blog: String?
+    let location, email: String?
+    let bio, twitterUsername: String?
+    let hireable: Bool?
+    let publicRepos, publicGists, followers, following: Int?
+    let createdAt, updatedAt: Date?
 
     enum CodingKeys: String, CodingKey {
         case login, id
@@ -56,103 +57,6 @@ struct GithubUserInfo: Codable {
     }
 }
 
-// MARK: GithubUserInfo convenience initializers and mutators
-
-extension GithubUserInfo {
-    init(data: Data) throws {
-        self = try newJSONDecoder().decode(GithubUserInfo.self, from: data)
-    }
-
-    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
-        guard let data = json.data(using: encoding) else {
-            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
-        }
-        try self.init(data: data)
-    }
-
-    init(fromURL url: URL) throws {
-        try self.init(data: try Data(contentsOf: url))
-    }
-
-    func with(
-        login: String? = nil,
-        id: Int? = nil,
-        nodeID: String? = nil,
-        avatarURL: String? = nil,
-        gravatarID: String? = nil,
-        url: String? = nil,
-        htmlURL: String? = nil,
-        followersURL: String? = nil,
-        followingURL: String? = nil,
-        gistsURL: String? = nil,
-        starredURL: String? = nil,
-        subscriptionsURL: String? = nil,
-        organizationsURL: String? = nil,
-        reposURL: String? = nil,
-        eventsURL: String? = nil,
-        receivedEventsURL: String? = nil,
-        type: String? = nil,
-        siteAdmin: Bool? = nil,
-        name: String? = nil,
-        company: String? = nil,
-        blog: String? = nil,
-        location: String? = nil,
-        email: String? = nil,
-        hireable: String? = nil,
-        bio: String? = nil,
-        twitterUsername: String? = nil,
-        publicRepos: Int? = nil,
-        publicGists: Int? = nil,
-        followers: Int? = nil,
-        following: Int? = nil,
-        createdAt: Date? = nil,
-        updatedAt: Date? = nil
-    ) -> GithubUserInfo {
-        return GithubUserInfo(
-            login: login ?? self.login,
-            id: id ?? self.id,
-            nodeID: nodeID ?? self.nodeID,
-            avatarURL: avatarURL ?? self.avatarURL,
-            gravatarID: gravatarID ?? self.gravatarID,
-            url: url ?? self.url,
-            htmlURL: htmlURL ?? self.htmlURL,
-            followersURL: followersURL ?? self.followersURL,
-            followingURL: followingURL ?? self.followingURL,
-            gistsURL: gistsURL ?? self.gistsURL,
-            starredURL: starredURL ?? self.starredURL,
-            subscriptionsURL: subscriptionsURL ?? self.subscriptionsURL,
-            organizationsURL: organizationsURL ?? self.organizationsURL,
-            reposURL: reposURL ?? self.reposURL,
-            eventsURL: eventsURL ?? self.eventsURL,
-            receivedEventsURL: receivedEventsURL ?? self.receivedEventsURL,
-            type: type ?? self.type,
-            siteAdmin: siteAdmin ?? self.siteAdmin,
-            name: name ?? self.name,
-            company: company ?? self.company,
-            blog: blog ?? self.blog,
-            location: location ?? self.location,
-            email: email ?? self.email,
-            hireable: hireable ?? self.hireable,
-            bio: bio ?? self.bio,
-            twitterUsername: twitterUsername ?? self.twitterUsername,
-            publicRepos: publicRepos ?? self.publicRepos,
-            publicGists: publicGists ?? self.publicGists,
-            followers: followers ?? self.followers,
-            following: following ?? self.following,
-            createdAt: createdAt ?? self.createdAt,
-            updatedAt: updatedAt ?? self.updatedAt
-        )
-    }
-
-    func jsonData() throws -> Data {
-        return try newJSONEncoder().encode(self)
-    }
-
-    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
-        return String(data: try self.jsonData(), encoding: encoding)
-    }
-}
-
 // MARK: - URLSession response handlers
 
 extension URLSession {
@@ -162,7 +66,11 @@ extension URLSession {
                 completionHandler(nil, response, error)
                 return
             }
-            completionHandler(try? newJSONDecoder().decode(T.self, from: data), response, nil)
+            do {
+            completionHandler(try newJSONDecoder().decode(T.self, from: data), response, nil)
+            } catch {
+                print("\(error)")
+                }
         }
     }
 
@@ -170,4 +78,3 @@ extension URLSession {
         return self.codableTask(with: url, completionHandler: completionHandler)
     }
 }
-

@@ -12,14 +12,13 @@ import CoreData
 
 // MARK: - AmiiboElementsViewModel
 class ProfileViewModel {
+    var delegate: ViewModelDelegate? = nil
+    let user: User
+    
     typealias OnDataAvailable = ( () -> Void )
     var onDataAvailable: OnDataAvailable = {}
     var onFetchInProgress: (() -> Void) = {}
     var onFetchNotInProgress: (() -> Void) = {}
-    
-    var currentCount: Int {
-        return users.count
-    }
     
     let imageStore: ImageStore!
     let apiService: GithubUsersApi
@@ -28,12 +27,14 @@ class ProfileViewModel {
             print("Fetch in progress: \(isFetchInProgress)")
             if (isFetchInProgress) {
                 onFetchInProgress()
+                delegate?.onFetchInProgress()
                 return
             }
             onFetchNotInProgress()
+            delegate?.onFetchDone()
         }
     }
-
+    
     private static let persistentContainerName = getConfig().xcPersisentContainerName
     private lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: Self.persistentContainerName )
@@ -63,124 +64,79 @@ class ProfileViewModel {
         let config = URLSessionConfiguration.default
         return URLSession(configuration: config)
     }()
-
-    private(set) var users: [User]! = [] {
+    
+    private(set) var userInfo: UserInfo! = nil {
         didSet {
             self.onDataAvailable()
+            delegate?.onDataAvailable()
         }
     }
-    var presentedElements: [UserPresenter]! {
-        return users.compactMap({ user in
-            UserPresenter(user)
-        })
-    }
-    
-    init(apiService: GithubUsersApi) {
+
+    init(user: User, apiService: GithubUsersApi) {
         self.apiService = apiService
+        self.user = user
         imageStore = ImageStore()
     }
-    
     
     /**
      Binds closure to model describing what to perform when data becomes available
      */
     func bind(availability: @escaping OnDataAvailable) {
         self.onDataAvailable = availability
-        fetchUsers()
     }
     
-    /**
-     API call to user profiles
-     */
-    func fetchUserDetails(for user: User , completion: @escaping (Result<UserInfo, Error>)->Void) {
-        guard let login = user.login else {
-            return completion(.failure(ErrorType.emptyResult))
-        }
-        self.apiService.fetchUserDetails(username: login) { result in
-            let context = self.persistentContainer.viewContext
-            switch result {
-            case let .success(githubuserInfo):
-                let userInfo = UserInfo(context: context)
-                userInfo.id = Int32(githubuserInfo.id)
-                userInfo.bio = githubuserInfo.bio
-                userInfo.company = githubuserInfo.company
-                userInfo.createdAt = githubuserInfo.createdAt
-                userInfo.email = githubuserInfo.email
-                userInfo.followers = Int32(githubuserInfo.followers)
-                userInfo.following = Int32(githubuserInfo.following)
-                userInfo.isHireable = githubuserInfo.hireable == ""
-                userInfo.location = githubuserInfo.location
-                userInfo.name = githubuserInfo.name
-                userInfo.publicGists = Int32(githubuserInfo.publicGists)
-                userInfo.publicRepos = Int32(githubuserInfo.publicRepos)
-                userInfo.twitterUsername = githubuserInfo.twitterUsername
-                userInfo.updatedAt = githubuserInfo.updatedAt
-                return completion(.success(userInfo))
-            case .failure(let error):
-                preconditionFailure("\(error.localizedDescription)")
-            }
-        }
-
-    }
-
-    var since: Int = 0
-    var currentPage: Int = 0
-    var lastBatchCount: Int = 0
-    
-    /**
-     Starts fetching user data from api service. Additional calls to this method
-     are terminated at the onset, while a fetch is already in progress.
-     */
-    func fetchUsers() {
+    func fetchUserDetails(for user: User, onRetryError: ((Int)->())? = nil, completion: ((Result<UserInfo, Error>)->Void)? = nil) {
         guard !isFetchInProgress else {
             return
         }
         
+        guard let login = user.login else {
+            completion?(.failure(ErrorType.emptyResult))
+            return
+        }
+
         isFetchInProgress = true
         
-        self.apiService.fetchUsers(since: since) { (result: Result<[GithubUser], Error>) in
+        let onTaskSuccess = { (githubuserInfo: GithubUserInfo) in
+            self.isFetchInProgress = false
+            
             let context = self.persistentContainer.viewContext
-            switch result {
-            case let .success(githubUsers):
-                self.isFetchInProgress = false
-                self.lastBatchCount = githubUsers.count
-                self.currentPage += 1
+            // TODO: Transfer to managedUserInfo in CoreData UserInfo entity class
+            let userInfo: UserInfo = UserInfo(context: context)
+            userInfo.id = Int32(githubuserInfo.id ?? 0)
+            userInfo.login = githubuserInfo.login
+            userInfo.bio = githubuserInfo.bio
+            userInfo.blog = githubuserInfo.blog
+            userInfo.company = githubuserInfo.company
+            userInfo.createdAt = githubuserInfo.createdAt
+            userInfo.email = githubuserInfo.email
+            userInfo.followers = Int32(githubuserInfo.followers ?? 0)
+            userInfo.following = Int32(githubuserInfo.following ?? 0)
+            userInfo.isHireable = githubuserInfo.hireable ?? false
+            userInfo.location = githubuserInfo.location
+            userInfo.name = githubuserInfo.name
+            userInfo.publicGists = Int32(githubuserInfo.publicGists ?? 0)
+            userInfo.publicRepos = Int32(githubuserInfo.publicRepos ?? 0)
+            userInfo.twitterUsername = githubuserInfo.twitterUsername
+            userInfo.updatedAt = githubuserInfo.updatedAt
 
-                let users: [User] = githubUsers.map { githubUser in
-                    var user: User!
-                    context.performAndWait {
-                        user = User(context: context)
-                        user.login = githubUser.login
-                        user.id = Int32(githubUser.id)
-                        user.nodeId = githubUser.nodeID
-                        user.urlAvatar = githubUser.avatarURL
-                        user.gravatarId = githubUser.gravatarID
-                        user.url = githubUser.url
-                        user.urlHtml = githubUser.htmlURL
-                        user.urlFollowers = githubUser.followersURL
-                        user.urlFollowing = githubUser.followingURL
-                        user.urlGists = githubUser.gistsURL
-                        user.urlStarred = githubUser.starredURL
-                        user.urlSubscriptions = githubUser.subscriptionsURL
-                        user.urlOrganizations = githubUser.organizationsURL
-                        user.urlRepos = githubUser.reposURL
-                        user.urlEvents = githubUser.eventsURL
-                        user.urlReceivedEvents = githubUser.receivedEventsURL
-                        user.userType = githubUser.type
-                        user.isSiteAdmin = githubUser.siteAdmin
-                    }
-                    return user
-                }
-                self.users.append(contentsOf: users)
-                guard let user = self.users.last else { return }
-                self.since = Int(user.id)
-            case .failure(let error):
-                self.isFetchInProgress = false
-                preconditionFailure("\(error.localizedDescription)")
-            }
+            self.userInfo = userInfo
+            completion?(.success(userInfo))
+            // TODO: Delegate success
         }
+        
+        let onTaskError: ((Int, Int, Error)->Void)? = { attemptCount, delayTillNext, error in
+            self.isFetchInProgress = false
+            completion?(.failure(error))
+            self.delegate?.onRetryError(n: attemptCount, nextAttemptInMilliseconds: delayTillNext, error: error)
+        }
+        
+        let queue = DispatchQueue(label: "serialized_queue", qos: .background)
+        let retryAttempts = 5
+        ScheduledTask(task: self.apiService.fetchUserDetails).retryWithBackoff(times: retryAttempts, taskParam: login, queue: queue, onTaskSuccess: onTaskSuccess, onTaskError: onTaskError)
+        
     }
-    
+
     /**
      Fetches photo media (based on avatar url). Call is asynchronous. Can be set to synchronous fetching, but
      doing so leads to severe performance degradation.
@@ -191,14 +147,14 @@ class ProfileViewModel {
             return
         }
         let imageUrl = URL(string: urlString)!
-
+        
         let key = "\(user.id)"
         if let image = imageStore.image(forKey: key) {
             DispatchQueue.main.async {
                 completion(.success((image, .cache)))
             }
         }
-
+        
         let request = URLRequest(url: imageUrl)
         let group = DispatchGroup()
         if (synchronous) { group.enter() }
@@ -209,7 +165,7 @@ class ProfileViewModel {
             if case let .success(image) = result {
                 self.imageStore.setImage(forKey: key, image: image.0)
             }
-
+            
             if (synchronous) { group.leave() }
             
             OperationQueue.main.addOperation {

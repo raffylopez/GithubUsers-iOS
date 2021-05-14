@@ -12,5 +12,8 @@ import CoreData
 
 @objc(UserInfo)
 public class UserInfo: User {
-
+    lazy var presented: UserInfoPresenter = {
+        return UserInfoPresenter(self)
+    }()
 }
+
