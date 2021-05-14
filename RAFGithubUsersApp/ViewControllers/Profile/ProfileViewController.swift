@@ -27,7 +27,8 @@ class ProfileViewController: UIViewController {
     @IBOutlet var lblLocationTag: UILabel!
     @IBOutlet var lblEmailTag: UILabel!
     @IBOutlet var lblHireabilityTag: UILabel!
-
+    @IBOutlet var lblNoteTag: UILabel!
+    
     @IBOutlet var tvNote: UITextView!
     @IBOutlet var btnSave: UIButton!
     
@@ -36,14 +37,14 @@ class ProfileViewController: UIViewController {
     
     var viewModel: ProfileViewModel!
     
-    func skeletonize(view:  UIView) {
+    private func skeletonize(view:  UIView) {
         view.isSkeletonable = true
         view.skeletonCornerRadius = 2.0
         view.showAnimatedGradientSkeleton()
         view.startSkeletonAnimation()
     }
     
-    func skeletonize(label: UILabel) {
+    private func skeletonize(label: UILabel) {
         label.numberOfLines = 0
         label.isSkeletonable = true
         label.skeletonCornerRadius = 2.0
@@ -51,9 +52,8 @@ class ProfileViewController: UIViewController {
         label.showAnimatedGradientSkeleton()
     }
     
-    
-    func showSkeletons() {
-        let tags = [lblCompanyTag, lblBlogTag, lblLocationTag, lblEmailTag, lblHireabilityTag]
+    private func showSkeletons() {
+        let tags = [lblCompanyTag, lblBlogTag, lblLocationTag, lblEmailTag, lblHireabilityTag, lblNoteTag]
         let values = [lblName, lblLogin, lblBio, lblFollow, lblCompany, lblBlog, lblLocation, lblEmail, lblHireability]
         let views = [boxBlue, tvNote, btnSave ]
         tags.forEach { self.skeletonize(label: $0!) }
@@ -61,8 +61,8 @@ class ProfileViewController: UIViewController {
         views.forEach { self.skeletonize(view: $0!) }
     }
     
-    func hideSkeletons() {
-        let tags = [lblCompanyTag, lblBlogTag, lblLocationTag, lblEmailTag, lblHireabilityTag]
+    private func hideSkeletons() {
+        let tags = [lblCompanyTag, lblBlogTag, lblLocationTag, lblEmailTag, lblHireabilityTag, lblNoteTag]
         let values = [lblName, lblLogin, lblBio, lblFollow, lblCompany, lblBlog, lblLocation, lblEmail, lblHireability]
         let views = [tvNote, btnSave ]
         tags.forEach { $0?.hideSkeleton() }
@@ -71,7 +71,6 @@ class ProfileViewController: UIViewController {
     }
     
     private func setupLayout() {
-
         tvNote.layer.borderColor = UIColor.systemGray.cgColor
         tvNote.layer.borderWidth = 0
         tvNote.layer.cornerRadius = 10
@@ -84,15 +83,6 @@ class ProfileViewController: UIViewController {
         boxBlue.clipsToBounds = true
         
         showSkeletons()
-        
-
-//        self.lblName.skeletonPaddingInsets = UIEdgeInsets(top: 0, left: 0, bottom: self.lblName.frame.height, right: self.lblName.frame.width)
-//        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(3000)) {
-//            self.lblName.hideSkeleton()
-//        }
-//        lblLogin.showAnimatedGradientSkeleton()
-//        lblFollow.showAnimatedGradientSkeleton()
-//        lblBio.showAnimatedGradientSkeleton()
     }
     
     private func setupNavbar() {
@@ -143,6 +133,7 @@ extension ProfileViewController: ViewModelDelegate {
             self.lblLocation.text = presented.location
             self.lblEmail.text = presented.email
             self.lblHireability.text = presented.hireability
+            self.lblFollow.text = "\(presented.followers) followers • \(presented.following) following"
             self.hideSkeletons()
         }
     }

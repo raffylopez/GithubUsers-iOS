@@ -102,26 +102,27 @@ class ProfileViewModel {
             
             let context = self.persistentContainer.viewContext
             // TODO: Transfer to managedUserInfo in CoreData UserInfo entity class
-            let userInfo: UserInfo = UserInfo(context: context)
-            userInfo.id = Int32(githubuserInfo.id ?? 0)
-            userInfo.login = githubuserInfo.login
-            userInfo.bio = githubuserInfo.bio
-            userInfo.blog = githubuserInfo.blog
-            userInfo.company = githubuserInfo.company
-            userInfo.createdAt = githubuserInfo.createdAt
-            userInfo.email = githubuserInfo.email
-            userInfo.followers = Int32(githubuserInfo.followers ?? 0)
-            userInfo.following = Int32(githubuserInfo.following ?? 0)
-            userInfo.isHireable = githubuserInfo.hireable ?? false
-            userInfo.location = githubuserInfo.location
-            userInfo.name = githubuserInfo.name
-            userInfo.publicGists = Int32(githubuserInfo.publicGists ?? 0)
-            userInfo.publicRepos = Int32(githubuserInfo.publicRepos ?? 0)
-            userInfo.twitterUsername = githubuserInfo.twitterUsername
-            userInfo.updatedAt = githubuserInfo.updatedAt
+            let managedUserInfo = UserInfo(from: githubuserInfo, moc: context)
+            
+//            userInfo.id = Int32(githubuserInfo.id ?? 0)
+//            userInfo.login = githubuserInfo.login
+//            userInfo.bio = githubuserInfo.bio
+//            userInfo.blog = githubuserInfo.blog
+//            userInfo.company = githubuserInfo.company
+//            userInfo.createdAt = githubuserInfo.createdAt
+//            userInfo.email = githubuserInfo.email
+//            userInfo.followers = Int32(githubuserInfo.followers ?? 0)
+//            userInfo.following = Int32(githubuserInfo.following ?? 0)
+//            userInfo.isHireable = githubuserInfo.hireable ?? false
+//            userInfo.location = githubuserInfo.location
+//            userInfo.name = githubuserInfo.name
+//            userInfo.publicGists = Int32(githubuserInfo.publicGists ?? 0)
+//            userInfo.publicRepos = Int32(githubuserInfo.publicRepos ?? 0)
+//            userInfo.twitterUsername = githubuserInfo.twitterUsername
+//            userInfo.updatedAt = githubuserInfo.updatedAt
 
-            self.userInfo = userInfo
-            completion?(.success(userInfo))
+            self.userInfo = managedUserInfo
+            completion?(.success(managedUserInfo))
             // TODO: Delegate success
         }
         
