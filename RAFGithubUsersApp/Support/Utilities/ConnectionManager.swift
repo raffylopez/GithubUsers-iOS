@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Reachability
 
 class ConnectionManager {
     
@@ -29,15 +30,18 @@ class ConnectionManager {
         switch reachability.connection {
         case .cellular:
             print("Network available via Cellular Data.")
-//            UIApplication.shared.windows.first?.rootViewController?.view.makeToast("Cellular")
+            UIApplication.shared.windows.first?.rootViewController?.view.makeToast("Cellular")
             break
         case .wifi:
             print("Network available via WiFi.")
-//            UIApplication.shared.windows.first?.rootViewController?.view.makeToast("Wifi")
+            UIApplication.shared.windows.first?.rootViewController?.view.makeToast("Wifi")
             break
-        case .unavailable:
-//            UIApplication.shared.windows.first?.rootViewController?.view.makeToast("No Network")
+        case .unavailable, .none:
+            UIApplication.shared.windows.first?.rootViewController?.view.makeToast("Connection to Internet lost. Retrying in ")
             print("Network is unavailable.")
+            break
+        @unknown default:
+            print("Unknown reachability status.")
             break
         }
     }

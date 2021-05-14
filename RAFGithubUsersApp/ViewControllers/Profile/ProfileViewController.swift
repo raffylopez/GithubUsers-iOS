@@ -22,8 +22,7 @@ class ProfileViewController: UIViewController {
     }
     
     private func setupNavbar() {
-        self.title = "User Profile"
-        self.navigationController?.navigationBar.prefersLargeTitles = false
+        self.title = "Tom Preston-Werner"
     }
     
     override func loadView() {
@@ -36,6 +35,10 @@ class ProfileViewController: UIViewController {
         setupLayout()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+//        self.navigationController?.navigationBar.prefersLargeTitles = false
+    }
 
 }
 

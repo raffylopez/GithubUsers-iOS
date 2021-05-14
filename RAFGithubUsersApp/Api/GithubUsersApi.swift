@@ -41,9 +41,13 @@ class GithubUsersApi {
         semaphore.wait()
     }
     
+    var synchronous = false
+    
     func fetchUsers(since: Int = 0, completion: ((Result<[GithubUser], Error>) -> Void)? = nil) {
         let dispatchGroup = DispatchGroup()
-        dispatchGroup.enter()
+        if synchronous {
+            dispatchGroup.enter()
+        }
         var uri = URLComponents(string: usersListUri)
         uri?.queryItems = [
             URLQueryItem(name: "access_token", value: getConfig().githubAccessToken),
@@ -51,18 +55,19 @@ class GithubUsersApi {
         ]
 
         let task = URLSession.shared.githubUsersTask(with: uri!.url!, completionHandler: { (githubUsers, _, error) in
-            dispatchGroup.leave()
+            if self.synchronous { dispatchGroup.leave() }
             if let error = error {
                 completion?(.failure(error))
                 return
             }
             if let githubUsers = githubUsers {
-                completion?(.success(githubUsers))
+                completion?(.failure(ErrorType.generalError))
+//                completion?(.success(githubUsers))
                 return
             }
             completion?(.failure(ErrorType.emptyResult))
         })
         task.resume()
-        dispatchGroup.wait()
+        if synchronous { dispatchGroup.wait() }
     }
 }

@@ -10,8 +10,19 @@ import Foundation
 import UIKit
 import CoreData
 
+
+protocol UsersViewModelDelegate {
+    func onDataAvailable()
+    func onRetryError(n: Int, nextAttemptInMilliseconds: Int, error:Error)
+    func onAttemptsExhausted(error:Error)
+    func onFetchInProgress()
+    func onFetchDone()
+}
+
 // MARK: - AmiiboElementsViewModel
 class UsersViewModel {
+    var delegate: UsersViewModelDelegate? = nil
+    
     typealias OnDataAvailable = ( () -> Void )
     var onDataAvailable: OnDataAvailable = {}
     var onFetchInProgress: (() -> Void) = {}
@@ -28,9 +39,11 @@ class UsersViewModel {
             print("Fetch in progress: \(isFetchInProgress)")
             if (isFetchInProgress) {
                 onFetchInProgress()
+                delegate?.onFetchInProgress()
                 return
             }
             onFetchNotInProgress()
+            delegate?.onFetchDone()
         }
     }
 
@@ -67,6 +80,7 @@ class UsersViewModel {
     private(set) var users: [User]! = [] {
         didSet {
             self.onDataAvailable()
+            delegate?.onDataAvailable()
         }
     }
     var presentedElements: [UserPresenter]! {
@@ -79,14 +93,12 @@ class UsersViewModel {
         self.apiService = apiService
         imageStore = ImageStore()
     }
-    
-    
+
     /**
      Binds closure to model describing what to perform when data becomes available
      */
     func bind(availability: @escaping OnDataAvailable) {
         self.onDataAvailable = availability
-        fetchUsers()
     }
     
     /**
@@ -130,22 +142,27 @@ class UsersViewModel {
     /**
      Starts fetching user data from api service. Additional calls to this method
      are terminated at the onset, while a fetch is already in progress.
+     
+     Data availability notification is performed through an observable viewmodel
+     closure
      */
-    func fetchUsers() {
+    func fetchUsers(onRetryError: ((Int)->())? = nil, completion: ((Result<[User], Error>)->Void)? = nil) {
         guard !isFetchInProgress else {
             return
         }
         
         isFetchInProgress = true
+        let onTaskError: ((Error)->Void)? = { (error: Error) in
+            completion?(.failure(error))
+            self.delegate?.onAttemptsExhausted(error: error)
+        }
         
-        self.apiService.fetchUsers(since: since) { (result: Result<[GithubUser], Error>) in
+        let onTaskSuccess = { (githubUsers: [GithubUser]) in
             let context = self.persistentContainer.viewContext
-            switch result {
-            case let .success(githubUsers):
                 self.isFetchInProgress = false
                 self.lastBatchCount = githubUsers.count
                 self.currentPage += 1
-
+                
                 let users: [User] = githubUsers.map { githubUser in
                     var user: User!
                     context.performAndWait {
@@ -174,11 +191,113 @@ class UsersViewModel {
                 self.users.append(contentsOf: users)
                 guard let user = self.users.last else { return }
                 self.since = Int(user.id)
-            case .failure(let error):
-                self.isFetchInProgress = false
-                preconditionFailure("\(error.localizedDescription)")
+            completion?(.success(users))
+        }
+        
+        let queue = DispatchQueue(label: "sync_q", qos: .background)
+        let retryAttempts = 5
+
+        retryWithBackoff(times: retryAttempts, taskParam: since, task: self.apiService.fetchUsers, queue: queue, onTaskSuccess: onTaskSuccess, onTaskError: onTaskError)
+    }
+    
+    func fetchUsers_() {
+        guard !isFetchInProgress else {
+            return
+        }
+        
+        isFetchInProgress = true
+        let queue = DispatchQueue(label: "sync_q", qos: .background)
+        let retryAttempts = 5
+        
+        for n in 1...retryAttempts {
+            Schedule.syncWithBackoff(on: queue, retry: n) {
+                self.apiService.fetchUsers(since: self.since) { (result: Result<[GithubUser], Error>) in
+                    let context = self.persistentContainer.viewContext
+                    switch result {
+                    case let .success(githubUsers):
+                        self.isFetchInProgress = false
+                        self.lastBatchCount = githubUsers.count
+                        self.currentPage += 1
+                        
+                        let users: [User] = githubUsers.map { githubUser in
+                            var user: User!
+                            context.performAndWait {
+                                user = User(context: context)
+                                user.login = githubUser.login
+                                user.id = Int32(githubUser.id)
+                                user.nodeId = githubUser.nodeID
+                                user.urlAvatar = githubUser.avatarURL
+                                user.gravatarId = githubUser.gravatarID
+                                user.url = githubUser.url
+                                user.urlHtml = githubUser.htmlURL
+                                user.urlFollowers = githubUser.followersURL
+                                user.urlFollowing = githubUser.followingURL
+                                user.urlGists = githubUser.gistsURL
+                                user.urlStarred = githubUser.starredURL
+                                user.urlSubscriptions = githubUser.subscriptionsURL
+                                user.urlOrganizations = githubUser.organizationsURL
+                                user.urlRepos = githubUser.reposURL
+                                user.urlEvents = githubUser.eventsURL
+                                user.urlReceivedEvents = githubUser.receivedEventsURL
+                                user.userType = githubUser.type
+                                user.isSiteAdmin = githubUser.siteAdmin
+                            }
+                            return user
+                        }
+                        self.users.append(contentsOf: users)
+                        guard let user = self.users.last else { return }
+                        self.since = Int(user.id)
+                        break
+                    case .failure(let error):
+                        self.isFetchInProgress = false
+                        print("\(error.localizedDescription)")
+                        
+                    }
+                }
             }
         }
+    }
+    
+    private func getExponentialDelay(for n: Int) -> Int {
+        let maxDelay = 300_000
+        let delay = Int(pow(2.0, Double(n))) * 1_000
+        let jitter = Int.random(in: 0...1_000)
+        return min(delay + jitter, maxDelay)
+    }
+    
+    var retryCount: Int = 0;
+    /**
+     Retry with backoff. Uses recursion for repetition.
+     */
+    func retryWithBackoff<T,ResultType>(times n: Int,
+                            taskParam: T,
+                            task: @escaping (T, ((Result<ResultType,Error>)->Void)?) -> Void,
+                            queue: DispatchQueue,
+                            onTaskSuccess: ((ResultType)->Void)? = nil,
+                            onTaskError: ((Error)->Void)? = nil) {
+        let delay = getExponentialDelay(for: retryCount)
+        queue.asyncAfter(
+        deadline: DispatchTime.now() + .milliseconds(delay)) {
+            task(taskParam) { result in
+                switch result {
+                case let .success(users):
+                    onTaskSuccess?(users)
+                case let .failure(error):
+                    self.retryCount += 1
+                    print("Error in try \(self.retryCount)...retrying in \(delay) milliseconds")
+                    
+                    self.delegate?.onRetryError(n: self.retryCount, nextAttemptInMilliseconds: delay, error: error)
+                    
+                    if n > 0 {
+                        self.retryWithBackoff(times: n - self.retryCount, taskParam: taskParam, task: task, queue: queue, onTaskSuccess: onTaskSuccess, onTaskError: onTaskError)
+                        return
+                    }
+                    onTaskError?(error)
+                }
+            }
+
+        }
+            
     }
     
     /**

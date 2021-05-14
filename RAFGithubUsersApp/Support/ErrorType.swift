@@ -10,4 +10,5 @@ enum ErrorType: Error {
     case missingImageUrl
     case imageCreationError
     case emptyResult
+    case generalError
 }

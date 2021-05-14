@@ -82,7 +82,12 @@ class UsersViewController: UITableViewController {
         registerTableCellTypes()
     }
 
+    private func makeToast(message:String) {
+        self.navigationController?.view.makeToast(message, duration: 3, position: .bottom)
+    }
+    
     private func setupHandlers() {
+        self.viewModel.delegate = self
         let onDataAvailable = {
             var newIndexPathsToReload: [IndexPath] = []
             if self.viewModel.currentPage > 1 {
@@ -90,7 +95,7 @@ class UsersViewController: UITableViewController {
             }
             
             OperationQueue.main.addOperation {
-                self.navigationController?.view.makeToast("Data loaded", duration: 3, position: .bottom)
+//                self.makeToast(message: "Data loaded!")
                 if self.viewModel.currentPage <= 1 { /* User performed a refresh */
                     self.tableView.alpha = 0
                     UIView.transition(with: self.tableView,
@@ -122,10 +127,10 @@ class UsersViewController: UITableViewController {
             }
         }
         self.viewModel.bind(availability: onDataAvailable)
+        self.fetchTableData()
     }
 
     private func setupNavbar() {
-        self.navigationController?.navigationBar.prefersLargeTitles = true
         let imgSize = CGFloat(20)
         let imgHeight = CGFloat(imgSize)
         let imgWidth = CGFloat(imgSize)
@@ -152,9 +157,7 @@ class UsersViewController: UITableViewController {
         //        let bbi: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .bookmarks, target: self, action: #selector(tableViewScrollToTop))
         //        let leftBarItem: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(tableViewScrollToTop))
         //        let rightBarItem: UIBarButtonItem = UIBarButtonItem(image: img.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: nil)
-        let rightBarItem = UIBarButtonItem(title: "Scroll to Top".localized(), style: .plain, target: self, action: #selector(tableViewScrollToTop))
         //        navigationItem.leftBarButtonItem = leftBarItem
-        navigationItem.rightBarButtonItem = rightBarItem
         self.navigationItem.searchController = search
         self.title = "Browse Users".localized()
     }
@@ -172,7 +175,13 @@ class UsersViewController: UITableViewController {
         self.view.backgroundColor = UIColor.systemBackground
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+    }
+    
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         self.view.backgroundColor = .systemBackground
         setupViews()
@@ -182,9 +191,18 @@ class UsersViewController: UITableViewController {
     // MARK: - Selector targets
     @objc private func refreshPulled() {
         self.refreshControl?.beginRefreshing()
-        self.viewModel.fetchUsers()
+        fetchTableData()
     }
     
+    func fetchTableData() {
+        self.viewModel.fetchUsers { result in
+            if case let .failure(error) = result {
+                print(error)
+                print("FOOBAR")
+            }
+        }
+    }
+
     @objc func tableViewScrollToTop() {
         self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
     }
@@ -203,7 +221,7 @@ class UsersViewController: UITableViewController {
         let element = self.viewModel.users[indexPath.row]
         
         if !isPrefetchingEnabled && isLoadingCell2(for: indexPath) {
-            viewModel.fetchUsers()
+            fetchTableData()
         }
         
         viewModel.fetchImage(for: element) { result in
@@ -292,7 +310,7 @@ extension UsersViewController: UISearchResultsUpdating {
 extension UsersViewController: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         if isPrefetchingEnabled && indexPaths.contains(where: isLoadingCell) {
-            viewModel.fetchUsers()
+            fetchTableData()
         }
     }
 }
@@ -309,3 +327,35 @@ private extension UsersViewController {
   }
 }
 
+
+extension UsersViewController: UsersViewModelDelegate {
+    func onAttemptsExhausted(error: Error) {
+        DispatchQueue.main.async {
+        self.makeToast(message: "Reload attempts exceeded.")
+        }
+    }
+    
+    func onRetryError(n: Int, nextAttemptInMilliseconds: Int, error: Error) {
+        DispatchQueue.main.async {
+            self.makeToast(message: "Unable to load data (\(n)). Retrying in \(nextAttemptInMilliseconds/1000) secs")
+            self.navigationItem.rightBarButtonItem = nil
+        }
+    }
+    
+    func onDataAvailable() {
+        DispatchQueue.main.async {
+            let rightBarItem = UIBarButtonItem(title: "Scroll to Top".localized(), style: .plain, target: self, action: #selector(self.tableViewScrollToTop))
+            self.navigationItem.rightBarButtonItem = rightBarItem
+        }
+    }
+    
+    func onFetchInProgress() {
+        //
+    }
+    
+    func onFetchDone() {
+        //
+    }
+    
+    
+}
