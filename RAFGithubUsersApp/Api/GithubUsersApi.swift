@@ -9,6 +9,8 @@
 import Foundation
 
 class GithubUsersApi {
+    let configurableForceFailure: Bool = false
+    
     typealias T = GithubUser
     let usersListUri: String
     let userInfoUriPrefix: String
@@ -61,8 +63,11 @@ class GithubUsersApi {
                 return
             }
             if let githubUsers = githubUsers {
-                completion?(.failure(ErrorType.generalError))
-//                completion?(.success(githubUsers))
+                if self.configurableForceFailure {
+                    completion?(.failure(ErrorType.generalError))
+                    return
+                }
+                completion?(.success(githubUsers))
                 return
             }
             completion?(.failure(ErrorType.emptyResult))

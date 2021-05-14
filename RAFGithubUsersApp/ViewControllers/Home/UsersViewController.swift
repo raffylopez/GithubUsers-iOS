@@ -17,7 +17,7 @@ class UsersViewController: UITableViewController {
     let isPrefetchingEnabled: Bool = false
     
     // MARK: Configure table cell types
-    typealias StandardTableViewCell = ShimmerTableViewCell
+    typealias StandardTableViewCell = NormalUserTableViewCell
     typealias NoteTableViewCell = NoteUserTableViewCell
     typealias AlternativeTableViewCell = InvertedUserTableViewCell
     typealias DummyTableViewCell = StubUserTableViewCell
@@ -175,9 +175,14 @@ class UsersViewController: UITableViewController {
         self.view.backgroundColor = UIColor.systemBackground
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+//        navigationItem.title = "Browse Users".localized()
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationItem.largeTitleDisplayMode = .always
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     override func viewDidLoad() {
@@ -296,8 +301,10 @@ extension UsersViewController: UserListTableViewCellDelegate {
     
     func didTouchCellPanel(cell: UserTableViewCellBase) {
         let viewModel = ProfileViewModel(apiService: GithubUsersApi())
+//        navigationItem.title = ""
         self.navigationController?.pushViewController(ViewControllersFactory.instance(vcType: .userProfile(viewModel)), animated: true)
     }
+    
 }
 
 extension UsersViewController: UISearchResultsUpdating {
