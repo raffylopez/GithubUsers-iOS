@@ -329,12 +329,7 @@ private extension UsersViewController {
 
 
 extension UsersViewController: UsersViewModelDelegate {
-    func onAttemptsExhausted(error: Error) {
-        DispatchQueue.main.async {
-        self.makeToast(message: "Reload attempts exceeded.")
-        }
-    }
-    
+
     func onRetryError(n: Int, nextAttemptInMilliseconds: Int, error: Error) {
         DispatchQueue.main.async {
             self.makeToast(message: "Unable to load data (\(n)). Retrying in \(nextAttemptInMilliseconds/1000) secs")

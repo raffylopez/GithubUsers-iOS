@@ -13,7 +13,7 @@
 		E146CC32264D901F00C3FA51 /* SkeletonView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1510C83264CF45100E59C35 /* SkeletonView.framework */; };
 		E146CC33264D901F00C3FA51 /* SkeletonView.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E1510C83264CF45100E59C35 /* SkeletonView.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E146CC36264D937600C3FA51 /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E146CC35264D937600C3FA51 /* ExternalAccessory.framework */; };
-		E146CC38264DD4B100C3FA51 /* Schedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = E146CC37264DD4B000C3FA51 /* Schedule.swift */; };
+		E146CC38264DD4B100C3FA51 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = E146CC37264DD4B000C3FA51 /* Task.swift */; };
 		E1510C60264BFAD300E59C35 /* GithubApiMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A184264AE7A000CBD45A /* GithubApiMock.swift */; };
 		E1510C61264BFAD700E59C35 /* fakeuserslist.json in Resources */ = {isa = PBXBuildFile; fileRef = E189A182264AE77800CBD45A /* fakeuserslist.json */; };
 		E1510C66264C10A600E59C35 /* FFBadgedBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = E1510C65264C10A600E59C35 /* FFBadgedBarButtonItem.m */; };
@@ -96,7 +96,7 @@
 		E146CC2E264D8FEC00C3FA51 /* Reachability.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Reachability.framework; path = Carthage/Build/iOS/Reachability.framework; sourceTree = "<group>"; };
 		E146CC34264D937600C3FA51 /* GithubApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GithubApp.entitlements; sourceTree = "<group>"; };
 		E146CC35264D937600C3FA51 /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
-		E146CC37264DD4B000C3FA51 /* Schedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Schedule.swift; sourceTree = "<group>"; };
+		E146CC37264DD4B000C3FA51 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		E1510C64264C10A500E59C35 /* RAFGithubUsersApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RAFGithubUsersApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		E1510C65264C10A600E59C35 /* FFBadgedBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFBadgedBarButtonItem.m; sourceTree = "<group>"; };
 		E1510C67264C10B000E59C35 /* FFBadgedBarButtonItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FFBadgedBarButtonItem.h; sourceTree = "<group>"; };
@@ -382,7 +382,7 @@
 		E189A18D264AF95500CBD45A /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				E146CC37264DD4B000C3FA51 /* Schedule.swift */,
+				E146CC37264DD4B000C3FA51 /* Task.swift */,
 				E1D04A7F264BB5CF00C4E5FD /* UIHelper.swift */,
 				E146CC2C264D887400C3FA51 /* ConnectionManager.swift */,
 				E189A18E264AF96300CBD45A /* ImageStore.swift */,
@@ -605,7 +605,7 @@
 				E1FA38F5264B086F001EFA5C /* StringExtensions.swift in Sources */,
 				E1FA390E264BA390001EFA5C /* UserInfo+CoreDataProperties.swift in Sources */,
 				E1FA38F1264B07D7001EFA5C /* ImageStore.swift in Sources */,
-				E146CC38264DD4B100C3FA51 /* Schedule.swift in Sources */,
+				E146CC38264DD4B100C3FA51 /* Task.swift in Sources */,
 				E160EBBD264A6D44002820EC /* AppDelegate.swift in Sources */,
 				E1FA390C264BA390001EFA5C /* User+CoreDataProperties.swift in Sources */,
 				E160EBBF264A6D44002820EC /* SceneDelegate.swift in Sources */,
