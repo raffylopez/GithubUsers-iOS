@@ -91,4 +91,6 @@ class ImageStore {
             print("Could not clear temp folder: \(error)")
         }
     }
+    func printStats() {
+    }
 }

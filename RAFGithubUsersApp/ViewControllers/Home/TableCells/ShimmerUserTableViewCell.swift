@@ -21,11 +21,34 @@ class ShimmerTableViewCell: UserTableViewCellBase {
     }
     
     override func updateWith(user: User) {
+        self.imgViewChar.image = nil
+        self.imgViewChar.backgroundColor = .systemGray5
+        skeletonize(view: self.imgViewChar)
         super.updateWith(user: user)
-        self.lblName.textColor = .red
-        self.lblName.text = "(\(user.id)) " + (self.lblName.text ?? "")
+//        self.lblName.textColor = .red
+//        self.lblName.text = "(\(user.id)) " + (self.lblName.text ?? "")
+        self.lblName.text = self.lblName.text ?? ""
     }
 
+    private func skeletonize(view:  UIView) {
+        view.isSkeletonable = true
+        view.skeletonCornerRadius = 2.0
+        view.showAnimatedGradientSkeleton()
+    }
+    override internal func setupViews() {
+        guard let lblName = lblName,
+            let lblSeries = lblSeries,
+            let imgCharacter = imgViewChar,
+            let stackView = stackView else { return }
+        
+        stackView.addArrangedSubview(lblName)
+        stackView.addArrangedSubview(lblSeries)
+        
+        UIHelper.initializeView(view: lblSeries, parent: nil)
+        UIHelper.initializeView(view: lblName, parent: nil)
+        UIHelper.initializeView(view: imgCharacter, parent: self)
+        UIHelper.initializeView(view: stackView, parent: self)
+    }
 }
 
 extension ShimmerTableViewCell: UserTableViewCell {
@@ -37,14 +60,11 @@ extension ShimmerTableViewCell: UserTableViewCell {
             
             switch imageSource {
             case .network:
-                UIView.transition(with: self.imgViewChar, duration: 0.25, options: .transitionCrossDissolve, animations: {
-                    self.imgViewChar.image = image
-                }, completion: { _ in
-                    self.spinner.stopAnimating()
-                })
+                self.imgViewChar.image = image
+                self.imgViewChar.hideSkeleton(reloadDataAfter: false, transition: .crossDissolve(0.3))
             case .cache:
                 self.imgViewChar.image = image
-                self.spinner.stopAnimating()
+                self.imgViewChar.hideSkeleton(reloadDataAfter: false, transition: .crossDissolve(0.3))
             }
             return
         }

@@ -27,19 +27,17 @@ class UsersViewModel {
         self.lastBatchCount = 0
     }
     
+    /* Resets state variables, removes images and entries in all stores*/
     public func clearData() {
         resetState()
-        
-        /* Clear out image caches */
         imageStore.removeAllImages()
-        
-        /* Clear out data in persistent store*/
         do {
             try databaseService.deleteAll()
         } catch {
             fatalError(error.localizedDescription) // TODO
         }
         users.removeAll()
+        // TODO: Create clear event notif
     }
     var delegate: ViewModelDelegate? = nil
     

@@ -7,13 +7,14 @@
 //
 
 import UIKit
+import SkeletonView
 
 class UserTableViewCellBase: UITableViewCell {
     var user: User!
     weak var delegate: UserListTableViewCellDelegate?
     
     var spinner: UIActivityIndicatorView! = {
-       let spinner = UIActivityIndicatorView()
+        let spinner = UIActivityIndicatorView()
         spinner.hidesWhenStopped = true
         return spinner
     }()

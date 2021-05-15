@@ -37,7 +37,7 @@ class UsersViewController: UITableViewController {
     
     var lastConnectionState: ConnectionState = .reachable
     // MARK: Configure table cell types
-    typealias StandardTableViewCell = NormalUserTableViewCell
+    typealias StandardTableViewCell = ShimmerTableViewCell
     typealias NoteTableViewCell = NoteUserTableViewCell
     typealias AlternativeTableViewCell = InvertedUserTableViewCell
     typealias DummyTableViewCell = StubUserTableViewCell
@@ -275,6 +275,9 @@ class UsersViewController: UITableViewController {
         if !isPrefetchingEnabled && isLoadingCell2(for: indexPath) {
             fetchTableData()
         }
+//        if let cell = cell as? ShimmerTableViewCell {
+//            cell.initialize()
+//        }
         
         viewModel.fetchImage(for: element) { result in
             guard let photoIndex = self.viewModel.users.firstIndex(of: element),
@@ -309,8 +312,7 @@ class UsersViewController: UITableViewController {
         let startIndex = self.viewModel.users.count - newUsers
         let endIndex = startIndex + newUsers
         print("vmuc:\(self.viewModel.users.count), n:\(newUsers)")
-        print("\(startIndex-1), \(endIndex-1)")
-        return ((startIndex-1)..<(endIndex-1)).map { IndexPath(row: $0, section: 0) }
+        return ((startIndex)..<(endIndex)).map { IndexPath(row: $0, section: 0) }
     }
 
 
