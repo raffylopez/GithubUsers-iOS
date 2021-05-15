@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		E129A665264EB4130035A99B /* UserInfoPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E129A664264EB4130035A99B /* UserInfoPresenter.swift */; };
-		E146CC2D264D887400C3FA51 /* ConnectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E146CC2C264D887400C3FA51 /* ConnectionManager.swift */; };
+		E146CC2D264D887400C3FA51 /* ConnectionMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E146CC2C264D887400C3FA51 /* ConnectionMonitor.swift */; };
 		E146CC2F264D8FEC00C3FA51 /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E146CC2E264D8FEC00C3FA51 /* Reachability.framework */; };
 		E146CC30264D8FEC00C3FA51 /* Reachability.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E146CC2E264D8FEC00C3FA51 /* Reachability.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E146CC32264D901F00C3FA51 /* SkeletonView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1510C83264CF45100E59C35 /* SkeletonView.framework */; };
@@ -95,7 +95,7 @@
 
 /* Begin PBXFileReference section */
 		E129A664264EB4130035A99B /* UserInfoPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoPresenter.swift; sourceTree = "<group>"; };
-		E146CC2C264D887400C3FA51 /* ConnectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionManager.swift; sourceTree = "<group>"; };
+		E146CC2C264D887400C3FA51 /* ConnectionMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionMonitor.swift; sourceTree = "<group>"; };
 		E146CC2E264D8FEC00C3FA51 /* Reachability.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Reachability.framework; path = Carthage/Build/iOS/Reachability.framework; sourceTree = "<group>"; };
 		E146CC34264D937600C3FA51 /* GithubApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GithubApp.entitlements; sourceTree = "<group>"; };
 		E146CC35264D937600C3FA51 /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
@@ -389,7 +389,7 @@
 			children = (
 				E146CC37264DD4B000C3FA51 /* Task.swift */,
 				E1D04A7F264BB5CF00C4E5FD /* UIHelper.swift */,
-				E146CC2C264D887400C3FA51 /* ConnectionManager.swift */,
+				E146CC2C264D887400C3FA51 /* ConnectionMonitor.swift */,
 				E189A18E264AF96300CBD45A /* ImageStore.swift */,
 				E1FA38FC264B1BB7001EFA5C /* JSONSchemaSupport.swift */,
 			);
@@ -602,7 +602,7 @@
 				E1510C7C264C6A7A00E59C35 /* NoteUserTableViewCell copy.swift in Sources */,
 				E1880BE5264E8BEA0026D6DC /* ViewModelDelegate.swift in Sources */,
 				E189A16D264ADD3000CBD45A /* Api.swift in Sources */,
-				E146CC2D264D887400C3FA51 /* ConnectionManager.swift in Sources */,
+				E146CC2D264D887400C3FA51 /* ConnectionMonitor.swift in Sources */,
 				E1D04A7E264BB58300C4E5FD /* NormalUserTableViewCell.swift in Sources */,
 				E1FA38FD264B1BB7001EFA5C /* JSONSchemaSupport.swift in Sources */,
 				E160EBC7264A6D44002820EC /* RAFGithubUsersApp.xcdatamodeld in Sources */,

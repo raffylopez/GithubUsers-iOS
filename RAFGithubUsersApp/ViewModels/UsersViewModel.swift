@@ -151,28 +151,29 @@ class UsersViewModel {
                 
                 let users: [User] = githubUsers.map { githubUser in
                     var user: User!
-                    context.performAndWait {
-                        
+                    context.perform {
+
                         // TODO: Transfer to managedUserInfo in CoreData User entity class
-                        user = User(context: context)
-                        user.login = githubUser.login
-                        user.id = Int32(githubUser.id)
-                        user.nodeId = githubUser.nodeID
-                        user.urlAvatar = githubUser.avatarURL
-                        user.gravatarId = githubUser.gravatarID
-                        user.url = githubUser.url
-                        user.urlHtml = githubUser.htmlURL
-                        user.urlFollowers = githubUser.followersURL
-                        user.urlFollowing = githubUser.followingURL
-                        user.urlGists = githubUser.gistsURL
-                        user.urlStarred = githubUser.starredURL
-                        user.urlSubscriptions = githubUser.subscriptionsURL
-                        user.urlOrganizations = githubUser.organizationsURL
-                        user.urlRepos = githubUser.reposURL
-                        user.urlEvents = githubUser.eventsURL
-                        user.urlReceivedEvents = githubUser.receivedEventsURL
-                        user.userType = githubUser.type
-                        user.isSiteAdmin = githubUser.siteAdmin
+//                        user = User(context: context)
+                        user = User(from: githubUser, moc: context)
+//                        user.login = githubUser.login
+//                        user.id = Int32(githubUser.id)
+//                        user.nodeId = githubUser.nodeID
+//                        user.urlAvatar = githubUser.avatarURL
+//                        user.gravatarId = githubUser.gravatarID
+//                        user.url = githubUser.url
+//                        user.urlHtml = githubUser.htmlURL
+//                        user.urlFollowers = githubUser.followersURL
+//                        user.urlFollowing = githubUser.followingURL
+//                        user.urlGists = githubUser.gistsURL
+//                        user.urlStarred = githubUser.starredURL
+//                        user.urlSubscriptions = githubUser.subscriptionsURL
+//                        user.urlOrganizations = githubUser.organizationsURL
+//                        user.urlRepos = githubUser.reposURL
+//                        user.urlEvents = githubUser.eventsURL
+//                        user.urlReceivedEvents = githubUser.receivedEventsURL
+//                        user.userType = githubUser.type
+//                        user.isSiteAdmin = githubUser.siteAdmin
                     }
                     return user
                 }

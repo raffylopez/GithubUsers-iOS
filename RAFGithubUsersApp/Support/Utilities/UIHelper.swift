@@ -28,3 +28,17 @@ extension UIImage {
         }
     }
 }
+/**
+ Displays a toast message at the bottom of the first window's nav
+ controller.
+ 
+ Navigation controller should be the receiver, otherwise toast
+ might be misplaced or obscured.
+ 
+ Display is always performed in the main queue
+ */
+func makeToast(message:String, duration: TimeInterval) {
+    DispatchQueue.main.async {
+        UIApplication.shared.windows.first?.rootViewController?.view.makeToast(message)
+    }
+}

@@ -9,9 +9,19 @@
 import Foundation
 import Reachability
 
-class ConnectionManager {
+
+protocol ReachabilityDelegate {
+    func onLostConnection()
+    func onRegainConnection()
+}
+
+class ConnectionMonitor {
+    let confIntervalInSeconds: Int = 5;
+    let confReachabilityIp: String = "http://www.google.com"
     
-    static let sharedInstance = ConnectionManager()
+    var delegate: ReachabilityDelegate? = nil
+
+    static let shared = ConnectionMonitor()
     private var reachability : Reachability!
     
     func observeReachability() throws {
@@ -21,7 +31,26 @@ class ConnectionManager {
             try self.reachability.startNotifier()
         }
         catch(let error) {
-            print("Error occured while starting reachability notifications : \(error.localizedDescription)")
+//            print("Error occured while starting reachability notifications : \(error.localizedDescription)")
+        }
+    }
+    
+    /**
+     Continuously check for network signal every n seconds.
+     
+     Workaround against Reachability library not sending a notification
+     when reconnected, whilst using the simulator
+     */
+    func checkNetworkSignal() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(10)) {
+            if let reachability = try? Reachability(hostname: self.confReachabilityIp),
+            reachability.connection == .unavailable {
+                self.delegate?.onLostConnection()
+            } else {
+                self.delegate?.onRegainConnection()
+            }
+
+            self.checkNetworkSignal()
         }
     }
     
@@ -37,7 +66,7 @@ class ConnectionManager {
             UIApplication.shared.windows.first?.rootViewController?.view.makeToast("Wifi")
             break
         case .unavailable, .none:
-            UIApplication.shared.windows.first?.rootViewController?.view.makeToast("Connection to Internet lost. Retrying in ")
+            UIApplication.shared.windows.first?.rootViewController?.view.makeToast("Connection to Internet lost")
             print("Network is unavailable.")
             break
         @unknown default:

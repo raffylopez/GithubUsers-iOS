@@ -10,17 +10,16 @@ import UIKit
 import CoreData
 
 @UIApplicationMain
+
+
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-        do {
-            try ConnectionManager.sharedInstance.observeReachability()
-        } catch {
-            print("\(error)")
-        }
+//        do {
+//            try ConnectionMonitor.shared.observeReachability()
+//        } catch {
+//
+//        }
         return true
     }
 

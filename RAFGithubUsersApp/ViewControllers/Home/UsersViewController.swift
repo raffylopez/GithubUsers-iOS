@@ -16,6 +16,12 @@ class UsersViewController: UITableViewController {
      */
     let isPrefetchingEnabled: Bool = false
     
+    private func setupReachability() {
+//        ConnectionMonitor.shared.delegate = self
+//        ConnectionMonitor.shared.checkNetworkSignal()
+    }
+    
+    var lastConnectionState: ConnectionState = .reachable
     // MARK: Configure table cell types
     typealias StandardTableViewCell = NormalUserTableViewCell
     typealias NoteTableViewCell = NoteUserTableViewCell
@@ -83,10 +89,26 @@ class UsersViewController: UITableViewController {
         registerTableCellTypes()
     }
 
-    private func makeToast(message:String) {
-        self.navigationController?.view.makeToast(message, duration: 3, position: .bottom)
+    /**
+     Displays a toast message at the bottom.
+     
+     Navigation controller should be the receiver, otherwise toast
+     might be misplaced or obscured.
+     
+     Display is always performed in the main queue
+     */
+    private func makeToast(message:String, duration: TimeInterval) {
+        DispatchQueue.main.async {
+            self.navigationController?.view.makeToast(message, duration: duration, position: .bottom)
+        }
     }
     
+    private func hideToast() {
+        DispatchQueue.main.async {
+            self.navigationController?.view.hideAllToasts()
+        }
+    }
+
     private func setupHandlers() {
         self.viewModel.delegate = self
         let onDataAvailable = {
@@ -187,11 +209,11 @@ class UsersViewController: UITableViewController {
     }
     
     override func viewDidLoad() {
-        
         super.viewDidLoad()
         self.view.backgroundColor = .systemBackground
         setupViews()
         setupHandlers()
+        setupReachability()
     }
     
     // MARK: - Selector targets
@@ -322,24 +344,45 @@ extension UsersViewController: UITableViewDataSourcePrefetching {
     }
 }
 
-private extension UsersViewController {
-  func isLoadingCell(for indexPath: IndexPath) -> Bool {
-    return (indexPath.row + 1) >= self.viewModel.currentCount
-  }
-
-  func visibleIndexPathsToReload(intersecting indexPaths: [IndexPath]) -> [IndexPath] {
-    let indexPathsForVisibleRows = tableView.indexPathsForVisibleRows ?? []
-    let indexPathsIntersection = Set(indexPathsForVisibleRows).intersection(indexPaths)
-    return Array(indexPathsIntersection)
-  }
+extension UsersViewController {
+    func isLoadingCell(for indexPath: IndexPath) -> Bool {
+        return (indexPath.row + 1) >= self.viewModel.currentCount
+    }
+    
+    func visibleIndexPathsToReload(intersecting indexPaths: [IndexPath]) -> [IndexPath] {
+        let indexPathsForVisibleRows = tableView.indexPathsForVisibleRows ?? []
+        let indexPathsIntersection = Set(indexPathsForVisibleRows).intersection(indexPaths)
+        return Array(indexPathsIntersection)
+    }
 }
 
+enum ConnectionState {
+    case reachable
+    case unreachable
+}
 
+extension UsersViewController: ReachabilityDelegate {
+    func onLostConnection() {
+        lastConnectionState = .unreachable
+        makeToast(message: "You are browsing offline", duration: 1000.0)
+        
+    }
+    
+    func onRegainConnection() {
+        if lastConnectionState == .unreachable {
+            hideToast()
+            makeToast(message: "Connected", duration: 3.0)
+            lastConnectionState = .reachable
+        }
+    }
+    
+    
+}
 extension UsersViewController: ViewModelDelegate {
 
     func onRetryError(n: Int, nextAttemptInMilliseconds: Int, error: Error) {
+            self.makeToast(message: "Unable to load data (\(n)). Retrying in \(nextAttemptInMilliseconds/1000) secs", duration: 3.0)
         DispatchQueue.main.async {
-            self.makeToast(message: "Unable to load data (\(n)). Retrying in \(nextAttemptInMilliseconds/1000) secs")
             self.navigationItem.rightBarButtonItem = nil
         }
     }
