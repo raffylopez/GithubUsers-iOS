@@ -8,7 +8,21 @@
 
 import UIKit
 
+
 class UsersViewController: UITableViewController {
+    
+    fileprivate func startSplashAnimation() {
+        let icon: SKSplashIcon = SKSplashIcon(image: UIImage(named: "github_splash_dark")!)
+        guard let splashView = SKSplashView(splashIcon: icon, animationType: .none),
+            let navController = self.navigationController
+        else { return }
+        splashView.backgroundColor = .black
+        splashView.animationDuration = 2.0
+        navController.view.addSubview(splashView)
+        splashView.startAnimation()
+    }
+    
+
     // MARK: - Configurables
     /**
      Enables look-ahead prefetching for table cells for infinite-scroll implementation.
@@ -121,9 +135,11 @@ class UsersViewController: UITableViewController {
 //                self.makeToast(message: "Data loaded!")
                 if self.viewModel.currentPage <= 1 { /* User performed a refresh */
                     self.tableView.alpha = 0
+                    self.tableView.alpha = 1
+                    self.tableView?.reloadSections(IndexSet(integer: 0), with: .none)
                     UIView.transition(with: self.tableView,
-                                      duration: 0.5,
-                                      options: .transitionFlipFromTop,
+                                      duration: 0.0,
+                                      options: [],
                                       animations: {
                                         self.tableView.alpha = 1
                                         self.tableView?.reloadSections(IndexSet(integer: 0), with: .none)
@@ -154,17 +170,17 @@ class UsersViewController: UITableViewController {
     }
 
     private func setupNavbar() {
-        let imgSize = CGFloat(20)
+        let imgSize = CGFloat(24)
         let imgHeight = CGFloat(imgSize)
         let imgWidth = CGFloat(imgSize)
         let spacing = CGFloat(5.0)
         let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: imgWidth, height: imgHeight))
         imageView.contentMode = .scaleAspectFit
-        let img = UIImage(named: "githublogo_wb")!
+        let img = UIImage(named: "github_splash_light")!
         imageView.image = img
         let container = UIView()
         let label = UILabel()
-        label.text = ""
+        label.text = "".localized()
         label.sizeToFit()
         UIHelper.initializeView(view: label, parent: container)
         label.centerXAnchor.constraint(equalTo: container.centerXAnchor, constant: (imgSize + spacing)/2).isActive = true
@@ -210,23 +226,31 @@ class UsersViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        startSplashAnimation()
         self.view.backgroundColor = .systemBackground
         setupViews()
         setupHandlers()
         setupReachability()
     }
     
+    private func clearData() {
+        self.viewModel.clearData()
+        self.tableView.reloadData()
+    }
     // MARK: - Selector targets
     @objc private func refreshPulled() {
         self.refreshControl?.beginRefreshing()
+        clearData()
         fetchTableData()
     }
     
     func fetchTableData() {
         self.viewModel.fetchUsers { result in
-            if case let .failure(error) = result {
-                print(error)
-                print("FOOBAR")
+            DispatchQueue.main.async {
+                self.refreshControl?.endRefreshing()
+                if case let .failure(error) = result {
+                    print(error) // TODO
+                }
             }
         }
     }

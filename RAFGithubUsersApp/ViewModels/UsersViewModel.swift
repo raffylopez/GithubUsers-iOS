@@ -11,6 +11,36 @@ import UIKit
 import CoreData
 
 class UsersViewModel {
+
+    private(set) var users: [User]! = [] {
+        didSet {
+            if users.count > 0 {
+                self.onDataAvailable()
+                delegate?.onDataAvailable()
+            }
+        }
+    }
+
+    private func resetState() {
+        self.since = 0
+        self.currentPage = 0
+        self.lastBatchCount = 0
+    }
+    
+    public func clearData() {
+        resetState()
+        
+        /* Clear out image caches */
+        imageStore.removeAllImages()
+        
+        /* Clear out data in persistent store*/
+        do {
+            try databaseService.deleteAll()
+        } catch {
+            fatalError(error.localizedDescription) // TODO
+        }
+        users.removeAll()
+    }
     var delegate: ViewModelDelegate? = nil
     
     typealias OnDataAvailable = ( () -> Void )
@@ -18,12 +48,18 @@ class UsersViewModel {
     var onFetchInProgress: (() -> Void) = {}
     var onFetchNotInProgress: (() -> Void) = {}
     
+    var since: Int = 0
+    var currentPage: Int = 0
+    var lastBatchCount: Int = 0
+    
     var currentCount: Int {
         return users.count
     }
     
-    let imageStore: ImageStore!
     let apiService: GithubUsersApi
+    let databaseService: UsersProvider
+    
+    let imageStore: ImageStore!
     var isFetchInProgress: Bool = false {
         didSet {
             print("Fetch in progress: \(isFetchInProgress)")
@@ -37,50 +73,19 @@ class UsersViewModel {
         }
     }
 
-    private static let persistentContainerName = getConfig().xcPersisentContainerName
-    private lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: Self.persistentContainerName )
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-            if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-        })
-        return container
-    }()
-    
-    // MARK: - Core Data Saving support
-    
-    private func saveContext () {
-        let context = persistentContainer.viewContext
-        if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-            }
-        }
-    }
-    
     private let session: URLSession! = {
         let config = URLSessionConfiguration.default
         return URLSession(configuration: config)
     }()
-
-    private(set) var users: [User]! = [] {
-        didSet {
-            self.onDataAvailable()
-            delegate?.onDataAvailable()
-        }
-    }
     var presentedElements: [UserPresenter]! {
         return users.compactMap({ user in
             UserPresenter(user)
         })
     }
     
-    init(apiService: GithubUsersApi) {
+    init(apiService: GithubUsersApi, databaseService: UsersProvider) {
         self.apiService = apiService
+        self.databaseService = databaseService
         imageStore = ImageStore()
     }
 
@@ -91,43 +96,6 @@ class UsersViewModel {
         self.onDataAvailable = availability
     }
     
-    /**
-     API call to user profiles
-     */
-//    func fetchUserDetailsDEPRECATED(for user: User , completion: @escaping (Result<UserInfo, Error>)->Void) {
-//        guard let login = user.login else {
-//            return completion(.failure(ErrorType.emptyResult))
-//        }
-//        self.apiService.fetchUserDetails(username: login) { result in
-//            let context = self.persistentContainer.viewContext
-//            switch result {
-//            case let .success(githubuserInfo):
-//                let userInfo = UserInfo(context: context)
-//                userInfo.id = Int32(githubuserInfo.id)
-//                userInfo.bio = githubuserInfo.bio
-//                userInfo.company = githubuserInfo.company
-//                userInfo.createdAt = githubuserInfo.createdAt
-//                userInfo.email = githubuserInfo.email
-//                userInfo.followers = Int32(githubuserInfo.followers)
-//                userInfo.following = Int32(githubuserInfo.following)
-//                userInfo.isHireable = githubuserInfo.hireable == ""
-//                userInfo.location = githubuserInfo.location
-//                userInfo.name = githubuserInfo.name
-//                userInfo.publicGists = Int32(githubuserInfo.publicGists)
-//                userInfo.publicRepos = Int32(githubuserInfo.publicRepos)
-//                userInfo.twitterUsername = githubuserInfo.twitterUsername
-//                userInfo.updatedAt = githubuserInfo.updatedAt
-//                return completion(.success(userInfo))
-//            case .failure(let error):
-//                preconditionFailure("\(error.localizedDescription)")
-//            }
-//        }
-//
-//    }
-
-    var since: Int = 0
-    var currentPage: Int = 0
-    var lastBatchCount: Int = 0
     /**
      Starts fetching user data from api service. Additional calls to this method
      are terminated at the onset, while a fetch is already in progress.
@@ -140,46 +108,35 @@ class UsersViewModel {
             return
         }
         
-        isFetchInProgress = true
+        try! self.databaseService.deleteAll()
+        /* Pre-fetch state toggles */
+        self.isFetchInProgress = true
 
         let onTaskSuccess = { (githubUsers: [GithubUser]) in
+            /* Post-fetch */
             self.isFetchInProgress = false
-            let context = self.persistentContainer.viewContext
-                self.isFetchInProgress = false
-                self.lastBatchCount = githubUsers.count
-                self.currentPage += 1
-                
-                let users: [User] = githubUsers.map { githubUser in
-                    var user: User!
-                    context.perform {
+            self.lastBatchCount = githubUsers.count
+            self.currentPage += 1
+            
+            let users: [User] = githubUsers.map { githubUser in
+                return self.databaseService.translate(from: githubUser)
+            }
+            
+            do {
+                try self.databaseService.saveAll()
+            } catch {
+                completion?(.failure(error))
+            }
 
-                        // TODO: Transfer to managedUserInfo in CoreData User entity class
-//                        user = User(context: context)
-                        user = User(from: githubUser, moc: context)
-//                        user.login = githubUser.login
-//                        user.id = Int32(githubUser.id)
-//                        user.nodeId = githubUser.nodeID
-//                        user.urlAvatar = githubUser.avatarURL
-//                        user.gravatarId = githubUser.gravatarID
-//                        user.url = githubUser.url
-//                        user.urlHtml = githubUser.htmlURL
-//                        user.urlFollowers = githubUser.followersURL
-//                        user.urlFollowing = githubUser.followingURL
-//                        user.urlGists = githubUser.gistsURL
-//                        user.urlStarred = githubUser.starredURL
-//                        user.urlSubscriptions = githubUser.subscriptionsURL
-//                        user.urlOrganizations = githubUser.organizationsURL
-//                        user.urlRepos = githubUser.reposURL
-//                        user.urlEvents = githubUser.eventsURL
-//                        user.urlReceivedEvents = githubUser.receivedEventsURL
-//                        user.userType = githubUser.type
-//                        user.isSiteAdmin = githubUser.siteAdmin
-                    }
-                    return user
+            self.databaseService.getUsers { result in
+                if case let .success(users) = result {
+//                    print(users)
                 }
-                self.users.append(contentsOf: users)
-                guard let user = self.users.last else { return }
-                self.since = Int(user.id)
+            }
+            self.users.append(contentsOf: users)
+            
+            guard let user = self.users.last else { return }
+            self.since = Int(user.id)
             completion?(.success(users))
             
             // TODO: Delegate success
@@ -187,7 +144,6 @@ class UsersViewModel {
         
         let onTaskError: ((Int, Int, Error)->Void)? = { attemptCount, delayTillNext, error in
             completion?(.failure(error))
-
             self.delegate?.onRetryError(n: attemptCount, nextAttemptInMilliseconds: delayTillNext, error: error)
         }
 
@@ -204,7 +160,7 @@ class UsersViewModel {
      */
     func fetchImage(for user: User, completion: @escaping (Result<(UIImage, ImageSource), Error>) -> Void, synchronous: Bool = false) {
         guard let urlString = user.urlAvatar, !urlString.isEmpty else {
-            completion(.failure(ErrorType.missingImageUrl))
+            completion(.failure(AppError.missingImageUrl))
             return
         }
         let imageUrl = URL(string: urlString)!
@@ -245,7 +201,7 @@ class UsersViewModel {
             if data == nil {
                 return .failure(error!)
             }
-            return .failure(ErrorType.imageCreationError)
+            return .failure(AppError.imageCreationError)
         }
         return .success((image, .network))
     }

@@ -20,7 +20,6 @@ public class User: NSManagedObject {
         let entity = NSEntityDescription.entity(forEntityName: String.init(describing: Self.self), in: moc)
         self.init(entity: entity!, insertInto: moc)
         
-        // TODO - transfer to properties
         self.login = githubUser.login
         self.id = Int32(githubUser.id)
         self.nodeId = githubUser.nodeID

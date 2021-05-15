@@ -5,8 +5,9 @@
 
 import Foundation
 
-enum ErrorType: Error {
+enum AppError: Error {
     case appConfigLoadError
+    case documentsDirectoryNotFound
     case missingImageUrl
     case imageCreationError
     case emptyResult

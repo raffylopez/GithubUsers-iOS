@@ -91,7 +91,7 @@ class ProfileViewModel {
         }
         
         guard let login = user.login else {
-            completion?(.failure(ErrorType.emptyResult))
+            completion?(.failure(AppError.emptyResult))
             return
         }
 
@@ -103,8 +103,12 @@ class ProfileViewModel {
             let context = self.persistentContainer.viewContext
             // TODO: Transfer to managedUserInfo in CoreData UserInfo entity class
             let managedUserInfo = UserInfo(from: githubuserInfo, moc: context)
-
             self.userInfo = managedUserInfo
+            do {
+                try context.save()
+            } catch {
+                completion?(.failure(error))
+            }
             completion?(.success(managedUserInfo))
             // TODO: Delegate success
         }
@@ -127,7 +131,7 @@ class ProfileViewModel {
      */
     func fetchImage(for user: User, completion: @escaping (Result<(UIImage, ImageSource), Error>) -> Void, synchronous: Bool = false) {
         guard let urlString = user.urlAvatar, !urlString.isEmpty else {
-            completion(.failure(ErrorType.missingImageUrl))
+            completion(.failure(AppError.missingImageUrl))
             return
         }
         let imageUrl = URL(string: urlString)!
@@ -168,7 +172,7 @@ class ProfileViewModel {
             if data == nil {
                 return .failure(error!)
             }
-            return .failure(ErrorType.imageCreationError)
+            return .failure(AppError.imageCreationError)
         }
         return .success((image, .network))
     }

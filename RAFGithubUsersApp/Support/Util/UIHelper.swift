@@ -16,6 +16,7 @@ enum UIHelper {
         parent?.addSubview(view)
     }
 }
+
 extension UIImage {
     func removeAlpha() -> UIImage {
         let inputImage = self

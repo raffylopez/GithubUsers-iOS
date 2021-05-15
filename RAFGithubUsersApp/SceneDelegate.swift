@@ -29,15 +29,23 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     private func setupViewControllers() {
         // constructor dependency injection
-        let viewModel = UsersViewModel(apiService: GithubUsersApi())
+        let viewModel = UsersViewModel(apiService: GithubUsersApi(), databaseService: CoreDataService.shared)
         let top = ViewControllersFactory.instance(vcType: .usersList(viewModel))
         let navController = UINavigationController(rootViewController: top)
         navController.navigationBar.barStyle = .default
+        
+//        let icon: SKSplashIcon = SKSplashIcon(image: UIImage(named: "github_splash_dark")!)
+//        guard let splashView = SKSplashView(splashIcon: icon, animationType: .none)
+//            else { return }
+//        splashView.backgroundColor = .black
+//        splashView.animationDuration = 2.5
+//        navController.view.addSubview(splashView)
+//        splashView.startAnimation()
+
         window?.rootViewController = navController
         window?.makeKeyAndVisible()
     }
     
-
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(frame: UIScreen.main.bounds)

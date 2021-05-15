@@ -12,8 +12,7 @@ import Foundation
 // MARK: - ImageStore
 
 /**
- Class for persisting media into disk (document sandbox), with support
- for in-memory caching
+ Allows for persistence of images into dual stores (document app directory and in-memory NSCache)
  */
 class ImageStore {
     public static var compressionQuality: CGFloat {
@@ -55,10 +54,11 @@ class ImageStore {
         if let data = image.jpegData(compressionQuality: Self.compressionQuality) {
             try? data.write(to: url)
         } else {
-            fatalError("Can't save image into docs directory")
+            fatalError("Can't save image into docs directory") // TODO
         }
     }
     
+
     /**
      Deletes an image given a string key
      */
@@ -69,6 +69,26 @@ class ImageStore {
             try FileManager.default.removeItem(at: persistentImgUrl)
         } catch let err {
             print("Unable to remove corresponding file from disk: \(err)")
+        }
+    }
+    
+    /**
+     Clears all cached media from NSCache and app documents
+     */
+    func removeAllImages() {
+        cache.removeAllObjects()
+        
+        do {
+            let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+            guard let url = urls.first else {
+                throw AppError.appConfigLoadError
+            }
+            let files = try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil, options: [])
+            for file in files {
+                try FileManager.default.removeItem(at: file)
+            }
+        } catch {
+            print("Could not clear temp folder: \(error)")
         }
     }
 }

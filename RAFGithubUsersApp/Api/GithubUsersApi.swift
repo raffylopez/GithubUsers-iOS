@@ -43,7 +43,7 @@ class GithubUsersApi {
                 return
             }
             print(url)
-            completion?(.failure(ErrorType.emptyResult))
+            completion?(.failure(AppError.emptyResult))
             }).resume()
     }
     
@@ -68,13 +68,13 @@ class GithubUsersApi {
             }
             if let githubUsers = githubUsers {
                 if self.configurableForceFailure {
-                    completion?(.failure(ErrorType.generalError))
+                    completion?(.failure(AppError.generalError))
                     return
                 }
                 completion?(.success(githubUsers))
                 return
             }
-            completion?(.failure(ErrorType.emptyResult))
+            completion?(.failure(AppError.emptyResult))
         })
         task.resume()
         if synchronous { dispatchGroup.wait() }

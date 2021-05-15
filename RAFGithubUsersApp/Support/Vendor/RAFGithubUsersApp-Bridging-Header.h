@@ -3,3 +3,5 @@
 //
 
 #import "FFBadgedBarButtonItem.h"
+#import "SKSplashView.h"
+#import "SKSplashIcon.h"
