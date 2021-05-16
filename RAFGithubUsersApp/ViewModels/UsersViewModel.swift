@@ -31,11 +31,11 @@ class UsersViewModel {
     public func clearData() {
         resetState()
         imageStore.removeAllImages()
-        do {
-            try databaseService.deleteAll()
-        } catch {
-            fatalError(error.localizedDescription) // TODO
-        }
+//        do {
+//            try databaseService.deleteAll()
+//        } catch {
+//            fatalError(error.localizedDescription) // TODO
+//        }
         users.removeAll()
         // TODO: Create clear event notif
     }

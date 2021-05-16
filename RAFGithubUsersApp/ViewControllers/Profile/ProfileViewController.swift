@@ -9,6 +9,29 @@
 import UIKit
 import SkeletonView
 
+protocol UIAlertMessageDisplay {
+    func display(message: String)
+}
+
+class ToastAlertMessageDisplay: UIAlertMessageDisplay {
+    static let shared = ToastAlertMessageDisplay()
+    func display(message: String) {
+        UIApplication.shared.windows.first?.rootViewController?.view.makeToast(message)
+    }
+}
+
+class StandardAlertMessageDisplay: UIAlertMessageDisplay {
+    static let shared = StandardAlertMessageDisplay()
+    func display(message: String) {
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: "Note saved", message: "Your note has been saved", preferredStyle: .actionSheet)
+            let action = UIAlertAction(title: "OK", style: .default) { action in }
+            alert.addAction(action)
+            UIApplication.shared.windows.first?.rootViewController?.present(alert, animated: true, completion: nil)
+        }
+    }
+}
+
 class ProfileViewController: UIViewController {
     @IBOutlet var boxBlue: UIView!
     
@@ -73,8 +96,8 @@ class ProfileViewController: UIViewController {
     private func setupLayout() {
         tvNote.layer.borderColor = UIColor.systemGray.cgColor
         tvNote.layer.borderWidth = 0
-        tvNote.layer.cornerRadius = 10
-        tvNote.backgroundColor = .systemGray5
+        tvNote.layer.cornerRadius = 5
+        tvNote.backgroundColor = UIColor.init(red: 239/255, green: 239/255, blue: 239/255, alpha: 1.0)
         
         boxBlue.layer.borderWidth = 3.0
         boxBlue.layer.masksToBounds = false
@@ -82,7 +105,22 @@ class ProfileViewController: UIViewController {
         boxBlue.layer.cornerRadius = boxBlue.frame.size.width / 2
         boxBlue.clipsToBounds = true
         
+        btnSave.setTitleColor(.red, for: .selected)
+
+        btnSave.layer.cornerRadius = 5
+        btnSave.addTarget(self, action: #selector(btnSavePressed), for: .touchDown)
         showSkeletons()
+    }
+    
+    @objc func btnSavePressed() {
+        let managedUser = self.viewModel.databaseService.getUserInfo(with: Int(self.viewModel.userInfo.id))
+        managedUser?.note = self.tvNote.text
+        do {
+            try self.viewModel.databaseService.save()
+        } catch {
+            preconditionFailure("Unable to save note! \(error)")
+        }
+        ToastAlertMessageDisplay.shared.display(message: "Note saved.")
     }
     
     private func setupNavbar() {
@@ -134,6 +172,7 @@ extension ProfileViewController: ViewModelDelegate {
             self.lblEmail.text = presented.email
             self.lblHireability.text = presented.hireability
             self.lblFollow.text = "\(presented.followers) followers • \(presented.following) following"
+            self.tvNote.text = presented.note
             self.hideSkeletons()
         }
     }

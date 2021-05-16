@@ -57,7 +57,7 @@
 		E1F2C142264D826200041F03 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F2C141264D826200041F03 /* Toast.swift */; };
 		E1F4479726505C680073B193 /* SKSplashIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = E1F4479426505C680073B193 /* SKSplashIcon.m */; };
 		E1F4479826505C680073B193 /* SKSplashView.m in Sources */ = {isa = PBXBuildFile; fileRef = E1F4479626505C680073B193 /* SKSplashView.m */; };
-		E1F447BC26511B560073B193 /* UsersProvider copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F447BB26511B560073B193 /* UsersProvider copy.swift */; };
+		E1F447BC26511B560073B193 /* UserInfoProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F447BB26511B560073B193 /* UserInfoProvider.swift */; };
 		E1F447C026511E790073B193 /* UserInfo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F447BE26511E790073B193 /* UserInfo+CoreDataProperties.swift */; };
 		E1F447C226511F020073B193 /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F447C126511F020073B193 /* User+CoreDataProperties.swift */; };
 		E1F6E025264D08E800A023A8 /* ShimmerUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F6E024264D08E800A023A8 /* ShimmerUserTableViewCell.swift */; };
@@ -159,7 +159,7 @@
 		E1F4479526505C680073B193 /* SKSplashView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKSplashView.h; sourceTree = "<group>"; };
 		E1F4479626505C680073B193 /* SKSplashView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKSplashView.m; sourceTree = "<group>"; };
 		E1F447992650CC610073B193 /* ShimmerUserTableViewCell copy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ShimmerUserTableViewCell copy.swift"; sourceTree = "<group>"; };
-		E1F447BB26511B560073B193 /* UsersProvider copy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UsersProvider copy.swift"; sourceTree = "<group>"; };
+		E1F447BB26511B560073B193 /* UserInfoProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoProvider.swift; sourceTree = "<group>"; };
 		E1F447BE26511E790073B193 /* UserInfo+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserInfo+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E1F447C126511F020073B193 /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "User+CoreDataProperties.swift"; path = "RAFGithubUsersApp/Persistence/CoreDataModels/User+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E1F6E024264D08E800A023A8 /* ShimmerUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmerUserTableViewCell.swift; sourceTree = "<group>"; };
@@ -442,7 +442,7 @@
 		E1F129B126503AD200EF34F8 /* Providers */ = {
 			isa = PBXGroup;
 			children = (
-				E1F447BB26511B560073B193 /* UsersProvider copy.swift */,
+				E1F447BB26511B560073B193 /* UserInfoProvider.swift */,
 				E1F129B226503B0600EF34F8 /* UsersProvider.swift */,
 			);
 			path = Providers;
@@ -631,7 +631,7 @@
 				E160EBC1264A6D44002820EC /* UsersViewController.swift in Sources */,
 				E129A665264EB4130035A99B /* UserInfoPresenter.swift in Sources */,
 				E189A180264AE3FD00CBD45A /* AppError.swift in Sources */,
-				E1F447BC26511B560073B193 /* UsersProvider copy.swift in Sources */,
+				E1F447BC26511B560073B193 /* UserInfoProvider.swift in Sources */,
 				E189A17D264AE0D400CBD45A /* GithubUser.swift in Sources */,
 				E1F447C226511F020073B193 /* User+CoreDataProperties.swift in Sources */,
 				E1FA38F7264B0B9D001EFA5C /* ImageSource.swift in Sources */,

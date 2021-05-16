@@ -62,6 +62,7 @@ class ProfileViewModel {
         self.onDataAvailable = availability
     }
     
+    
     func fetchUserDetails(for user: User, onRetryError: ((Int)->())? = nil, completion: ((Result<UserInfo, Error>)->Void)? = nil) {
         guard !isFetchInProgress else {
             return
@@ -76,11 +77,20 @@ class ProfileViewModel {
         
         let onTaskSuccess = { (githubuserInfo: GithubUserInfo) in
             self.isFetchInProgress = false
+            // Get existing
             
-            // TODO: Transfer to managedUserInfo in CoreData UserInfo entity class
-            let managedUserInfo = self.databaseService.translate(from: githubuserInfo)
-            managedUserInfo.user = self.user
+            var managedUserInfo: UserInfo!
+            
+            if let id = githubuserInfo.id, let userInfo = self.databaseService.getUserInfo(with: id) {
+                managedUserInfo = userInfo
+            } else {
+                // Create new
+                managedUserInfo = self.databaseService.translate(from: githubuserInfo)
+                managedUserInfo.user = self.user
+            }
+            
             self.userInfo = managedUserInfo
+            
             do {
                 try self.databaseService.save()
             } catch {
