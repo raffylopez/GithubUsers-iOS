@@ -22,6 +22,7 @@ class ProfileViewModel {
     
     let imageStore: ImageStore!
     let apiService: GithubUsersApi
+    let databaseService: UserInfoProvider
     var isFetchInProgress: Bool = false {
         didSet {
             print("Fetch in progress: \(isFetchInProgress)")
@@ -34,32 +35,7 @@ class ProfileViewModel {
             delegate?.onFetchDone()
         }
     }
-    
-    private static let persistentContainerName = getConfig().xcPersisentContainerName
-    private lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: Self.persistentContainerName )
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-            if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-        })
-        return container
-    }()
-    
-    // MARK: - Core Data Saving support
-    
-    private func saveContext () {
-        let context = persistentContainer.viewContext
-        if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-            }
-        }
-    }
-    
+
     private let session: URLSession! = {
         let config = URLSessionConfiguration.default
         return URLSession(configuration: config)
@@ -72,9 +48,10 @@ class ProfileViewModel {
         }
     }
 
-    init(user: User, apiService: GithubUsersApi) {
+    init(user: User, apiService: GithubUsersApi, databaseService: UserInfoProvider) {
         self.apiService = apiService
         self.user = user
+        self.databaseService = databaseService
         imageStore = ImageStore()
     }
     
@@ -100,16 +77,17 @@ class ProfileViewModel {
         let onTaskSuccess = { (githubuserInfo: GithubUserInfo) in
             self.isFetchInProgress = false
             
-            let context = self.persistentContainer.viewContext
             // TODO: Transfer to managedUserInfo in CoreData UserInfo entity class
-            let managedUserInfo = UserInfo(from: githubuserInfo, moc: context)
+            let managedUserInfo = self.databaseService.translate(from: githubuserInfo)
+            managedUserInfo.user = self.user
             self.userInfo = managedUserInfo
             do {
-                try context.save()
+                try self.databaseService.save()
             } catch {
                 completion?(.failure(error))
             }
             completion?(.success(managedUserInfo))
+            print("NOTE: \(managedUserInfo.note ?? "<NONE>")")
             // TODO: Delegate success
         }
         

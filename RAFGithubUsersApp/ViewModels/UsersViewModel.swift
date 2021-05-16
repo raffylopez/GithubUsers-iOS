@@ -39,6 +39,7 @@ class UsersViewModel {
         users.removeAll()
         // TODO: Create clear event notif
     }
+    
     var delegate: ViewModelDelegate? = nil
     
     typealias OnDataAvailable = ( () -> Void )

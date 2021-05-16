@@ -57,6 +57,9 @@
 		E1F2C142264D826200041F03 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F2C141264D826200041F03 /* Toast.swift */; };
 		E1F4479726505C680073B193 /* SKSplashIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = E1F4479426505C680073B193 /* SKSplashIcon.m */; };
 		E1F4479826505C680073B193 /* SKSplashView.m in Sources */ = {isa = PBXBuildFile; fileRef = E1F4479626505C680073B193 /* SKSplashView.m */; };
+		E1F447BC26511B560073B193 /* UsersProvider copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F447BB26511B560073B193 /* UsersProvider copy.swift */; };
+		E1F447C026511E790073B193 /* UserInfo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F447BE26511E790073B193 /* UserInfo+CoreDataProperties.swift */; };
+		E1F447C226511F020073B193 /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F447C126511F020073B193 /* User+CoreDataProperties.swift */; };
 		E1F6E025264D08E800A023A8 /* ShimmerUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F6E024264D08E800A023A8 /* ShimmerUserTableViewCell.swift */; };
 		E1F6E027264D648700A023A8 /* fakeuserslist.json in Resources */ = {isa = PBXBuildFile; fileRef = E189A182264AE77800CBD45A /* fakeuserslist.json */; };
 		E1F6E029264D765000A023A8 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F6E028264D764F00A023A8 /* ProfileViewModel.swift */; };
@@ -69,7 +72,6 @@
 		E1FA38FD264B1BB7001EFA5C /* JSONSchemaSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FA38FC264B1BB7001EFA5C /* JSONSchemaSupport.swift */; };
 		E1FA390C264BA390001EFA5C /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FA3909264BA390001EFA5C /* User+CoreDataProperties.swift */; };
 		E1FA390D264BA390001EFA5C /* UserInfo+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FA390A264BA390001EFA5C /* UserInfo+CoreDataClass.swift */; };
-		E1FA390E264BA390001EFA5C /* UserInfo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FA390B264BA390001EFA5C /* UserInfo+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -157,6 +159,9 @@
 		E1F4479526505C680073B193 /* SKSplashView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKSplashView.h; sourceTree = "<group>"; };
 		E1F4479626505C680073B193 /* SKSplashView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKSplashView.m; sourceTree = "<group>"; };
 		E1F447992650CC610073B193 /* ShimmerUserTableViewCell copy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ShimmerUserTableViewCell copy.swift"; sourceTree = "<group>"; };
+		E1F447BB26511B560073B193 /* UsersProvider copy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UsersProvider copy.swift"; sourceTree = "<group>"; };
+		E1F447BE26511E790073B193 /* UserInfo+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserInfo+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		E1F447C126511F020073B193 /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "User+CoreDataProperties.swift"; path = "RAFGithubUsersApp/Persistence/CoreDataModels/User+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E1F6E024264D08E800A023A8 /* ShimmerUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmerUserTableViewCell.swift; sourceTree = "<group>"; };
 		E1F6E028264D764F00A023A8 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		E1FA38EF264B05E4001EFA5C /* UserPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPresenter.swift; sourceTree = "<group>"; };
@@ -166,7 +171,6 @@
 		E1FA38FC264B1BB7001EFA5C /* JSONSchemaSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONSchemaSupport.swift; sourceTree = "<group>"; };
 		E1FA3909264BA390001EFA5C /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E1FA390A264BA390001EFA5C /* UserInfo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserInfo+CoreDataClass.swift"; sourceTree = "<group>"; };
-		E1FA390B264BA390001EFA5C /* UserInfo+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserInfo+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E1FA390F264BA90C001EFA5C /* UserInfoDataModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoDataModelTest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -265,6 +269,7 @@
 		E160EBB0264A6D44002820EC = {
 			isa = PBXGroup;
 			children = (
+				E1F447C126511F020073B193 /* User+CoreDataProperties.swift */,
 				E160EBBB264A6D44002820EC /* RAFGithubUsersApp */,
 				E160EBD5264A6D47002820EC /* RAFGithubUsersAppTests */,
 				E160EBBA264A6D44002820EC /* Products */,
@@ -333,7 +338,7 @@
 				E189A158264ACE7F00CBD45A /* User+CoreDataClass.swift */,
 				E1FA3909264BA390001EFA5C /* User+CoreDataProperties.swift */,
 				E1FA390A264BA390001EFA5C /* UserInfo+CoreDataClass.swift */,
-				E1FA390B264BA390001EFA5C /* UserInfo+CoreDataProperties.swift */,
+				E1F447BE26511E790073B193 /* UserInfo+CoreDataProperties.swift */,
 			);
 			path = CoreDataModels;
 			sourceTree = "<group>";
@@ -437,6 +442,7 @@
 		E1F129B126503AD200EF34F8 /* Providers */ = {
 			isa = PBXGroup;
 			children = (
+				E1F447BB26511B560073B193 /* UsersProvider copy.swift */,
 				E1F129B226503B0600EF34F8 /* UsersProvider.swift */,
 			);
 			path = Providers;
@@ -625,7 +631,9 @@
 				E160EBC1264A6D44002820EC /* UsersViewController.swift in Sources */,
 				E129A665264EB4130035A99B /* UserInfoPresenter.swift in Sources */,
 				E189A180264AE3FD00CBD45A /* AppError.swift in Sources */,
+				E1F447BC26511B560073B193 /* UsersProvider copy.swift in Sources */,
 				E189A17D264AE0D400CBD45A /* GithubUser.swift in Sources */,
+				E1F447C226511F020073B193 /* User+CoreDataProperties.swift in Sources */,
 				E1FA38F7264B0B9D001EFA5C /* ImageSource.swift in Sources */,
 				E1F6E029264D765000A023A8 /* ProfileViewModel.swift in Sources */,
 				E160EBE5264A76FF002820EC /* ProfileViewController.swift in Sources */,
@@ -657,13 +665,13 @@
 				E1510C6F264C478100E59C35 /* UserTableViewCell.swift in Sources */,
 				E1FA38F5264B086F001EFA5C /* StringExtensions.swift in Sources */,
 				E1F4479726505C680073B193 /* SKSplashIcon.m in Sources */,
-				E1FA390E264BA390001EFA5C /* UserInfo+CoreDataProperties.swift in Sources */,
 				E1FA38F1264B07D7001EFA5C /* ImageStore.swift in Sources */,
 				E146CC38264DD4B100C3FA51 /* ScheduledTask.swift in Sources */,
 				E160EBBD264A6D44002820EC /* AppDelegate.swift in Sources */,
 				E1FA390C264BA390001EFA5C /* User+CoreDataProperties.swift in Sources */,
 				E160EBBF264A6D44002820EC /* SceneDelegate.swift in Sources */,
 				E1D04A80264BB5CF00C4E5FD /* UIHelper.swift in Sources */,
+				E1F447C026511E790073B193 /* UserInfo+CoreDataProperties.swift in Sources */,
 				E189A15A264ACE7F00CBD45A /* User+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -848,7 +856,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "RAFGithubUsersApp/Support/Vendor/RAFGithubUsersApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -873,7 +881,7 @@
 				PRODUCT_NAME = GithubApp;
 				SWIFT_OBJC_BRIDGING_HEADER = "RAFGithubUsersApp/Support/Vendor/RAFGithubUsersApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

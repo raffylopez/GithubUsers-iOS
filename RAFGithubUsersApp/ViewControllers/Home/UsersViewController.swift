@@ -135,28 +135,23 @@ class UsersViewController: UITableViewController {
         return value % multiple == 0 && value != 0
     }
     
-    private func performLookAheadImageCaching() {
+    private func performInvertedImagesPrefetching() {
         guard confImageInversionOnFourthRows else {
             return
         }
         
-            OperationQueue.main.addOperation {
-                var i: Int = 0
-                for user in self.viewModel.users {
-                guard let targetCell = self.tableView.cellForRow(at: IndexPath(row: i, section:0))
-                    else { continue }
-                let cellIsVisible = self.tableView.visibleCells.contains(targetCell)
-                if self.multiple(of: 4, i + 1) && cellIsVisible {
-                    print(user.id)
-                    self.viewModel.fetchImage(for: user) { result in
-                        if case let .success(img) = result, let inverted = img.0.invertImageColors() {
-                            self.viewModel.imageStore.setImage(forKey: "\(user.id)", image: inverted)
-                        }
+        var i: Int = 0
+        for user in self.viewModel.users {
+            guard self.viewModel.imageStore.image(forKey: "\(user.id)") == nil else  { continue }
+            if (i+1) % 4 == 0 {
+                self.viewModel.fetchImage(for: user) { result in
+                    if case let .success(img) = result, let inverted = img.0.invertImageColors() {
+                        self.viewModel.imageStore.setImage(forKey: "\(user.id)", image: inverted)
                     }
                 }
-                
-                i += 1
             }
+            
+            i += 1
         }
     }
     
@@ -168,7 +163,7 @@ class UsersViewController: UITableViewController {
                 newIndexPathsToReload = self.calculateIndexPathsToReload(from: self.viewModel.lastBatchCount)
             }
 
-            self.performLookAheadImageCaching()
+//            self.performInvertedImagesPrefetching()
 
             OperationQueue.main.addOperation {
 //                self.makeToast(message: "Data loaded!")
@@ -384,7 +379,7 @@ extension UsersViewController: UserListTableViewCellDelegate {
     }
     
     func didTouchCellPanel(cell: UserTableViewCellBase) {
-        let viewModel = ProfileViewModel(user: cell.user, apiService: GithubUsersApi())
+        let viewModel = ProfileViewModel(user: cell.user, apiService: GithubUsersApi(), databaseService: CoreDataService.shared)
         self.navigationController?.pushViewController(ViewControllersFactory.instance(vcType: .userProfile(viewModel)), animated: true)
     }
     

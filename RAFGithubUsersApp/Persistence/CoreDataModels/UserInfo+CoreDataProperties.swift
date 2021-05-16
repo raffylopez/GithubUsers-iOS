@@ -2,7 +2,7 @@
 //  UserInfo+CoreDataProperties.swift
 //  RAFGithubUsersApp
 //
-//  Created by Volare on 5/12/21.
+//  Created by Volare on 5/16/21.
 //  Copyright © 2021 Raf. All rights reserved.
 //
 //
@@ -18,6 +18,7 @@ extension UserInfo {
     }
 
     @NSManaged public var bio: String?
+    @NSManaged public var blog: String?
     @NSManaged public var company: String?
     @NSManaged public var createdAt: Date?
     @NSManaged public var email: String?
@@ -32,5 +33,6 @@ extension UserInfo {
     @NSManaged public var seen: Bool
     @NSManaged public var twitterUsername: String?
     @NSManaged public var updatedAt: Date?
+    @NSManaged public var user: User?
 
 }
