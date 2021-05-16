@@ -15,8 +15,27 @@ protocol UIAlertMessageDisplay {
 
 class ToastAlertMessageDisplay: UIAlertMessageDisplay {
     static let shared = ToastAlertMessageDisplay()
+    static let appView = UIApplication.shared.windows.first?.rootViewController?.view
     func display(message: String) {
-        UIApplication.shared.windows.first?.rootViewController?.view.makeToast(message)
+        OperationQueue.main.addOperation {
+            Self.appView?.makeToast(message)
+        }
+    }
+    func hideAllToasts() {
+        OperationQueue.main.addOperation {
+            Self.appView?.hideAllToasts()
+        }
+    }
+    func makeToastActivity() {
+        OperationQueue.main.addOperation {
+            Self.appView?.makeToastActivity(.bottom)
+        }
+    }
+    func hideToastActivity() {
+        OperationQueue.main.addOperation {
+            Self.appView?.hideToastActivity()
+        }
+        
     }
 }
 
@@ -34,6 +53,7 @@ class StandardAlertMessageDisplay: UIAlertMessageDisplay {
 
 class ProfileViewController: UIViewController {
     @IBOutlet var boxBlue: UIView!
+    @IBOutlet var imgUser: UIImageView!
     
     @IBOutlet var lblName: UILabel!
     @IBOutlet var lblLogin: UILabel!
@@ -44,7 +64,7 @@ class ProfileViewController: UIViewController {
     @IBOutlet var lblLocation: UILabel!
     @IBOutlet var lblEmail: UILabel!
     @IBOutlet var lblHireability: UILabel!
-
+    
     @IBOutlet var lblCompanyTag: UILabel!
     @IBOutlet var lblBlogTag: UILabel!
     @IBOutlet var lblLocationTag: UILabel!
@@ -106,7 +126,7 @@ class ProfileViewController: UIViewController {
         boxBlue.clipsToBounds = true
         
         btnSave.setTitleColor(.red, for: .selected)
-
+        
         btnSave.layer.cornerRadius = 5
         btnSave.addTarget(self, action: #selector(btnSavePressed), for: .touchDown)
         showSkeletons()
@@ -130,7 +150,7 @@ class ProfileViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         self.navigationItem.largeTitleDisplayMode = .never
     }
-
+    
     override func loadView() {
         super.loadView()
     }
@@ -145,18 +165,17 @@ class ProfileViewController: UIViewController {
         }
         self.viewModel.fetchUserDetails(for: self.viewModel.user)
     }
-
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
-
+    
 }
 
 extension ProfileViewController: ViewModelDelegate {
     func onDataAvailable() {
-        print("Profile data available")
         let presented = self.viewModel.userInfo.presented
-        DispatchQueue.main.async {
+        OperationQueue.main.addOperation {
             self.lblName.text = presented.name
             if presented.name.isEmpty {
                 self.nameTopContraint.constant = 9
@@ -174,6 +193,14 @@ extension ProfileViewController: ViewModelDelegate {
             self.lblFollow.text = "\(presented.followers) followers • \(presented.following) following"
             self.tvNote.text = presented.note
             self.hideSkeletons()
+            self.viewModel.fetchImage(for: self.viewModel.user) { result in
+                OperationQueue.main.addOperation {
+                    if case let .success(img) = result {
+                        self.imgUser.image = img.0
+                        self.boxBlue.hideSkeleton()
+                    }
+                }
+            }
         }
     }
     
@@ -181,7 +208,7 @@ extension ProfileViewController: ViewModelDelegate {
         print("\(#function)")
     }
     
-func onFetchInProgress() {
+    func onFetchInProgress() {
         print("\(#function)")
     }
     

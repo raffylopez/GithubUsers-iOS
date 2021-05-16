@@ -69,7 +69,7 @@ extension CoreDataService: UserInfoProvider {
     
     func save() throws {
         if context.hasChanges {
-            try context.save()
+            try saveContext()
         }
     }
 }

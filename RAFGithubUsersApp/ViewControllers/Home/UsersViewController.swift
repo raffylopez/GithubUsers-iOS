@@ -122,12 +122,6 @@ class UsersViewController: UITableViewController {
         }
     }
     
-    private func hideToast() {
-        DispatchQueue.main.async {
-            self.navigationController?.view.hideAllToasts()
-        }
-    }
-
     private func multiple(of multiple: Int, _ value: Int, includingFirst: Bool = false) -> Bool {
         if includingFirst {
             return value % multiple == 0
@@ -163,14 +157,11 @@ class UsersViewController: UITableViewController {
                 newIndexPathsToReload = self.calculateIndexPathsToReload(from: self.viewModel.lastBatchCount)
             }
 
-//            self.performInvertedImagesPrefetching()
-
             OperationQueue.main.addOperation {
-//                self.makeToast(message: "Data loaded!")
+                ToastAlertMessageDisplay.shared.hideToastActivity()
                 if self.viewModel.currentPage <= 1 { /* User performed a refresh */
                     self.tableView.alpha = 0
                     self.tableView.alpha = 1
-//                    self.tableView?.reloadSections(IndexSet(integer: 0), with: .none) // TODO
                     UIView.transition(with: self.tableView,
                                       duration: 0.0,
                                       options: [],
@@ -426,7 +417,7 @@ extension UsersViewController: ReachabilityDelegate {
     
     func onRegainConnection() {
         if lastConnectionState == .unreachable {
-            hideToast()
+            ToastAlertMessageDisplay.shared.hideToastActivity()
             makeToast(message: "Connected", duration: 3.0)
             lastConnectionState = .reachable
         }

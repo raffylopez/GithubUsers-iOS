@@ -107,6 +107,10 @@ class UsersViewModel {
             return
         }
         
+//        let message = self.currentPage <= 0 ? "Loading" : "Loading more"
+        
+        ToastAlertMessageDisplay.shared.makeToastActivity()
+        
         try! self.databaseService.deleteAll()
         /* Pre-fetch state toggles */
         self.isFetchInProgress = true
@@ -126,12 +130,12 @@ class UsersViewModel {
             } catch {
                 completion?(.failure(error))
             }
-
-            self.databaseService.getUsers { result in
-                if case let .success(users) = result {
-//                    print(users)
-                }
-            }
+//
+//            self.databaseService.getUsers { result in
+//                if case let .success(users) = result {
+////                    print(users)
+//                }
+//            }
             self.users.append(contentsOf: users)
             
             guard let user = self.users.last else { return }

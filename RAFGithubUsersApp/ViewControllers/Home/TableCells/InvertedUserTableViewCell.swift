@@ -20,7 +20,6 @@ class InvertedUserTableViewCell: UserTableViewCellBase {
     override func updateWith(user: User) {
         super.updateWith(user: user)
         self.lblName.text = self.lblName.text ?? ""
-        self.lblName.textColor = .red
     }
     
     required init?(coder: NSCoder) {

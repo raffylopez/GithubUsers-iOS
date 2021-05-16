@@ -129,6 +129,7 @@ class ProfileViewModel {
             DispatchQueue.main.async {
                 completion(.success((image, .cache)))
             }
+            return
         }
         
         let request = URLRequest(url: imageUrl)
@@ -151,7 +152,7 @@ class ProfileViewModel {
         task.resume()
         if (synchronous) { group.wait() }
     }
-    
+
     /**
      Performs Data to UIImage conversion
      */

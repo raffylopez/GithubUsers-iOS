@@ -50,7 +50,7 @@ extension CoreDataService: UsersProvider {
     
     func saveAll() throws {
         if context.hasChanges {
-            try context.save()
+            try saveContext()
         }
     }
 }
