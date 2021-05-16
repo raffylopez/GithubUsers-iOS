@@ -232,14 +232,14 @@
 		E1510C7E264C710F00E59C35 /* TableCells */ = {
 			isa = PBXGroup;
 			children = (
+				E1510C78264C4E0000E59C35 /* Base Types */,
+				E1D04A7D264BB57F00C4E5FD /* NormalUserTableViewCell.swift */,
+				E1510C6A264C459200E59C35 /* InvertedUserTableViewCell.swift */,
 				E1510C79264C6A0F00E59C35 /* StubUserTableViewCell.swift */,
 				E1F6E024264D08E800A023A8 /* ShimmerUserTableViewCell.swift */,
 				E1F447992650CC610073B193 /* ShimmerUserTableViewCell copy.swift */,
 				E1510C7F264C9B9200E59C35 /* AdminUserTableViewCell.swift */,
 				E1510C7B264C6A7A00E59C35 /* NoteUserTableViewCell copy.swift */,
-				E1510C6A264C459200E59C35 /* InvertedUserTableViewCell.swift */,
-				E1D04A7D264BB57F00C4E5FD /* NormalUserTableViewCell.swift */,
-				E1510C78264C4E0000E59C35 /* Base Types */,
 			);
 			path = TableCells;
 			sourceTree = "<group>";

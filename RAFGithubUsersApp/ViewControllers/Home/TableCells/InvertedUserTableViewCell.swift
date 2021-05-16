@@ -29,7 +29,14 @@ class InvertedUserTableViewCell: UserTableViewCellBase {
 
 extension InvertedUserTableViewCell: UserTableViewCell {
     /**
-     Wraps image inversion in asynchronous call
+     Wraps image inversion in asynchronous call, and places the routine into a
+     high performance queue.
+     
+     Images are only inverted after network retrieval. The inverted
+     image is stored into the image cache afterwards. This leads to a palpably less
+     laggy tableview scrolling experience.
+     
+     TODO: Implement look-ahead image inversion for even better performance.
      */
     func invertImage(image: UIImage, completion: @escaping (UIImage?)->()) {
         DispatchQueue.global(qos: .userInteractive).async {
@@ -39,37 +46,28 @@ extension InvertedUserTableViewCell: UserTableViewCell {
     }
     
     func update(displaying image: (UIImage, ImageSource)?) {
-        print("ID \(self.user.id): FOOBAR")
         if let imageResultSet = image {
             
             let image = imageResultSet.0
             let imageSource = imageResultSet.1
             
-            OperationQueue.main.addOperation {
-                if let invertedImage = image.invertImageColors() {
-                    self.imgViewChar.image = invertedImage
-                    //                        self.store.setImage(forKey: "\(self.user.id)", image: invertedImage)
+            switch imageSource {
+            case .network:
+                OperationQueue.main.addOperation {
+                    if let invertedImage = image.invertImageColors() {
+                        self.imgViewChar.image = invertedImage
+                        self.store.setImage(forKey: "\(self.user.id)", image: invertedImage)
+                        self.spinner.stopAnimating()
+                    }
+                }
+                return
+            case .cache:
+                OperationQueue.main.addOperation {
+                    self.imgViewChar.image = image
                     self.spinner.stopAnimating()
                 }
             }
-
-//            switch imageSource {
-//            case .network:
-//                OperationQueue.main.addOperation {
-//                    if let invertedImage = image.invertImageColors() {
-//                        self.imgViewChar.image = invertedImage
-////                        self.store.setImage(forKey: "\(self.user.id)", image: invertedImage)
-//                        self.spinner.stopAnimating()
-//                    }
-//                }
-//                return
-//            case .cache:
-//                OperationQueue.main.addOperation {
-//                    self.imgViewChar.image = image
-//                    self.spinner.stopAnimating()
-//                }
-//            }
-//            return
+            return
         }
     }
 }

@@ -28,7 +28,12 @@ class UsersViewController: UITableViewController {
      Enables look-ahead prefetching for table cells for infinite-scroll implementation.
      If false, tail-end fetching is used.
      */
-    let isPrefetchingEnabled: Bool = false
+    let confPrefetchingEnabled: Bool = false
+    
+    /**
+     Cached images need to be reloaded after toggling this flag
+     */
+    let confImageInversionOnFourthRows: Bool = true
     
     private func setupReachability() {
 //        ConnectionMonitor.shared.delegate = self
@@ -37,7 +42,7 @@ class UsersViewController: UITableViewController {
     
     var lastConnectionState: ConnectionState = .reachable
     // MARK: Configure table cell types
-    typealias StandardTableViewCell = ShimmerTableViewCell
+    typealias StandardTableViewCell = NormalUserTableViewCell
     typealias NoteTableViewCell = NoteUserTableViewCell
     typealias AlternativeTableViewCell = InvertedUserTableViewCell
     typealias DummyTableViewCell = StubUserTableViewCell
@@ -123,6 +128,38 @@ class UsersViewController: UITableViewController {
         }
     }
 
+    private func multiple(of multiple: Int, _ value: Int, includingFirst: Bool = false) -> Bool {
+        if includingFirst {
+            return value % multiple == 0
+        }
+        return value % multiple == 0 && value != 0
+    }
+    
+    private func performLookAheadImageCaching() {
+        guard confImageInversionOnFourthRows else {
+            return
+        }
+        
+            OperationQueue.main.addOperation {
+                var i: Int = 0
+                for user in self.viewModel.users {
+                guard let targetCell = self.tableView.cellForRow(at: IndexPath(row: i, section:0))
+                    else { continue }
+                let cellIsVisible = self.tableView.visibleCells.contains(targetCell)
+                if self.multiple(of: 4, i + 1) && cellIsVisible {
+                    print(user.id)
+                    self.viewModel.fetchImage(for: user) { result in
+                        if case let .success(img) = result, let inverted = img.0.invertImageColors() {
+                            self.viewModel.imageStore.setImage(forKey: "\(user.id)", image: inverted)
+                        }
+                    }
+                }
+                
+                i += 1
+            }
+        }
+    }
+    
     private func setupHandlers() {
         self.viewModel.delegate = self
         let onDataAvailable = {
@@ -130,13 +167,15 @@ class UsersViewController: UITableViewController {
             if self.viewModel.currentPage > 1 {
                 newIndexPathsToReload = self.calculateIndexPathsToReload(from: self.viewModel.lastBatchCount)
             }
-            
+
+            self.performLookAheadImageCaching()
+
             OperationQueue.main.addOperation {
 //                self.makeToast(message: "Data loaded!")
                 if self.viewModel.currentPage <= 1 { /* User performed a refresh */
                     self.tableView.alpha = 0
                     self.tableView.alpha = 1
-                    self.tableView?.reloadSections(IndexSet(integer: 0), with: .none)
+//                    self.tableView?.reloadSections(IndexSet(integer: 0), with: .none) // TODO
                     UIView.transition(with: self.tableView,
                                       duration: 0.0,
                                       options: [],
@@ -215,6 +254,7 @@ class UsersViewController: UITableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
 //        navigationItem.title = "Browse Users".localized()
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationItem.largeTitleDisplayMode = .always
@@ -256,7 +296,7 @@ class UsersViewController: UITableViewController {
     }
 
     @objc func tableViewScrollToTop() {
-        self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+        self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
     }
     
     /**
@@ -272,23 +312,21 @@ class UsersViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let element = self.viewModel.users[indexPath.row]
         
-//        if !isPrefetchingEnabled && isLoadingCell2(for: indexPath) {
-//            fetchTableData()
-//        }
-        print("---------------- DISPLAYING CELL FOR ID = \(self.viewModel.users[indexPath.row].id) -------")
-
+        if !confPrefetchingEnabled && isLoadingCell2(for: indexPath) {
+            fetchTableData()
+        }
+        
         viewModel.fetchImage(for: element) { result in
+
             guard let photoIndex = self.viewModel.users.firstIndex(of: element),
                 case let .success(image) = result else {
                     return
             }
             if let cell = self.tableView.cellForRow(at: IndexPath(item: photoIndex, section: 0)) as? StandardTableViewCell {
-                print("---------------- DISPLAYING CELL FOR ID = \(self.viewModel.users[indexPath.row].id) -------")
                 cell.update(displaying: image)
                 return
             }
             if let cell = self.tableView.cellForRow(at: IndexPath(item: photoIndex, section: 0)) as? AlternativeTableViewCell {
-//                print("CALL ALT--------------------------------------------")
                 cell.update(displaying: image)
                 return
             }
@@ -329,16 +367,13 @@ class UsersViewController: UITableViewController {
 // MARK: • UITableViewDatasource methods
 extension UsersViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let rowMultipleOfFour = (indexPath.row + 1) % 4 == 0
-        let rowNotZero = indexPath.row != 0
-
         let user = viewModel.users[indexPath.row]
-//        let cell: UserTableViewCellBase = rowMultipleOfFour && rowNotZero ?
-//            getUserTableViewCell(associatedUser: user, AlternativeTableViewCell.self, cellForRowAt: indexPath) :
-//            getUserTableViewCell(associatedUser: user, StandardTableViewCell.self, cellForRowAt: indexPath)
-        let cell = getUserTableViewCell(associatedUser: user, StandardTableViewCell.self, cellForRowAt: indexPath)
+        let cell: UserTableViewCellBase = multiple(of: 4, indexPath.row + 1) && confImageInversionOnFourthRows ?
+            getUserTableViewCell(associatedUser: user, AlternativeTableViewCell.self, cellForRowAt: indexPath) :
+            getUserTableViewCell(associatedUser: user, StandardTableViewCell.self, cellForRowAt: indexPath)
         cell.delegate = self
         cell.updateWith(user: user)
+        
         return cell
     }
 }
@@ -364,7 +399,7 @@ extension UsersViewController: UISearchResultsUpdating {
 
 extension UsersViewController: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-        if isPrefetchingEnabled && indexPaths.contains(where: isLoadingCell) {
+        if confPrefetchingEnabled && indexPaths.contains(where: isLoadingCell) {
             fetchTableData()
         }
     }

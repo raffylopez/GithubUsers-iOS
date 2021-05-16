@@ -20,25 +20,30 @@ class ShimmerTableViewCell: UserTableViewCellBase {
         super.init(coder: coder)
     }
     
-    override func updateWith(user: User) {
-        self.imgViewChar.image = nil
-        self.imgViewChar.backgroundColor = .systemGray5
-        skeletonize(view: self.imgViewChar)
-        super.updateWith(user: user)
-        self.lblName.text = self.lblName.text ?? ""
-    }
+//    override func updateWith(user: User) {
+//        self.imgViewChar.image = nil
+//        self.imgViewChar.backgroundColor = .systemGray5
+//        skeletonize(view: self.imgViewChar)
+//        super.updateWith(user: user)
+//        self.lblName.text = self.lblName.text ?? ""
+//    }
 
     private func skeletonize(view:  UIView) {
         view.isSkeletonable = true
         view.skeletonCornerRadius = 2.0
         view.showAnimatedGradientSkeleton()
-        view.showSkeleton()
     }
     
     private func skeletonize(label:  UILabel) {
-        label.backgroundColor = .systemGray5
+        label.isSkeletonable = true
+        label.skeletonCornerRadius = 2.0
+        label.showAnimatedGradientSkeleton()
     }
 
+    private func unskeletonize(label:  UILabel) {
+        label.hideSkeleton()
+    }
+    
     override internal func setupViews() {
         guard let lblName = lblName,
             let lblSeries = lblSeries,
@@ -52,6 +57,13 @@ class ShimmerTableViewCell: UserTableViewCellBase {
         UIHelper.initializeView(view: lblName, parent: nil)
         UIHelper.initializeView(view: imgCharacter, parent: self)
         UIHelper.initializeView(view: stackView, parent: self)
+    }
+    
+    override internal func updateWith(user: User) {
+        super.updateWith(user: user)
+        OperationQueue.main.addOperation {
+            self.skeletonize(view: self.imgViewChar)
+        }
     }
 }
 

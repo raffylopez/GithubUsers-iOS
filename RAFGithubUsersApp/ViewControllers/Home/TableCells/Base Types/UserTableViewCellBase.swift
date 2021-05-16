@@ -63,7 +63,7 @@ class UserTableViewCellBase: UITableViewCell {
         
         stackView.addArrangedSubview(lblName)
         stackView.addArrangedSubview(lblSeries)
-        
+
         UIHelper.initializeView(view: lblSeries, parent: nil)
         UIHelper.initializeView(view: lblName, parent: nil)
         UIHelper.initializeView(view: imgCharacter, parent: self)
@@ -72,7 +72,7 @@ class UserTableViewCellBase: UITableViewCell {
         
         spinner.centerYAnchor.constraint(equalTo: imgCharacter.centerYAnchor).isActive = true
         spinner.centerXAnchor.constraint(equalTo: imgCharacter.centerXAnchor).isActive = true
-//        imgCharacter.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        
         spinner.startAnimating()
     }
     
@@ -93,7 +93,7 @@ class UserTableViewCellBase: UITableViewCell {
         NSLayoutConstraint.activate(hcn)
     }
     
-    func updateWith(user: User) {
+    internal func updateWith(user: User) {
         self.lblName.text = user.login
         self.lblSeries.text = user.urlHtml
     }

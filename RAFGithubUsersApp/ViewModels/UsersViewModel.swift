@@ -168,6 +168,7 @@ class UsersViewModel {
             DispatchQueue.main.async {
                 completion(.success((image, .cache)))
             }
+            return // !!!
         }
 
         let request = URLRequest(url: imageUrl)
