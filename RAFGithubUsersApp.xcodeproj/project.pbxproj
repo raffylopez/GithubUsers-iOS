@@ -156,6 +156,7 @@
 		E1F4479426505C680073B193 /* SKSplashIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKSplashIcon.m; sourceTree = "<group>"; };
 		E1F4479526505C680073B193 /* SKSplashView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKSplashView.h; sourceTree = "<group>"; };
 		E1F4479626505C680073B193 /* SKSplashView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKSplashView.m; sourceTree = "<group>"; };
+		E1F447992650CC610073B193 /* ShimmerUserTableViewCell copy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ShimmerUserTableViewCell copy.swift"; sourceTree = "<group>"; };
 		E1F6E024264D08E800A023A8 /* ShimmerUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmerUserTableViewCell.swift; sourceTree = "<group>"; };
 		E1F6E028264D764F00A023A8 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		E1FA38EF264B05E4001EFA5C /* UserPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPresenter.swift; sourceTree = "<group>"; };
@@ -233,6 +234,7 @@
 			children = (
 				E1510C79264C6A0F00E59C35 /* StubUserTableViewCell.swift */,
 				E1F6E024264D08E800A023A8 /* ShimmerUserTableViewCell.swift */,
+				E1F447992650CC610073B193 /* ShimmerUserTableViewCell copy.swift */,
 				E1510C7F264C9B9200E59C35 /* AdminUserTableViewCell.swift */,
 				E1510C7B264C6A7A00E59C35 /* NoteUserTableViewCell copy.swift */,
 				E1510C6A264C459200E59C35 /* InvertedUserTableViewCell.swift */,

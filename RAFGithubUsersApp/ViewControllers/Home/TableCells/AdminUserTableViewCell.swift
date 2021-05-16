@@ -28,7 +28,6 @@ class AdminUserTableViewCell: UserTableViewCellBase {
 }
 
 extension AdminUserTableViewCell: UserTableViewCell {
-
     func update(displaying image: (UIImage, ImageSource)?) {
         if let imageResultSet = image {
             let image = imageResultSet.0
@@ -48,4 +47,5 @@ extension AdminUserTableViewCell: UserTableViewCell {
             return
         }
     }
+    
 }

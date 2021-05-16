@@ -31,14 +31,18 @@ extension NormalUserTableViewCell: UserTableViewCell {
             
             switch imageSource {
             case .network:
-                UIView.transition(with: self.imgViewChar, duration: 0.25, options: .transitionCrossDissolve, animations: {
-                    self.imgViewChar.image = image
-                }, completion: { _ in
-                    self.spinner.stopAnimating()
-                })
+                OperationQueue.main.addOperation {
+                    UIView.transition(with: self.imgViewChar, duration: 0.25, options: .transitionCrossDissolve, animations: {
+                        self.imgViewChar.image = image
+                    }, completion: { _ in
+                        self.spinner.stopAnimating()
+                    })
+                }
             case .cache:
-                self.imgViewChar.image = image
-                self.spinner.stopAnimating()
+                OperationQueue.main.addOperation {
+                    self.imgViewChar.image = image
+                    self.spinner.stopAnimating()
+                }
             }
             return
         }

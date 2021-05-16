@@ -272,23 +272,23 @@ class UsersViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let element = self.viewModel.users[indexPath.row]
         
-        if !isPrefetchingEnabled && isLoadingCell2(for: indexPath) {
-            fetchTableData()
-        }
-//        if let cell = cell as? ShimmerTableViewCell {
-//            cell.initialize()
+//        if !isPrefetchingEnabled && isLoadingCell2(for: indexPath) {
+//            fetchTableData()
 //        }
-        
+        print("---------------- DISPLAYING CELL FOR ID = \(self.viewModel.users[indexPath.row].id) -------")
+
         viewModel.fetchImage(for: element) { result in
             guard let photoIndex = self.viewModel.users.firstIndex(of: element),
                 case let .success(image) = result else {
                     return
             }
             if let cell = self.tableView.cellForRow(at: IndexPath(item: photoIndex, section: 0)) as? StandardTableViewCell {
+                print("---------------- DISPLAYING CELL FOR ID = \(self.viewModel.users[indexPath.row].id) -------")
                 cell.update(displaying: image)
                 return
             }
             if let cell = self.tableView.cellForRow(at: IndexPath(item: photoIndex, section: 0)) as? AlternativeTableViewCell {
+//                print("CALL ALT--------------------------------------------")
                 cell.update(displaying: image)
                 return
             }
@@ -312,7 +312,11 @@ class UsersViewController: UITableViewController {
         let startIndex = self.viewModel.users.count - newUsers
         let endIndex = startIndex + newUsers
         print("vmuc:\(self.viewModel.users.count), n:\(newUsers)")
-        return ((startIndex)..<(endIndex)).map { IndexPath(row: $0, section: 0) }
+//        if self.viewModel.currentPage == 1 {
+//            return ((startIndex)..<(endIndex-1)).map { IndexPath(row: $0, section: 0) }
+//        }
+//        return ((startIndex < 0 ? startIndex : startIndex - 1)..<(endIndex-1)).map { IndexPath(row: $0, section: 0) }
+        return (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
     }
 
 
@@ -325,19 +329,15 @@ class UsersViewController: UITableViewController {
 // MARK: • UITableViewDatasource methods
 extension UsersViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let rowMultipleOfFour = (indexPath.row + 1) % 4 == 0
-//        let rowNotZero = indexPath.row != 0
-        
-//        if rowMultipleOfFour && rowNotZero {
-//            return getTableViewCell(AlternativeTableViewCell.self, cellForRowAt: indexPath)
-//        }
+        let rowMultipleOfFour = (indexPath.row + 1) % 4 == 0
+        let rowNotZero = indexPath.row != 0
+
         let user = viewModel.users[indexPath.row]
+//        let cell: UserTableViewCellBase = rowMultipleOfFour && rowNotZero ?
+//            getUserTableViewCell(associatedUser: user, AlternativeTableViewCell.self, cellForRowAt: indexPath) :
+//            getUserTableViewCell(associatedUser: user, StandardTableViewCell.self, cellForRowAt: indexPath)
         let cell = getUserTableViewCell(associatedUser: user, StandardTableViewCell.self, cellForRowAt: indexPath)
         cell.delegate = self
-//        if isLoadingCell2(for: indexPath) {
-//            cell.updateWith(user: viewModel.users[indexPath.row])
-//            return cell
-//        }
         cell.updateWith(user: user)
         return cell
     }

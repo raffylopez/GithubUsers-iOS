@@ -17,6 +17,11 @@ class InvertedUserTableViewCell: UserTableViewCellBase {
         setupLayout()
     }
 
+    override func updateWith(user: User) {
+        super.updateWith(user: user)
+        self.lblName.text = self.lblName.text ?? ""
+    }
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
@@ -34,25 +39,37 @@ extension InvertedUserTableViewCell: UserTableViewCell {
     }
     
     func update(displaying image: (UIImage, ImageSource)?) {
+        print("ID \(self.user.id): FOOBAR")
         if let imageResultSet = image {
             
             let image = imageResultSet.0
             let imageSource = imageResultSet.1
-
-            switch imageSource {
-            case .network:
-                self.invertImage(image: image) { img in
-                    OperationQueue.main.addOperation {
-                        self.imgViewChar.image = img
-                    }
+            
+            OperationQueue.main.addOperation {
+                if let invertedImage = image.invertImageColors() {
+                    self.imgViewChar.image = invertedImage
+                    //                        self.store.setImage(forKey: "\(self.user.id)", image: invertedImage)
+                    self.spinner.stopAnimating()
                 }
-            case .cache:
-                OperationQueue.main.addOperation {
-                    self.imgViewChar.image = image
-                }
-                self.spinner.stopAnimating()
             }
-            return
+
+//            switch imageSource {
+//            case .network:
+//                OperationQueue.main.addOperation {
+//                    if let invertedImage = image.invertImageColors() {
+//                        self.imgViewChar.image = invertedImage
+////                        self.store.setImage(forKey: "\(self.user.id)", image: invertedImage)
+//                        self.spinner.stopAnimating()
+//                    }
+//                }
+//                return
+//            case .cache:
+//                OperationQueue.main.addOperation {
+//                    self.imgViewChar.image = image
+//                    self.spinner.stopAnimating()
+//                }
+//            }
+//            return
         }
     }
 }
