@@ -63,6 +63,8 @@ extension CoreDataService: UsersProvider {
 
     func getUsers(callback: @escaping (Result<[User], Error>) -> Void) {
         let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: #keyPath(User.id), ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
         context.perform {
             do {
                 var allUsers: [User]!

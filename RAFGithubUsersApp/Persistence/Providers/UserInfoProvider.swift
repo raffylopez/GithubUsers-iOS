@@ -22,7 +22,7 @@ extension CoreDataService: UserInfoProvider {
     func getUserInfo(for user: User) -> UserInfo? {
         let entityName = String(describing: UserInfo.self)
         let fetchRequest: NSFetchRequest<UserInfo> = NSFetchRequest(entityName: entityName)
-        let format = "\(#keyPath(UserInfo.id)) == \(user.id)"
+        let format = "\(#keyPath(UserInfo.user)) == \(user)"
         let predicate = NSPredicate( format: format )
         fetchRequest.predicate = predicate
         var fetchedUserInfo: [UserInfo]!
@@ -40,7 +40,8 @@ extension CoreDataService: UserInfoProvider {
     func getUserInfo(with id: Int) -> UserInfo? {
         let entityName = String(describing: UserInfo.self)
         let fetchRequest: NSFetchRequest<UserInfo> = NSFetchRequest(entityName: entityName)
-        let predicate = NSPredicate( format: "\(#keyPath(UserInfo.id)) == \(id)" )
+        
+        let predicate = NSPredicate( format: "\(#keyPath(UserInfo.user.id)) == \(id)" )
         fetchRequest.predicate = predicate
         var fetchedUserInfo: [UserInfo]!
         context.performAndWait {

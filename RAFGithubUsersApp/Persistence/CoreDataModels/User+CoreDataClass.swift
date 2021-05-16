@@ -21,7 +21,7 @@ public class User: NSManagedObject {
         self.init(entity: entity!, insertInto: moc)
         
         self.login = githubUser.login
-        self.id = Int32(githubUser.id)
+        self.id = Int64(githubUser.id)
         self.nodeId = githubUser.nodeID
         self.urlAvatar = githubUser.avatarURL
         self.gravatarId = githubUser.gravatarID
@@ -45,7 +45,7 @@ public class User: NSManagedObject {
         self.init(entity: entity!, insertInto: moc)
         
         self.login = githubUser.login
-        self.id = Int32(githubUser.id)
+        self.id = Int64(githubUser.id)
         self.nodeId = githubUser.nodeID
         self.urlAvatar = githubUser.avatarURL
         self.gravatarId = githubUser.gravatarID

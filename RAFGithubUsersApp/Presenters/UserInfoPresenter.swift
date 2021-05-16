@@ -23,7 +23,7 @@ class UserInfoPresenter {
     }
 
     var name: String { return self.userInfo.name ?? "" }
-    var login: String { return self.userInfo.login ?? "-" }
+    var login: String { return self.userInfo.user?.login ?? "-" }
     var bio: String { return self.userInfo.bio ?? "" }
     var followers: String {
         let num = NSNumber(value: self.userInfo.followers)

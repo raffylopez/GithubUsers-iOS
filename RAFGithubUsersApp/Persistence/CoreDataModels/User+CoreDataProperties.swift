@@ -2,7 +2,7 @@
 //  User+CoreDataProperties.swift
 //  RAFGithubUsersApp
 //
-//  Created by Volare on 5/16/21.
+//  Created by Volare on 5/17/21.
 //  Copyright © 2021 Raf. All rights reserved.
 //
 //
@@ -18,7 +18,7 @@ extension User {
     }
 
     @NSManaged public var gravatarId: String?
-    @NSManaged public var id: Int32
+    @NSManaged public var id: Int64
     @NSManaged public var isSiteAdmin: Bool
     @NSManaged public var login: String?
     @NSManaged public var nodeId: String?

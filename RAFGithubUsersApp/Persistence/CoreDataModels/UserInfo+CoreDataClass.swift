@@ -11,7 +11,7 @@ import Foundation
 import CoreData
 
 @objc(UserInfo)
-public class UserInfo: User {
+public class UserInfo: NSManagedObject {
     lazy var presented: UserInfoPresenter = {
         return UserInfoPresenter(self)
     }()
@@ -20,8 +20,6 @@ public class UserInfo: User {
         let entity = NSEntityDescription.entity(forEntityName: String.init(describing: Self.self), in: moc)
         self.init(entity: entity!, insertInto: moc)
         moc.performAndWait {
-            self.id = Int32(from.id ?? 0)
-            self.login = from.login
             self.bio = from.bio
             self.blog = from.blog
             self.company = from.company
@@ -42,8 +40,6 @@ public class UserInfo: User {
     
     func set(from: GithubUserInfo, moc: NSManagedObjectContext) {
         moc.performAndWait {
-            self.id = Int32(from.id ?? 0)
-            self.login = from.login
             self.bio = from.bio
             self.blog = from.blog
             self.company = from.company

@@ -149,6 +149,7 @@ class UsersViewController: UITableViewController {
         }
     }
     
+
     private func setupHandlers() {
         self.viewModel.delegate = self
         let onDataAvailable = {
