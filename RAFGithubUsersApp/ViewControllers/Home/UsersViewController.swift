@@ -156,6 +156,10 @@ class UsersViewController: UITableViewController {
             if self.viewModel.currentPage > 1 {
                 newIndexPathsToReload = self.calculateIndexPathsToReload(from: self.viewModel.lastBatchCount)
             }
+            
+            if let users = self.viewModel.users, let first = users.first {
+                print(first)
+            }
 
             OperationQueue.main.addOperation {
                 ToastAlertMessageDisplay.shared.hideToastActivity()
@@ -370,6 +374,7 @@ extension UsersViewController: UserListTableViewCellDelegate {
     }
     
     func didTouchCellPanel(cell: UserTableViewCellBase) {
+        print(cell.user)
         let viewModel = ProfileViewModel(user: cell.user, apiService: GithubUsersApi(), databaseService: CoreDataService.shared)
         self.navigationController?.pushViewController(ViewControllersFactory.instance(vcType: .userProfile(viewModel)), animated: true)
     }

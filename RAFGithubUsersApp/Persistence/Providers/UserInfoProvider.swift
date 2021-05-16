@@ -13,11 +13,29 @@ protocol UserInfoProvider {
     func translate(from apiUser: GithubUserInfo) -> UserInfo
     func getAllUserInfo(callback: @escaping (Result<[UserInfo], Error>) -> Void)
     func getUserInfo(with id: Int) -> UserInfo?
+    func getUserInfo(for user: User) -> UserInfo?
     func save() throws
     func delete() throws
 }
 
 extension CoreDataService: UserInfoProvider {
+    func getUserInfo(for user: User) -> UserInfo? {
+        let entityName = String(describing: UserInfo.self)
+        let fetchRequest: NSFetchRequest<UserInfo> = NSFetchRequest(entityName: entityName)
+        let format = "\(#keyPath(UserInfo.id)) == \(user.id)"
+        let predicate = NSPredicate( format: format )
+        fetchRequest.predicate = predicate
+        var fetchedUserInfo: [UserInfo]!
+        context.performAndWait {
+            fetchedUserInfo = try? fetchRequest.execute()
+        }
+        if let existingInfo = fetchedUserInfo?.first {
+            return existingInfo
+        }
+        
+        return nil
+        
+    }
 
     func getUserInfo(with id: Int) -> UserInfo? {
         let entityName = String(describing: UserInfo.self)

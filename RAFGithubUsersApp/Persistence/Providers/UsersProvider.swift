@@ -11,13 +11,31 @@ import CoreData
 
 protocol UsersProvider {
     func translate(from apiUser: GithubUser) -> User
+    func translate(from apiUser: GithubUser, with userInfo: UserInfo) -> User
     func getUsers(callback: @escaping (Result<[User], Error>) -> Void)
+    func getUser(id: Int) -> User?
     func saveAll() throws
     func deleteAll() throws
 }
 
 extension CoreDataService: UsersProvider {
 
+    func getUser(id: Int) -> User? {
+        let entityName = String(describing: User.self)
+        let fetchRequest: NSFetchRequest<User> = NSFetchRequest(entityName: entityName)
+        let predicate = NSPredicate( format: "\(#keyPath(User.id)) == \(id)" )
+        fetchRequest.predicate = predicate
+        var fetchedUserInfo: [User]!
+        context.performAndWait {
+            fetchedUserInfo = try? fetchRequest.execute()
+        }
+        if let existingInfo = fetchedUserInfo?.first {
+            return existingInfo
+        }
+        return nil
+
+
+    }
     func translate(from apiUser: GithubUser) -> User {
         var managedUser: User!
         context.performAndWait {
@@ -26,6 +44,14 @@ extension CoreDataService: UsersProvider {
         return managedUser
     }
     
+    func translate(from apiUser: GithubUser, with userInfo: UserInfo) -> User {
+        var managedUser: User!
+        context.performAndWait {
+            managedUser = User(from: apiUser, with: userInfo, moc: context)
+        }
+        return managedUser
+    }
+
     func deleteAll() throws {
         let entityName = String(describing: User.self)
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: entityName)
@@ -49,8 +75,8 @@ extension CoreDataService: UsersProvider {
     }
     
     func saveAll() throws {
-        if context.hasChanges {
+//        if context.hasChanges {
             try saveContext()
-        }
+//        }
     }
 }

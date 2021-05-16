@@ -133,14 +133,16 @@ class ProfileViewController: UIViewController {
     }
     
     @objc func btnSavePressed() {
-        let managedUser = self.viewModel.databaseService.getUserInfo(with: Int(self.viewModel.userInfo.id))
-        managedUser?.note = self.tvNote.text
-        do {
-            try self.viewModel.databaseService.save()
-        } catch {
-            preconditionFailure("Unable to save note! \(error)")
+        if let userInfo = self.viewModel.userInfo {
+            userInfo.note = self.tvNote.text
+            userInfo.user = self.viewModel.user
+            do {
+                try self.viewModel.databaseService.save()
+            } catch {
+                preconditionFailure("Unable to save note! \(error)")
+            }
+            ToastAlertMessageDisplay.shared.display(message: "Note saved.")
         }
-        ToastAlertMessageDisplay.shared.display(message: "Note saved.")
     }
     
     private func setupNavbar() {

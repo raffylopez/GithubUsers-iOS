@@ -102,6 +102,9 @@ class UsersViewModel {
      Data availability notification is performed through an observable viewmodel
      closure
      */
+    
+    let userInfoProvider: UserInfoProvider = CoreDataService.shared
+    
     func fetchUsers(onRetryError: ((Int)->())? = nil, completion: ((Result<[User], Error>)->Void)? = nil) {
         guard !isFetchInProgress else {
             return
@@ -122,7 +125,14 @@ class UsersViewModel {
             self.currentPage += 1
             
             let users: [User] = githubUsers.map { githubUser in
+                if let existingUserInfo = self.userInfoProvider.getUserInfo(with: githubUser.id) {
+                    return self.databaseService.translate(from: githubUser, with: existingUserInfo)
+                }
                 return self.databaseService.translate(from: githubUser)
+            }
+            
+            if let first = users.first, let login = first.login {
+                print("FOOBAR: \(first)")
             }
             
             do {
@@ -130,14 +140,9 @@ class UsersViewModel {
             } catch {
                 completion?(.failure(error))
             }
-//
-//            self.databaseService.getUsers { result in
-//                if case let .success(users) = result {
-////                    print(users)
-//                }
-//            }
             self.users.append(contentsOf: users)
             
+
             guard let user = self.users.last else { return }
             self.since = Int(user.id)
             completion?(.success(users))

@@ -77,28 +77,29 @@ class ProfileViewModel {
         
         let onTaskSuccess = { (githubuserInfo: GithubUserInfo) in
             self.isFetchInProgress = false
-            // Get existing
-            
-            var managedUserInfo: UserInfo!
-            
-            if let id = githubuserInfo.id, let userInfo = self.databaseService.getUserInfo(with: id) {
-                managedUserInfo = userInfo
-            } else {
+
+            print(self.user)
+//            if let userInfo = self.user.userInfo, let login = userInfo.login {
+//                print (login)
+//            } else {
+//                print("userinfo doesn't exist!")
+//            }
+//            if let id = githubuserInfo.id, let userInfo = self.databaseService.getUserInfo(with: id) {
+//                managedUserInfo = userInfo
+//            } else {
                 // Create new
-                managedUserInfo = self.databaseService.translate(from: githubuserInfo)
-                managedUserInfo.user = self.user
-            }
-            
-            self.userInfo = managedUserInfo
-            
+//            if self.us
+//                managedUserInfo = self.databaseService.translate(from: githubuserInfo)
+//                managedUserInfo.user = self.user
+//            }
+            self.user.userInfo?.set(from: githubuserInfo, moc: CoreDataService.shared.context)
+
             do {
                 try self.databaseService.save()
             } catch {
                 completion?(.failure(error))
             }
-            completion?(.success(managedUserInfo))
-            print("NOTE: \(managedUserInfo.note ?? "<NONE>")")
-            // TODO: Delegate success
+            self.userInfo = self.user.userInfo
         }
         
         let onTaskError: ((Int, Int, Error)->Void)? = { attemptCount, delayTillNext, error in
