@@ -142,7 +142,7 @@ class UsersViewModel {
      
      This function makes absolutely no network calls.
      */
-    func updateDataSource(onError: ((Error)->Void)? = nil, onSuccess: (()->Void)? = nil) {
+    func updateFromDiskSource(onError: ((Error)->Void)? = nil, onSuccess: (()->Void)? = nil) {
         fetchUsersFromDisk { result in
             switch result {
             case let .failure(error):
@@ -150,9 +150,28 @@ class UsersViewModel {
                 print("CoreData read problem: \(error.localizedDescription)")
                 onError?(error)
             case let .success(users):
+                if let user = users.last {
+                    self.since = Int(user.id)
+                }
                 self.users = users
+                self.users.append(contentsOf: users)
                 print("COREDATA TOTAL USERS DATASOURCE COUNT (UpdateDataSource): \(self.users.count)" )
                 onSuccess?()
+            }
+        }
+    }
+
+    func updateFromNetworkAndDisk() {
+        processUserRequest { result in
+            switch result {
+            case let .success(users):
+                if let user = users.last {
+                    self.since = Int(user.id)
+                }
+                self.lastBatchCount = users.count
+                self.users.append(contentsOf: users)
+            case let .failure(error):
+                preconditionFailure(error.localizedDescription)
             }
         }
     }
@@ -165,6 +184,7 @@ class UsersViewModel {
      size of the batch received.
      */
     func processUserRequest(completion: ((Result<[User], Error>)->Void)? = nil) {
+        
         let context = CoreDataService.persistentContainer.viewContext
         
         self.apiService.fetchUsers(since: self.since) { (result: Result<[GithubUser], Error>) in
@@ -199,11 +219,6 @@ class UsersViewModel {
                     completion?(.failure(error))
                     preconditionFailure()
                 }
-                self.lastBatchCount = githubUsers.count
-                
-                if let user = self.users.last {
-                    self.since = Int(user.id)
-                }
 
                 completion?(.success(users))
 
@@ -213,31 +228,31 @@ class UsersViewModel {
         }
     }
 
-    /* Combination of processRequest and updatedatasource */
-    /* TODO: closure-based notifiers */
-    func fetchUsers(onRetryError: ((Int)->())? = nil, completion: ((Result<[User], Error>)->Void)? = nil) {
-
-        print("COREDATA USER COUNT (PRE-FETCH): \(usersDatabaseService.getUserCount())" )
-        guard !isFetchInProgress else {
-            return
-        }
-        
-        processUserRequest { result in
-            self.isFetchInProgress = false
-            switch result {
-            case let .success(users):
-                print("COREDATA USER COUNT (POST-FETCH): \(self.usersDatabaseService.getUserCount())" )
-                if let user = users.last {
-                    self.since = Int(user.id)
-                }
-                print("COREDATA SINCE: \(self.since)" )
-                print("COREDATA USERS RETURNED: \(users.count)" )
-                self.updateDataSource()
-            case let .failure(_):
-                preconditionFailure("BLAH")
-            }
-        }
-    }
+//    /* Combination of processRequest and updatedatasource */
+//    /* TODO: closure-based notifiers */
+//    func fetchUsers(onRetryError: ((Int)->())? = nil, completion: ((Result<[User], Error>)->Void)? = nil) {
+//
+//        print("COREDATA USER COUNT (PRE-FETCH): \(usersDatabaseService.getUserCount())" )
+//        guard !isFetchInProgress else {
+//            return
+//        }
+//
+//        processUserRequest { result in
+//            self.isFetchInProgress = false
+//            switch result {
+//            case let .success(users):
+//                print("COREDATA USER COUNT (POST-FETCH): \(self.usersDatabaseService.getUserCount())" )
+//                if let user = users.last {
+//                    self.since = Int(user.id)
+//                }
+//                print("COREDATA SINCE: \(self.since)" )
+//                print("COREDATA USERS RETURNED: \(users.count)" )
+//                self.updateDataSource()
+//            case let .failure(_):
+//                preconditionFailure("BLAH")
+//            }
+//        }
+//    }
     let localAccessOnly: Bool = true
 
     /* Combination of processRequest and updatedatasource */
@@ -259,7 +274,7 @@ class UsersViewModel {
                 }
                 print("COREDATA SINCE: \(self.since)" )
                 print("COREDATA USERS RETURNED: \(users.count)" )
-                self.updateDataSource()
+                self.updateFromDiskSource()
             case let .failure(_):
                 preconditionFailure("BLAH")
             }
@@ -331,7 +346,7 @@ class UsersViewModel {
             }
 
             /* Update model datasource, which should trigger view controller */
-            self.updateDataSource {
+            self.updateFromDiskSource {
                 self.since = Int(self.users.last?.id ?? 0)
                 self.currentPage += 1
                 completion?(.success(users))
@@ -405,7 +420,7 @@ class UsersViewModel {
                 }
                 
                 /* Update model datasource, which should trigger view controller */
-                self.updateDataSource {
+                self.updateFromDiskSource {
                     self.since = Int(self.users.last?.id ?? 0)
                     self.currentPage += 1
                     completion?(.success(users))

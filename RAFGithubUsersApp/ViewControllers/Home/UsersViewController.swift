@@ -217,7 +217,7 @@ class UsersViewController: UITableViewController {
         
         // if network is available, freshen datastore objects
         
-        viewModel.updateDataSource { }
+        viewModel.updateFromDiskSource { }
     }
 
     private func setupNavbar() {
@@ -278,6 +278,10 @@ class UsersViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        try? self.viewModel.usersDatabaseService.deleteAll() // DEBUG
+        fetchAdditionalTableData()
+
         startSplashAnimation()
         self.view.backgroundColor = .systemBackground
         setupViews()
@@ -294,15 +298,13 @@ class UsersViewController: UITableViewController {
     @objc private func refreshPulled() {
         self.refreshControl?.beginRefreshing()
         clearData()
-        fetchTableData()
+        fetchAdditionalTableData()
     }
     
-    func fetchTableData() {
-        ToastAlertMessageDisplay.shared.display(message: "Loading")
-        self.viewModel.processUserRequest { _ in
-            self.viewModel.updateDataSource()
-            ToastAlertMessageDisplay.shared.hideAllToasts()
-        }
+    func fetchAdditionalTableData() {
+//        ToastAlertMessageDisplay.shared.display(message: "Loading")
+        self.viewModel.updateFromNetworkAndDisk()
+        
 //        self.viewModel.fetchUsers { result in
 //            DispatchQueue.main.async {
 //                self.refreshControl?.endRefreshing()
@@ -330,8 +332,9 @@ class UsersViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let element = self.viewModel.users[indexPath.row]
         
+        print(self.viewModel.users[indexPath.row].login)
         if !confPrefetchingEnabled && isLoadingLastCell(for: indexPath) {
-            fetchTableData()
+            fetchAdditionalTableData()
         }
         
         viewModel.fetchImage(for: element) { result in
@@ -419,9 +422,9 @@ extension UsersViewController: UISearchResultsUpdating {
 
 extension UsersViewController: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-        if confPrefetchingEnabled && indexPaths.contains(where: isLoadingCell) {
-            fetchTableData()
-        }
+//        if confPrefetchingEnabled && indexPaths.contains(where: isLoadingCell) {
+//            fetchAdditionalTableData()
+//        }
     }
 }
 
