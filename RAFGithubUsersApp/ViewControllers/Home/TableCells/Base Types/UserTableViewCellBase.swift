@@ -94,7 +94,8 @@ class UserTableViewCellBase: UITableViewCell {
     }
     
     internal func updateWith(user: User) {
-        self.lblName.text = user.login
+        let id = user.id
+        self.lblName.text = "\(id): \(user.login)"
         self.lblSeries.text = user.urlHtml
     }
 }

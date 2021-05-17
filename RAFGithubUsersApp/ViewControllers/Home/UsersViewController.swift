@@ -151,11 +151,13 @@ class UsersViewController: UITableViewController {
     
 
     private func setupHandlers() {
+//        self.viewModel.clearDiskStore()
+
         self.viewModel.delegate = self
         let onDataAvailable = {
-            var newIndexPathsToReload: [IndexPath] = []
+            var newIndexPathsToInsert: [IndexPath] = []
             if self.viewModel.currentPage > 1 {
-                newIndexPathsToReload = self.calculateIndexPathsToReload(from: self.viewModel.lastBatchCount)
+                newIndexPathsToInsert = self.calculateIndexPathsToReload(from: self.viewModel.lastBatchCount)
             }
             
             if let users = self.viewModel.users, let first = users.first {
@@ -180,12 +182,15 @@ class UsersViewController: UITableViewController {
                     self.refreshControl?.endRefreshing()
                     return
                 }
-                let indexPathsToReload = self.visibleIndexPathsToReload(intersecting: newIndexPathsToReload)
+                
+                let indexPathsToReload = self.visibleIndexPathsToReload(intersecting: newIndexPathsToInsert)
+                
+                print("To reload(new): \(newIndexPathsToInsert.count), since: \(self.viewModel.since), currentCount: \(self.viewModel.currentCount), lastBatchCount: \(self.viewModel.lastBatchCount), start: \(newIndexPathsToInsert[0].row), end: end: \(newIndexPathsToInsert[newIndexPathsToInsert.count-1].row) ")
                 
                 /* Ensure slide animations are disabled on row insertion (slide animation used by default on insert) */
                 UIView.setAnimationsEnabled(false)
                 self.tableView?.beginUpdates()
-                self.tableView?.insertRows(at: newIndexPathsToReload, with: .none)
+                self.tableView?.insertRows(at: newIndexPathsToInsert, with: .none)
                 self.tableView?.endUpdates()
                 
                 UIView.setAnimationsEnabled(true)
@@ -267,6 +272,7 @@ class UsersViewController: UITableViewController {
     private func clearData() {
         self.viewModel.clearData()
         self.tableView.reloadData()
+        self.fetchTableData()
     }
     // MARK: - Selector targets
     @objc private func refreshPulled() {
@@ -341,6 +347,7 @@ class UsersViewController: UITableViewController {
         let startIndex = self.viewModel.users.count - newUsers
         let endIndex = startIndex + newUsers
         print("vmuc:\(self.viewModel.users.count), n:\(newUsers)")
+        print("STARTINDEX: \(startIndex), ENDINDEX: \(endIndex)")
 //        if self.viewModel.currentPage == 1 {
 //            return ((startIndex)..<(endIndex-1)).map { IndexPath(row: $0, section: 0) }
 //        }
