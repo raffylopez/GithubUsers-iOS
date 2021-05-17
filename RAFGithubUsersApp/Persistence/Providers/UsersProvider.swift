@@ -13,12 +13,30 @@ protocol UsersProvider {
     func translate(from apiUser: GithubUser) -> User
     func translate(from apiUser: GithubUser, with userInfo: UserInfo) -> User
     func getUsers(callback: @escaping (Result<[User], Error>) -> Void)
+    func getUserCount() -> Int
     func getUser(id: Int) -> User?
     func saveAll() throws
     func deleteAll() throws
 }
 
 extension CoreDataService: UsersProvider {
+    func getUserCount() -> Int {
+        let entityName = String(describing: User.self)
+        let fetchRequest: NSFetchRequest<User> = NSFetchRequest(entityName: entityName)
+        fetchRequest.includesSubentities = false
+        
+        var count: Int! = -1
+        context.performAndWait {
+            do {
+                try count = context.count(for: fetchRequest)
+            } catch {
+                count = -1
+            }
+        }
+        return count
+
+
+    }
 
     func getUser(id: Int) -> User? {
         let entityName = String(describing: User.self)
@@ -61,10 +79,12 @@ extension CoreDataService: UsersProvider {
         try coordinator.execute(deleteRequest, with: context)
     }
 
+    /* Gets all users including duplicates */
     func getUsers(callback: @escaping (Result<[User], Error>) -> Void) {
         let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: #keyPath(User.id), ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
+        
         context.perform {
             do {
                 var allUsers: [User]!

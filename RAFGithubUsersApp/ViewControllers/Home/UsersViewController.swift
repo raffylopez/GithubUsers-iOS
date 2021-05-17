@@ -272,8 +272,8 @@ class UsersViewController: UITableViewController {
     private func clearData() {
         self.viewModel.clearData()
         self.tableView.reloadData()
-        self.fetchTableData()
     }
+    
     // MARK: - Selector targets
     @objc private func refreshPulled() {
         self.refreshControl?.beginRefreshing()
