@@ -154,7 +154,6 @@ class UsersViewModel {
                     self.since = Int(user.id)
                 }
                 self.users = users
-                self.users.append(contentsOf: users)
                 print("COREDATA TOTAL USERS DATASOURCE COUNT (UpdateDataSource): \(self.users.count)" )
                 onSuccess?()
             }
@@ -184,10 +183,15 @@ class UsersViewModel {
      size of the batch received.
      */
     func processUserRequest(completion: ((Result<[User], Error>)->Void)? = nil) {
-        
+        guard !isFetchInProgress else {
+            return
+        }
+        self.isFetchInProgress = true
+
         let context = CoreDataService.persistentContainer.viewContext
         
         self.apiService.fetchUsers(since: self.since) { (result: Result<[GithubUser], Error>) in
+            self.isFetchInProgress = false
             switch result {
             case let .success(githubUsers):
                 self.currentPage += 1

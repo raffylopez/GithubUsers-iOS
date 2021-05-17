@@ -279,9 +279,7 @@ class UsersViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        try? self.viewModel.usersDatabaseService.deleteAll() // DEBUG
-        fetchAdditionalTableData()
-
+//        try? self.viewModel.usersDatabaseService.deleteAll() // DEBUG
         startSplashAnimation()
         self.view.backgroundColor = .systemBackground
         setupViews()
