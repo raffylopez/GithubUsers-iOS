@@ -150,14 +150,18 @@ class UsersViewController: UITableViewController {
     }
     
 
+    // zxcv
     private func setupHandlers() {
 //        self.viewModel.clearDiskStore()
 
         self.viewModel.delegate = self
         let onDataAvailable = {
+            
+            print("COREDATA TOTAL USERS DATASOURCE COUNT (onDataAvailable): \(self.viewModel.users.count)" )
+            print("COREDATA UserCount: \(self.viewModel.users.count)")
             var newIndexPathsToInsert: [IndexPath] = []
             if self.viewModel.currentPage > 1 {
-                newIndexPathsToInsert = self.calculateIndexPathsToReload(from: self.viewModel.lastBatchCount)
+                newIndexPathsToInsert = self.calculateIndexPathsToInsert(from: self.viewModel.lastBatchCount, offset: 30)
             }
             
             if let users = self.viewModel.users, let first = users.first {
@@ -166,7 +170,9 @@ class UsersViewController: UITableViewController {
 
             OperationQueue.main.addOperation {
                 ToastAlertMessageDisplay.shared.hideToastActivity()
-                if self.viewModel.currentPage <= 1 { /* User performed a refresh */
+                
+                /* RECALICTRANT */
+                if self.viewModel.currentPage <= 1 { /* User performed a refresh/first load */
                     self.tableView.alpha = 0
                     self.tableView.alpha = 1
                     UIView.transition(with: self.tableView,
@@ -185,11 +191,17 @@ class UsersViewController: UITableViewController {
                 
                 let indexPathsToReload = self.visibleIndexPathsToReload(intersecting: newIndexPathsToInsert)
                 
-                print("To reload(new): \(newIndexPathsToInsert.count), since: \(self.viewModel.since), currentCount: \(self.viewModel.currentCount), lastBatchCount: \(self.viewModel.lastBatchCount), start: \(newIndexPathsToInsert[0].row), end: end: \(newIndexPathsToInsert[newIndexPathsToInsert.count-1].row) ")
+                print("COREDATA To reload(new): \(newIndexPathsToInsert.count), since: \(self.viewModel.since), currentCount: \(self.viewModel.currentCount), lastBatchCount: \(self.viewModel.lastBatchCount), start: \(newIndexPathsToInsert[0].row), end: end: \(newIndexPathsToInsert[newIndexPathsToInsert.count-1].row) ")
                 
                 /* Ensure slide animations are disabled on row insertion (slide animation used by default on insert) */
                 UIView.setAnimationsEnabled(false)
                 self.tableView?.beginUpdates()
+                let ids = self.viewModel.users.map { user  in
+                    user.id
+                }
+                ids.forEach { id in
+                    print("FOOB \(id)" )
+                }
                 self.tableView?.insertRows(at: newIndexPathsToInsert, with: .none)
                 self.tableView?.endUpdates()
                 
@@ -202,6 +214,7 @@ class UsersViewController: UITableViewController {
         }
         self.viewModel.bind(availability: onDataAvailable)
         self.fetchTableData()
+        viewModel.updateDataSource { }
     }
 
     private func setupNavbar() {
@@ -282,14 +295,14 @@ class UsersViewController: UITableViewController {
     }
     
     func fetchTableData() {
-        self.viewModel.fetchUsers { result in
-            DispatchQueue.main.async {
-                self.refreshControl?.endRefreshing()
-                if case let .failure(error) = result {
-                    print(error) // TODO
-                }
-            }
-        }
+//        self.viewModel.fetchUsers { result in
+//            DispatchQueue.main.async {
+//                self.refreshControl?.endRefreshing()
+//                if case let .failure(error) = result {
+//                    print(error) // TODO
+//                }
+//            }
+//        }
     }
 
     @objc func tableViewScrollToTop() {
@@ -343,16 +356,16 @@ class UsersViewController: UITableViewController {
         return 130
     }
     
-    private func calculateIndexPathsToReload(from newUsers: Int) -> [IndexPath] {
-        let startIndex = self.viewModel.users.count - newUsers
-        let endIndex = startIndex + newUsers
-        print("vmuc:\(self.viewModel.users.count), n:\(newUsers)")
-        print("STARTINDEX: \(startIndex), ENDINDEX: \(endIndex)")
+    private func calculateIndexPathsToInsert(from newUsers: Int, offset: Int = 0) -> [IndexPath] {
+        let startIndex = (self.viewModel.users.count - newUsers) + offset
+        let endIndex = (startIndex + newUsers)
+        print("COREDATA vmuc:\(self.viewModel.users.count), n:\(newUsers)")
+        print("COREDATA STARTINDEX: \(startIndex), ENDINDEX: \(endIndex)")
 //        if self.viewModel.currentPage == 1 {
 //            return ((startIndex)..<(endIndex-1)).map { IndexPath(row: $0, section: 0) }
 //        }
 //        return ((startIndex < 0 ? startIndex : startIndex - 1)..<(endIndex-1)).map { IndexPath(row: $0, section: 0) }
-        return (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
+        return (startIndex-1..<endIndex-1).map { IndexPath(row: $0, section: 0) }
     }
 
 

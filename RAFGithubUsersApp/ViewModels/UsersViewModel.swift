@@ -134,18 +134,34 @@ class UsersViewModel {
         }
     }
     
-    func updateDataSource(completion: ()->Void) {
+    /**
+     Used for updating table view.
+     
+     Fetch data from coredata, and set it to users attribute, thereby triggering
+     view controller closure.
+     
+     This function makes absolutely no network calls.
+     */
+    func updateDataSource(onError: ((Error)->Void)? = nil, onSuccess: (()->Void)? = nil) {
         fetchUsersFromDisk { result in
             switch result {
             case let .failure(error):
                 self.users.removeAll()
                 print("CoreData read problem: \(error.localizedDescription)")
+                onError?(error)
             case let .success(users):
-                self.users.append(contentsOf: users)
+                self.users = users
+                print("COREDATA TOTAL USERS DATASOURCE COUNT (UpdateDataSource): \(self.users.count)" )
+                onSuccess?()
             }
         }
     }
 
+    /**
+     Returns a result containing network-fetched users ONLY, which are a combination
+     of network-based objects and old database objects. The count is based on the
+     size of the batch received.
+     */
     private func processUserRequest(completion: @escaping (Result<[User], Error>)->Void) {
         let context = CoreDataService.persistentContainer.viewContext
         
@@ -188,7 +204,6 @@ class UsersViewModel {
                 }
 
                 completion(.success(users))
-
             case let .failure(error):
                 completion(.failure(error))
             }
@@ -216,7 +231,8 @@ class UsersViewModel {
                 }
                 print("COREDATA SINCE: \(self.since)" )
                 print("COREDATA USERS RETURNED: \(users.count)" )
-                self.updateDataSource { }
+                self.updateDataSource {
+                }
             case let .failure(_):
                 preconditionFailure("BLAH")
             }
