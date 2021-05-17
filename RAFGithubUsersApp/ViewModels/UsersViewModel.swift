@@ -158,11 +158,13 @@ class UsersViewModel {
     }
 
     /**
+     Fetches users from off the network, and writes users into the datastore.
+
      Returns a result containing network-fetched users ONLY, which are a combination
      of network-based objects and old database objects. The count is based on the
      size of the batch received.
      */
-    private func processUserRequest(completion: @escaping (Result<[User], Error>)->Void) {
+    func processUserRequest(completion: ((Result<[User], Error>)->Void)? = nil) {
         let context = CoreDataService.persistentContainer.viewContext
         
         self.apiService.fetchUsers(since: self.since) { (result: Result<[GithubUser], Error>) in
@@ -194,7 +196,7 @@ class UsersViewModel {
                 do {
                     try context.save()
                 } catch {
-                    completion(.failure(error))
+                    completion?(.failure(error))
                     preconditionFailure()
                 }
                 self.lastBatchCount = githubUsers.count
@@ -203,17 +205,43 @@ class UsersViewModel {
                     self.since = Int(user.id)
                 }
 
-                completion(.success(users))
+                completion?(.success(users))
+
             case let .failure(error):
-                completion(.failure(error))
+                completion?(.failure(error))
             }
         }
     }
-    
-    // ASDF
-    let localAccessOnly: Bool = true
-    /* Copies API-sourced data into datastore entities, which are then attached to the datasource */
+
+    /* Combination of processRequest and updatedatasource */
+    /* TODO: closure-based notifiers */
     func fetchUsers(onRetryError: ((Int)->())? = nil, completion: ((Result<[User], Error>)->Void)? = nil) {
+
+        print("COREDATA USER COUNT (PRE-FETCH): \(usersDatabaseService.getUserCount())" )
+        guard !isFetchInProgress else {
+            return
+        }
+        
+        processUserRequest { result in
+            self.isFetchInProgress = false
+            switch result {
+            case let .success(users):
+                print("COREDATA USER COUNT (POST-FETCH): \(self.usersDatabaseService.getUserCount())" )
+                if let user = users.last {
+                    self.since = Int(user.id)
+                }
+                print("COREDATA SINCE: \(self.since)" )
+                print("COREDATA USERS RETURNED: \(users.count)" )
+                self.updateDataSource()
+            case let .failure(_):
+                preconditionFailure("BLAH")
+            }
+        }
+    }
+    let localAccessOnly: Bool = true
+
+    /* Combination of processRequest and updatedatasource */
+    func fetchUsers_(onRetryError: ((Int)->())? = nil, completion: ((Result<[User], Error>)->Void)? = nil) {
 //        try? usersDatabaseService.deleteAll()
         
         print("COREDATA USER COUNT (PRE-FETCH): \(usersDatabaseService.getUserCount())" )
@@ -231,8 +259,7 @@ class UsersViewModel {
                 }
                 print("COREDATA SINCE: \(self.since)" )
                 print("COREDATA USERS RETURNED: \(users.count)" )
-                self.updateDataSource {
-                }
+                self.updateDataSource()
             case let .failure(_):
                 preconditionFailure("BLAH")
             }

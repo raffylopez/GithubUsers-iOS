@@ -133,6 +133,10 @@ class ProfileViewController: UIViewController {
     }
     
     @objc func btnSavePressed() {
+        guard let userInfoNote = self.viewModel.userInfo.note, self.tvNote.text != userInfoNote else {
+            ToastAlertMessageDisplay.shared.display(message: "No changes to save.".localized())
+            return
+        }
         if let userInfo = self.viewModel.userInfo {
             userInfo.note = self.tvNote.text
             userInfo.user = self.viewModel.user
@@ -141,7 +145,7 @@ class ProfileViewController: UIViewController {
             } catch {
                 preconditionFailure("Unable to save note! \(error)")
             }
-            ToastAlertMessageDisplay.shared.display(message: "Note saved.")
+            ToastAlertMessageDisplay.shared.display(message: "Note saved.".localized())
         }
     }
     

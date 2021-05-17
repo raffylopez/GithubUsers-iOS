@@ -152,7 +152,7 @@ class UsersViewController: UITableViewController {
 
     // zxcv
     private func setupHandlers() {
-//        self.viewModel.clearDiskStore()
+//        self.viewModel.clearDiskStore() //DEBUG
 
         self.viewModel.delegate = self
         let onDataAvailable = {
@@ -160,8 +160,9 @@ class UsersViewController: UITableViewController {
             print("COREDATA TOTAL USERS DATASOURCE COUNT (onDataAvailable): \(self.viewModel.users.count)" )
             print("COREDATA UserCount: \(self.viewModel.users.count)")
             var newIndexPathsToInsert: [IndexPath] = []
+            self.viewModel.currentPage = 1 /* DEBUG: FORCE*/
             if self.viewModel.currentPage > 1 {
-                newIndexPathsToInsert = self.calculateIndexPathsToInsert(from: self.viewModel.lastBatchCount, offset: 30)
+                newIndexPathsToInsert = self.calculateIndexPathsToInsert(from: self.viewModel.lastBatchCount)
             }
             
             if let users = self.viewModel.users, let first = users.first {
@@ -183,7 +184,7 @@ class UsersViewController: UITableViewController {
                                         self.tableView?.reloadSections(IndexSet(integer: 0), with: .none)
                     }, completion: { _ in
                         /* Fix graphical glitch when pull-to-refresh is started when navbar is collapsed */
-                        self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+//                        self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
                     })
                     self.refreshControl?.endRefreshing()
                     return
@@ -213,7 +214,9 @@ class UsersViewController: UITableViewController {
             }
         }
         self.viewModel.bind(availability: onDataAvailable)
-        self.fetchTableData()
+        
+        // if network is available, freshen datastore objects
+        
         viewModel.updateDataSource { }
     }
 
@@ -295,6 +298,11 @@ class UsersViewController: UITableViewController {
     }
     
     func fetchTableData() {
+        ToastAlertMessageDisplay.shared.display(message: "Loading")
+        self.viewModel.processUserRequest { _ in
+            self.viewModel.updateDataSource()
+            ToastAlertMessageDisplay.shared.hideAllToasts()
+        }
 //        self.viewModel.fetchUsers { result in
 //            DispatchQueue.main.async {
 //                self.refreshControl?.endRefreshing()
@@ -322,7 +330,7 @@ class UsersViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let element = self.viewModel.users[indexPath.row]
         
-        if !confPrefetchingEnabled && isLoadingCell2(for: indexPath) {
+        if !confPrefetchingEnabled && isLoadingLastCell(for: indexPath) {
             fetchTableData()
         }
         
@@ -369,7 +377,7 @@ class UsersViewController: UITableViewController {
     }
 
 
-    func isLoadingCell2(for indexPath: IndexPath) -> Bool {
+    func isLoadingLastCell(for indexPath: IndexPath) -> Bool {
         return indexPath.row + 1 >= self.viewModel.currentCount
     }
 }
