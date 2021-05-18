@@ -89,6 +89,13 @@ class UsersViewModel {
         self.apiService = apiService
         self.usersDatabaseService = databaseService
         imageStore = ImageStore()
+        // asdf
+        try? usersDatabaseService.deleteAll()
+        self.processUserRequest { (result) in
+            if case let .success(users) = result {
+                self.users = users
+            }
+        }
     }
 
     /**
@@ -160,7 +167,7 @@ class UsersViewModel {
         }
     }
 
-    func updateFromNetworkAndDisk() {
+    func updateFromNetworkAndDisk(completion: (()->Void)? = nil) {
         processUserRequest { result in
             switch result {
             case let .success(users):
@@ -168,7 +175,8 @@ class UsersViewModel {
                     self.since = Int(user.id)
                 }
                 self.lastBatchCount = users.count
-                self.users.append(contentsOf: users)
+                // aaaaa
+                completion?()
             case let .failure(error):
                 preconditionFailure(error.localizedDescription)
             }
@@ -188,9 +196,9 @@ class UsersViewModel {
         }
         self.isFetchInProgress = true
 
-        let context = CoreDataService.persistentContainer.viewContext
-        
+
         self.apiService.fetchUsers(since: self.since) { (result: Result<[GithubUser], Error>) in
+            let context = CoreDataService.persistentContainer.viewContext
             self.isFetchInProgress = false
             switch result {
             case let .success(githubUsers):
@@ -202,15 +210,18 @@ class UsersViewModel {
                     let predicate = NSPredicate( format: "\(#keyPath(User.id)) == \(githubUser.id)" )
                     fetchRequest.predicate = predicate
                     var fetchedUsers: [User]?
-                    do {
-                        fetchedUsers = try context.fetch(fetchRequest)
-                    } catch {
-                        preconditionFailure()
+                    context.performAndWait {
+                        do {
+//                            fetchedUsers = try context.fetch(fetchRequest)
+                            fetchedUsers = try fetchRequest.execute()
+                        } catch {
+                            preconditionFailure()
+                        }
                     }
                     if let existingUser = fetchedUsers?.first {
                         return existingUser
                     }
-                    
+
                     var user: User!
                     context.performAndWait {
                         user = User(from: githubUser, moc: context)

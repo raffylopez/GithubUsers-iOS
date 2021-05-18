@@ -156,15 +156,12 @@ class UsersViewController: UITableViewController {
 
         self.viewModel.delegate = self
         let onDataAvailable = {
-            
+
             print("COREDATA TOTAL USERS DATASOURCE COUNT (onDataAvailable): \(self.viewModel.users.count)" )
             print("COREDATA UserCount: \(self.viewModel.users.count)")
-            var newIndexPathsToInsert: [IndexPath] = []
-            self.viewModel.currentPage = 1 /* DEBUG: FORCE*/
-            if self.viewModel.currentPage > 1 {
-                newIndexPathsToInsert = self.calculateIndexPathsToInsert(from: self.viewModel.lastBatchCount)
-            }
             
+            self.viewModel.currentPage = 1 /* DEBUG: FORCE*/
+
             if let users = self.viewModel.users, let first = users.first {
                 print(first)
             }
@@ -190,6 +187,7 @@ class UsersViewController: UITableViewController {
                     return
                 }
                 
+                let newIndexPathsToInsert: [IndexPath] = self.calculateIndexPathsToInsert(from: self.viewModel.lastBatchCount)
                 let indexPathsToReload = self.visibleIndexPathsToReload(intersecting: newIndexPathsToInsert)
                 
                 print("COREDATA To reload(new): \(newIndexPathsToInsert.count), since: \(self.viewModel.since), currentCount: \(self.viewModel.currentCount), lastBatchCount: \(self.viewModel.lastBatchCount), start: \(newIndexPathsToInsert[0].row), end: end: \(newIndexPathsToInsert[newIndexPathsToInsert.count-1].row) ")
@@ -197,12 +195,6 @@ class UsersViewController: UITableViewController {
                 /* Ensure slide animations are disabled on row insertion (slide animation used by default on insert) */
                 UIView.setAnimationsEnabled(false)
                 self.tableView?.beginUpdates()
-                let ids = self.viewModel.users.map { user  in
-                    user.id
-                }
-                ids.forEach { id in
-                    print("FOOB \(id)" )
-                }
                 self.tableView?.insertRows(at: newIndexPathsToInsert, with: .none)
                 self.tableView?.endUpdates()
                 
@@ -299,9 +291,10 @@ class UsersViewController: UITableViewController {
         fetchAdditionalTableData()
     }
     
-    func fetchAdditionalTableData() {
+    func fetchAdditionalTableData(completion: (()->Void)? = nil) {
 //        ToastAlertMessageDisplay.shared.display(message: "Loading")
-        self.viewModel.updateFromNetworkAndDisk()
+        self.viewModel.updateFromNetworkAndDisk(completion: completion)
+        
         
 //        self.viewModel.fetchUsers { result in
 //            DispatchQueue.main.async {
@@ -330,10 +323,12 @@ class UsersViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let element = self.viewModel.users[indexPath.row]
         
-        print(self.viewModel.users[indexPath.row].login)
-        if !confPrefetchingEnabled && isLoadingLastCell(for: indexPath) {
-            fetchAdditionalTableData()
+        if isLoadingLastCell(for: indexPath) {
+            fetchAdditionalTableData() {
+                
+            }
         }
+        
         
         viewModel.fetchImage(for: element) { result in
 
@@ -379,7 +374,8 @@ class UsersViewController: UITableViewController {
 
 
     func isLoadingLastCell(for indexPath: IndexPath) -> Bool {
-        return indexPath.row + 1 >= self.viewModel.currentCount
+        print("FOOBARBAZ \(indexPath.row + 1)")
+        return indexPath.row + 1 >= self.viewModel.users.count
     }
 }
 
@@ -407,6 +403,7 @@ extension UsersViewController: UserListTableViewCellDelegate {
         print(cell.user)
         let viewModel = ProfileViewModel(user: cell.user, apiService: GithubUsersApi(), databaseService: CoreDataService.shared)
         self.navigationController?.pushViewController(ViewControllersFactory.instance(vcType: .userProfile(viewModel)), animated: true)
+        fetchAdditionalTableData()
     }
     
 }
