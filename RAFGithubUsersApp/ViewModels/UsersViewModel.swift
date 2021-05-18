@@ -12,6 +12,23 @@ import CoreData
 
 class UsersViewModel {
 
+    func fetchFromNetworkMergingWithDatastore(completion: (()->Void)? = nil) {
+        processUserRequest { result in
+            switch result {
+            case let .success(users):
+                if let user = users.last {
+                    self.since = Int(user.id)
+                }
+                self.lastBatchCount = users.count
+                print_r(array: users)
+                // aaaaa
+                completion?()
+            case let .failure(error):
+                preconditionFailure(error.localizedDescription)
+            }
+        }
+    }
+
     private(set) var users: [User]! = [] {
         didSet {
             if users.count > 0 {
@@ -34,6 +51,7 @@ class UsersViewModel {
             fatalError(error.localizedDescription) // TODO
         }
     }
+    
     /* Freshen stored objects with new data from the network  */
     public func clearData() {
         resetState()
@@ -91,10 +109,9 @@ class UsersViewModel {
         imageStore = ImageStore()
         // asdf
         try? usersDatabaseService.deleteAll()
-        self.processUserRequest { (result) in
-            if case let .success(users) = result {
-                self.users = users
-            }
+        fetchFromNetworkMergingWithDatastore() {
+            print("COREDATA \(#function)")
+            self.updateFromDiskSource()
         }
     }
 
@@ -128,7 +145,6 @@ class UsersViewModel {
 ////        }
 //    }
 
-
     func fetchUsersFromDisk(completion: @escaping ((Result<[User], Error>)->Void)) {
         // if offline, display from coredata, then keep retrying
         usersDatabaseService.getUsers { (result) in
@@ -160,25 +176,10 @@ class UsersViewModel {
                 if let user = users.last {
                     self.since = Int(user.id)
                 }
+                
                 self.users = users
                 print("COREDATA TOTAL USERS DATASOURCE COUNT (UpdateDataSource): \(self.users.count)" )
                 onSuccess?()
-            }
-        }
-    }
-
-    func updateFromNetworkAndDisk(completion: (()->Void)? = nil) {
-        processUserRequest { result in
-            switch result {
-            case let .success(users):
-                if let user = users.last {
-                    self.since = Int(user.id)
-                }
-                self.lastBatchCount = users.count
-                // aaaaa
-                completion?()
-            case let .failure(error):
-                preconditionFailure(error.localizedDescription)
             }
         }
     }
@@ -195,7 +196,6 @@ class UsersViewModel {
             return
         }
         self.isFetchInProgress = true
-
 
         self.apiService.fetchUsers(since: self.since) { (result: Result<[GithubUser], Error>) in
             let context = CoreDataService.persistentContainer.viewContext
@@ -290,8 +290,8 @@ class UsersViewModel {
                 print("COREDATA SINCE: \(self.since)" )
                 print("COREDATA USERS RETURNED: \(users.count)" )
                 self.updateFromDiskSource()
-            case let .failure(_):
-                preconditionFailure("BLAH")
+            case let .failure(error):
+                preconditionFailure("Error in \(#function): \(error)")
             }
         }
         

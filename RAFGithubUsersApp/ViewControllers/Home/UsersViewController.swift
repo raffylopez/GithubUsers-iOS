@@ -42,7 +42,7 @@ class UsersViewController: UITableViewController {
     
     var lastConnectionState: ConnectionState = .reachable
     // MARK: Configure table cell types
-    typealias StandardTableViewCell = NormalUserTableViewCell
+    typealias StandardTableViewCell = DebugUserTableViewCell
     typealias NoteTableViewCell = NoteUserTableViewCell
     typealias AlternativeTableViewCell = InvertedUserTableViewCell
     typealias DummyTableViewCell = StubUserTableViewCell
@@ -152,7 +152,6 @@ class UsersViewController: UITableViewController {
 
     // zxcv
     private func setupHandlers() {
-//        self.viewModel.clearDiskStore() //DEBUG
 
         self.viewModel.delegate = self
         let onDataAvailable = {
@@ -288,12 +287,14 @@ class UsersViewController: UITableViewController {
     @objc private func refreshPulled() {
         self.refreshControl?.beginRefreshing()
         clearData()
-        fetchAdditionalTableData()
+        fetchMoreTableDataDisplayingResults()
     }
     
-    func fetchAdditionalTableData(completion: (()->Void)? = nil) {
+    func fetchMoreTableDataDisplayingResults(completion: (()->Void)? = nil) {
 //        ToastAlertMessageDisplay.shared.display(message: "Loading")
-        self.viewModel.updateFromNetworkAndDisk(completion: completion)
+        self.viewModel.fetchFromNetworkMergingWithDatastore {
+            self.viewModel.updateFromDiskSource()
+        }
         
         
 //        self.viewModel.fetchUsers { result in
@@ -324,9 +325,7 @@ class UsersViewController: UITableViewController {
         let element = self.viewModel.users[indexPath.row]
         
         if isLoadingLastCell(for: indexPath) {
-            fetchAdditionalTableData() {
-                
-            }
+            fetchMoreTableDataDisplayingResults()
         }
         
         
@@ -372,9 +371,7 @@ class UsersViewController: UITableViewController {
         return (startIndex-1..<endIndex-1).map { IndexPath(row: $0, section: 0) }
     }
 
-
     func isLoadingLastCell(for indexPath: IndexPath) -> Bool {
-        print("FOOBARBAZ \(indexPath.row + 1)")
         return indexPath.row + 1 >= self.viewModel.users.count
     }
 }
@@ -403,7 +400,7 @@ extension UsersViewController: UserListTableViewCellDelegate {
         print(cell.user)
         let viewModel = ProfileViewModel(user: cell.user, apiService: GithubUsersApi(), databaseService: CoreDataService.shared)
         self.navigationController?.pushViewController(ViewControllersFactory.instance(vcType: .userProfile(viewModel)), animated: true)
-        fetchAdditionalTableData()
+        fetchMoreTableDataDisplayingResults()
     }
     
 }

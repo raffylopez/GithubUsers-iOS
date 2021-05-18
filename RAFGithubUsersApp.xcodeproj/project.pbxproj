@@ -52,6 +52,8 @@
 		E1D04A7E264BB58300C4E5FD /* NormalUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D04A7D264BB57F00C4E5FD /* NormalUserTableViewCell.swift */; };
 		E1D04A80264BB5CF00C4E5FD /* UIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D04A7F264BB5CF00C4E5FD /* UIHelper.swift */; };
 		E1E141482651AD3300C282FE /* User+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E141472651AD3200C282FE /* User+CoreDataClass.swift */; };
+		E1E1414A265443EE00C282FE /* NormalUserTableViewCell copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E14149265443EC00C282FE /* NormalUserTableViewCell copy.swift */; };
+		E1E1414C26544A8400C282FE /* DebugUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E1414B26544A8300C282FE /* DebugUtils.swift */; };
 		E1F129B0265029D600EF34F8 /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F129AF265029D500EF34F8 /* CoreDataService.swift */; };
 		E1F129B326503B8100EF34F8 /* UsersProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F129B226503B0600EF34F8 /* UsersProvider.swift */; };
 		E1F2C142264D826200041F03 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F2C141264D826200041F03 /* Toast.swift */; };
@@ -150,6 +152,8 @@
 		E1D04A7D264BB57F00C4E5FD /* NormalUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NormalUserTableViewCell.swift; sourceTree = "<group>"; };
 		E1D04A7F264BB5CF00C4E5FD /* UIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIHelper.swift; sourceTree = "<group>"; };
 		E1E141472651AD3200C282FE /* User+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "User+CoreDataClass.swift"; sourceTree = "<group>"; };
+		E1E14149265443EC00C282FE /* NormalUserTableViewCell copy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NormalUserTableViewCell copy.swift"; sourceTree = "<group>"; };
+		E1E1414B26544A8300C282FE /* DebugUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugUtils.swift; sourceTree = "<group>"; };
 		E1F129AF265029D500EF34F8 /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
 		E1F129B226503B0600EF34F8 /* UsersProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersProvider.swift; sourceTree = "<group>"; };
 		E1F2C141264D826200041F03 /* Toast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
@@ -236,6 +240,7 @@
 			children = (
 				E1510C78264C4E0000E59C35 /* Base Types */,
 				E1D04A7D264BB57F00C4E5FD /* NormalUserTableViewCell.swift */,
+				E1E14149265443EC00C282FE /* NormalUserTableViewCell copy.swift */,
 				E1510C6A264C459200E59C35 /* InvertedUserTableViewCell.swift */,
 				E1510C79264C6A0F00E59C35 /* StubUserTableViewCell.swift */,
 				E1F6E024264D08E800A023A8 /* ShimmerUserTableViewCell.swift */,
@@ -406,6 +411,7 @@
 				E1D04A7F264BB5CF00C4E5FD /* UIHelper.swift */,
 				E146CC2C264D887400C3FA51 /* ConnectionMonitor.swift */,
 				E1FA38FC264B1BB7001EFA5C /* JSONSchemaSupport.swift */,
+				E1E1414B26544A8300C282FE /* DebugUtils.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -626,6 +632,7 @@
 				E1F2C142264D826200041F03 /* Toast.swift in Sources */,
 				E1510C6D264C462200E59C35 /* UIViewExtensions.swift in Sources */,
 				E160EBC1264A6D44002820EC /* UsersViewController.swift in Sources */,
+				E1E1414C26544A8400C282FE /* DebugUtils.swift in Sources */,
 				E129A665264EB4130035A99B /* UserInfoPresenter.swift in Sources */,
 				E189A180264AE3FD00CBD45A /* AppError.swift in Sources */,
 				E1F447BC26511B560073B193 /* UserInfoProvider.swift in Sources */,
@@ -638,6 +645,7 @@
 				E1510C80264C9B9300E59C35 /* AdminUserTableViewCell.swift in Sources */,
 				E1E141482651AD3300C282FE /* User+CoreDataClass.swift in Sources */,
 				E189A17A264AE08300CBD45A /* GithubUsersApi.swift in Sources */,
+				E1E1414A265443EE00C282FE /* NormalUserTableViewCell copy.swift in Sources */,
 				E189A166264AD86600CBD45A /* AppConfig.swift in Sources */,
 				E1FA38F2264B083A001EFA5C /* UserPresenter.swift in Sources */,
 				E160EBE3264A7686002820EC /* ViewControllersFactory.swift in Sources */,
