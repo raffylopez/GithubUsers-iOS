@@ -13,3 +13,12 @@ func print_r<T>(array: [T]) where T: CustomStringConvertible {
         print(t)
     }
 }
+
+func print_opt<T>(item: Optional<T>) {
+    let label = String(describing: item)
+    if let item = item {
+        print("\(label): \(item)")
+        return
+    }
+    print("\(label): nil")
+}

@@ -166,7 +166,7 @@ class UsersViewController: UITableViewController {
             }
 
             OperationQueue.main.addOperation {
-                ToastAlertMessageDisplay.shared.hideToastActivity()
+                ToastAlertMessageDisplay.main.hideToastActivity()
                 
                 /* RECALICTRANT */
                 if self.viewModel.currentPage <= 1 { /* User performed a refresh/first load */
@@ -291,9 +291,10 @@ class UsersViewController: UITableViewController {
     }
     
     func fetchMoreTableDataDisplayingResults(completion: (()->Void)? = nil) {
-//        ToastAlertMessageDisplay.shared.display(message: "Loading")
+        ToastAlertMessageDisplay.main.makeToastActivity()
         self.viewModel.fetchFromNetworkMergingWithDatastore {
             self.viewModel.updateFromDiskSource()
+            ToastAlertMessageDisplay.main.hideToastActivity()
         }
         
         
@@ -397,10 +398,8 @@ extension UsersViewController: UserListTableViewCellDelegate {
     }
     
     func didTouchCellPanel(cell: UserTableViewCellBase) {
-        print(cell.user)
         let viewModel = ProfileViewModel(user: cell.user, apiService: GithubUsersApi(), databaseService: CoreDataService.shared)
         self.navigationController?.pushViewController(ViewControllersFactory.instance(vcType: .userProfile(viewModel)), animated: true)
-        fetchMoreTableDataDisplayingResults()
     }
     
 }
@@ -446,7 +445,7 @@ extension UsersViewController: ReachabilityDelegate {
     
     func onRegainConnection() {
         if lastConnectionState == .unreachable {
-            ToastAlertMessageDisplay.shared.hideToastActivity()
+            ToastAlertMessageDisplay.main.hideToastActivity()
             makeToast(message: "Connected", duration: 3.0)
             lastConnectionState = .reachable
         }

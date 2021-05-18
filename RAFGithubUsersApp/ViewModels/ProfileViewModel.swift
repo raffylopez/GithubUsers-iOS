@@ -67,7 +67,7 @@ class ProfileViewModel {
         guard !isFetchInProgress else {
             return
         }
-        
+
         guard let login = user.login else {
             completion?(.failure(AppError.emptyResult))
             return
@@ -78,7 +78,6 @@ class ProfileViewModel {
         let onTaskSuccess = { (githubuserInfo: GithubUserInfo) in
             self.isFetchInProgress = false
 
-            print(self.user)
 //            if let userInfo = self.user.userInfo, let login = userInfo.login {
 //                print (login)
 //            } else {
@@ -100,6 +99,7 @@ class ProfileViewModel {
                 completion?(.failure(error))
             }
             self.userInfo = self.user.userInfo
+            completion?(.success(self.userInfo))
         }
         
         let onTaskError: ((Int, Int, Error)->Void)? = { attemptCount, delayTillNext, error in

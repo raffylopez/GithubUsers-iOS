@@ -11,6 +11,20 @@ import UIKit
 import CoreData
 
 class UsersViewModel {
+    func dbgClearStoresOnAppLaunch() {
+        try? usersDatabaseService.deleteAll()
+        fetchFromNetworkMergingWithDatastore() {
+            print("COREDATA \(#function)")
+            self.updateFromDiskSource()
+        }
+    }
+    
+    init(apiService: GithubUsersApi, databaseService: UsersProvider) {
+        self.apiService = apiService
+        self.usersDatabaseService = databaseService
+        imageStore = ImageStore()
+        dbgClearStoresOnAppLaunch() // DEBUG
+    }
 
     func fetchFromNetworkMergingWithDatastore(completion: (()->Void)? = nil) {
         processUserRequest { result in
@@ -101,18 +115,6 @@ class UsersViewModel {
         return users.compactMap({ user in
             UserPresenter(user)
         })
-    }
-    
-    init(apiService: GithubUsersApi, databaseService: UsersProvider) {
-        self.apiService = apiService
-        self.usersDatabaseService = databaseService
-        imageStore = ImageStore()
-        // asdf
-        try? usersDatabaseService.deleteAll()
-        fetchFromNetworkMergingWithDatastore() {
-            print("COREDATA \(#function)")
-            self.updateFromDiskSource()
-        }
     }
 
     /**
@@ -307,7 +309,7 @@ class UsersViewModel {
         guard !localAccessOnly else { return }
 
         let context = CoreDataService.persistentContainer.viewContext
-        ToastAlertMessageDisplay.shared.makeToastActivity()
+        ToastAlertMessageDisplay.main.makeToastActivity()
         
         try! self.usersDatabaseService.deleteAll()
         

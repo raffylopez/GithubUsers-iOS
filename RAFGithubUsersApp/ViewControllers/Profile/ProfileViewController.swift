@@ -9,48 +9,6 @@
 import UIKit
 import SkeletonView
 
-protocol UIAlertMessageDisplay {
-    func display(message: String)
-}
-
-class ToastAlertMessageDisplay: UIAlertMessageDisplay {
-    static let shared = ToastAlertMessageDisplay()
-    static let appView = UIApplication.shared.windows.first?.rootViewController?.view
-    func display(message: String) {
-        OperationQueue.main.addOperation {
-            Self.appView?.makeToast(message)
-        }
-    }
-    func hideAllToasts() {
-        OperationQueue.main.addOperation {
-            Self.appView?.hideAllToasts()
-        }
-    }
-    func makeToastActivity() {
-        OperationQueue.main.addOperation {
-            Self.appView?.makeToastActivity(.bottom)
-        }
-    }
-    func hideToastActivity() {
-        OperationQueue.main.addOperation {
-            Self.appView?.hideToastActivity()
-        }
-        
-    }
-}
-
-class StandardAlertMessageDisplay: UIAlertMessageDisplay {
-    static let shared = StandardAlertMessageDisplay()
-    func display(message: String) {
-        DispatchQueue.main.async {
-            let alert = UIAlertController(title: "Note saved", message: "Your note has been saved", preferredStyle: .actionSheet)
-            let action = UIAlertAction(title: "OK", style: .default) { action in }
-            alert.addAction(action)
-            UIApplication.shared.windows.first?.rootViewController?.present(alert, animated: true, completion: nil)
-        }
-    }
-}
-
 class ProfileViewController: UIViewController {
     @IBOutlet var boxBlue: UIView!
     @IBOutlet var imgUser: UIImageView!
@@ -133,10 +91,6 @@ class ProfileViewController: UIViewController {
     }
     
     @objc func btnSavePressed() {
-        guard let userInfoNote = self.viewModel.userInfo.note, self.tvNote.text != userInfoNote else {
-            ToastAlertMessageDisplay.shared.display(message: "No changes to save.".localized())
-            return
-        }
         if let userInfo = self.viewModel.userInfo {
             userInfo.note = self.tvNote.text
             userInfo.user = self.viewModel.user
@@ -145,7 +99,7 @@ class ProfileViewController: UIViewController {
             } catch {
                 preconditionFailure("Unable to save note! \(error)")
             }
-            ToastAlertMessageDisplay.shared.display(message: "Note saved.".localized())
+            ToastAlertMessageDisplay.main.display(message: "Note saved.".localized())
         }
     }
     
@@ -169,14 +123,19 @@ class ProfileViewController: UIViewController {
         self.viewModel.bind {
             print(self.viewModel.userInfo ?? "NO_USER_INFO")
         }
-        self.viewModel.fetchUserDetails(for: self.viewModel.user)
+
+        ToastAlertMessageDisplay.main.makeToastActivity()
+        self.viewModel.fetchUserDetails(for: self.viewModel.user, onRetryError: nil) { _ in
+            ToastAlertMessageDisplay.main.hideToastActivity()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
-    
 }
+
+
 
 extension ProfileViewController: ViewModelDelegate {
     func onDataAvailable() {
