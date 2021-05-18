@@ -12,6 +12,7 @@ protocol UIAlertMessageDisplay {
     func display(message: String)
 }
 
+/* Ensures that toast messages are always displayed on the main queue*/
 class ToastAlertMessageDisplay: UIAlertMessageDisplay {
     static let main = ToastAlertMessageDisplay()
     static let appView = UIApplication.shared.windows.first?.rootViewController?.view

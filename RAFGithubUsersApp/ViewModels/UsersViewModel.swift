@@ -23,7 +23,7 @@ class UsersViewModel {
         self.apiService = apiService
         self.usersDatabaseService = databaseService
         imageStore = ImageStore()
-        dbgClearStoresOnAppLaunch() // DEBUG
+        // dbgClearStoresOnAppLaunch() // DEBUG
     }
 
     func fetchFromNetworkMergingWithDatastore(completion: (()->Void)? = nil) {

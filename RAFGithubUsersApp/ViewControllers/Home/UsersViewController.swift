@@ -159,7 +159,7 @@ class UsersViewController: UITableViewController {
             print("COREDATA TOTAL USERS DATASOURCE COUNT (onDataAvailable): \(self.viewModel.users.count)" )
             print("COREDATA UserCount: \(self.viewModel.users.count)")
             
-            self.viewModel.currentPage = 1 /* DEBUG: FORCE*/
+//            self.viewModel.currentPage = 1 /* DEBUG: FORCE*/
 
             if let users = self.viewModel.users, let first = users.first {
                 print(first)
@@ -369,7 +369,8 @@ class UsersViewController: UITableViewController {
 //            return ((startIndex)..<(endIndex-1)).map { IndexPath(row: $0, section: 0) }
 //        }
 //        return ((startIndex < 0 ? startIndex : startIndex - 1)..<(endIndex-1)).map { IndexPath(row: $0, section: 0) }
-        return (startIndex-1..<endIndex-1).map { IndexPath(row: $0, section: 0) }
+//        return (startIndex-1..<endIndex-1).map { IndexPath(row: $0, section: 0) }
+        return (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
     }
 
     func isLoadingLastCell(for indexPath: IndexPath) -> Bool {
