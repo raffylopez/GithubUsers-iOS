@@ -8,6 +8,7 @@
 
 import UIKit
 import SkeletonView
+import FontAwesome
 
 class ProfileViewController: UIViewController {
     @IBOutlet var boxBlue: UIView!
@@ -71,6 +72,22 @@ class ProfileViewController: UIViewController {
         views.forEach { $0?.hideSkeleton() }
     }
     
+    func applyIconology(label: inout UILabel, icon: FontAwesome, style: FontAwesomeStyle = .regular) {
+        guard let labelText = label.attributedText else {
+            return
+        }
+        let fontSize = label.font.pointSize
+        
+        let iconText = String.fontAwesomeIcon(name: icon) + " "
+        let fontFontAwesome = UIFont.fontAwesome(ofSize: fontSize, style: style)
+        let iconTextAttributed = NSMutableAttributedString(string:iconText, attributes: [NSAttributedString.Key.font: fontFontAwesome])
+        
+        let mutableAttributedText = NSMutableAttributedString(attributedString: labelText)
+        iconTextAttributed.append(mutableAttributedText)
+        
+        label.attributedText = iconTextAttributed
+    }
+    
     private func setupLayout() {
         tvNote.layer.borderColor = UIColor.systemGray.cgColor
         tvNote.layer.borderWidth = 0
@@ -87,6 +104,12 @@ class ProfileViewController: UIViewController {
         
         btnSave.layer.cornerRadius = 5
         btnSave.addTarget(self, action: #selector(btnSavePressed), for: .touchDown)
+        applyIconology(label: &self.lblCompanyTag, icon: .building)
+        applyIconology(label: &self.lblBlogTag, icon: .blog)
+        applyIconology(label: &self.lblLocationTag, icon: .mapMarker)
+        applyIconology(label: &self.lblEmailTag, icon: .envelope)
+        applyIconology(label: &self.lblHireabilityTag, icon: .briefcase)
+        applyIconology(label: &self.lblNoteTag, icon: .stickyNote)
         showSkeletons()
     }
     
@@ -114,6 +137,7 @@ class ProfileViewController: UIViewController {
     override func loadView() {
         super.loadView()
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.systemBackground
