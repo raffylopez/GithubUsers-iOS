@@ -216,10 +216,10 @@ class UsersViewController: UITableViewController {
         let imgHeight = CGFloat(imgSize)
         let imgWidth = CGFloat(imgSize)
         let spacing = CGFloat(5.0)
-        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: imgWidth, height: imgHeight))
-        imageView.contentMode = .scaleAspectFit
-        let img = UIImage(named: "github_splash_light")!
-        imageView.image = img
+//        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: imgWidth, height: imgHeight))
+//        imageView.contentMode = .scaleAspectFit
+//        let img = UIImage(named: "github_splash_light")!
+//        imageView.image = img
         let container = UIView()
         let label = UILabel()
         label.text = "".localized()
@@ -228,13 +228,17 @@ class UsersViewController: UITableViewController {
         label.centerXAnchor.constraint(equalTo: container.centerXAnchor, constant: (imgSize + spacing)/2).isActive = true
         label.centerYAnchor.constraint(equalTo: container.centerYAnchor).isActive = true
         
-        UIHelper.initializeView(view: imageView, parent: container)
-        imageView.rightAnchor.constraint(equalTo: label.leftAnchor, constant: spacing * -1).isActive = true
-        imageView.centerYAnchor.constraint(equalTo: container.centerYAnchor).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: imgSize).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: imgSize).isActive = true
+//        UIHelper.initializeView(view: imageView, parent: container)
+//        imageView.rightAnchor.constraint(equalTo: label.leftAnchor, constant: spacing * -1).isActive = true
+//        imageView.centerYAnchor.constraint(equalTo: container.centerYAnchor).isActive = true
+//        imageView.widthAnchor.constraint(equalToConstant: imgSize).isActive = true
+//        imageView.heightAnchor.constraint(equalToConstant: imgSize).isActive = true
         
-        self.navigationItem.titleView = container
+//        self.navigationItem.titleView = container
+        let titleLabel = UILabel()
+        titleLabel.font = UIFont.fontAwesome(ofSize: 20, style: .brands)
+        titleLabel.text = String.fontAwesomeIcon(name: .github)
+        self.navigationItem.titleView = titleLabel
         //        let bbi: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .bookmarks, target: self, action: #selector(tableViewScrollToTop))
         //        let leftBarItem: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(tableViewScrollToTop))
         //        let rightBarItem: UIBarButtonItem = UIBarButtonItem(image: img.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: nil)

@@ -26,7 +26,7 @@ class ProfileViewController: UIViewController {
     
     @IBOutlet var lblCompanyTag: UILabel!
     @IBOutlet var lblBlogTag: UILabel!
-    @IBOutlet var lblLocationTag: UILabel!
+    @IBOutlet var lblLocationIcon: UILabel!
     @IBOutlet var lblEmailTag: UILabel!
     @IBOutlet var lblHireabilityTag: UILabel!
     @IBOutlet var lblNoteTag: UILabel!
@@ -37,6 +37,11 @@ class ProfileViewController: UIViewController {
     @IBOutlet var nameTopContraint: NSLayoutConstraint!
     @IBOutlet var bioTopConstraint: NSLayoutConstraint!
     
+    @IBOutlet var lblNoteIcon: UILabel!
+    @IBOutlet var lblHirabilityIcon: UILabel!
+    @IBOutlet var lblEmailIcon: UILabel!
+    @IBOutlet var lblBlogIcon: UILabel!
+    @IBOutlet var lblCompanyIcon: UILabel!
     var viewModel: ProfileViewModel!
     
     private func skeletonize(view:  UIView) {
@@ -55,7 +60,7 @@ class ProfileViewController: UIViewController {
     }
     
     private func showSkeletons() {
-        let tags = [lblCompanyTag, lblBlogTag, lblLocationTag, lblEmailTag, lblHireabilityTag, lblNoteTag]
+        let tags = [lblCompanyIcon, lblBlogIcon, lblEmailIcon, lblHirabilityIcon, lblNoteIcon, lblCompanyTag, lblBlogTag, lblLocationIcon, lblEmailTag, lblHireabilityTag, lblNoteTag]
         let values = [lblName, lblLogin, lblBio, lblFollow, lblCompany, lblBlog, lblLocation, lblEmail, lblHireability]
         let views = [boxBlue, tvNote, btnSave ]
         tags.forEach { self.skeletonize(label: $0!) }
@@ -64,7 +69,7 @@ class ProfileViewController: UIViewController {
     }
     
     private func hideSkeletons() {
-        let tags = [lblCompanyTag, lblBlogTag, lblLocationTag, lblEmailTag, lblHireabilityTag, lblNoteTag]
+        let tags = [lblCompanyIcon, lblBlogIcon, lblEmailIcon, lblHirabilityIcon, lblNoteIcon, lblCompanyTag, lblBlogTag, lblLocationIcon, lblEmailTag, lblHireabilityTag, lblNoteTag]
         let values = [lblName, lblLogin, lblBio, lblFollow, lblCompany, lblBlog, lblLocation, lblEmail, lblHireability]
         let views = [tvNote, btnSave ]
         tags.forEach { $0?.hideSkeleton() }
@@ -72,14 +77,17 @@ class ProfileViewController: UIViewController {
         views.forEach { $0?.hideSkeleton() }
     }
     
-    func configureIcon(label: inout UILabel, icon: FontAwesome, style: FontAwesomeStyle = .regular) {
+    func configureIcon(label: inout UILabel, icon: FontAwesome, style: FontAwesomeStyle = .regular, prepend: Bool = false) {
         guard let labelText = label.attributedText else { return }
         let fontSize = label.font.pointSize
-        let iconText = String.fontAwesomeIcon(name: icon) + " "
+        let iconText = prepend ? "\(String.fontAwesomeIcon(name: icon)) ": String.fontAwesomeIcon(name: icon)
         let fontFontAwesome = UIFont.fontAwesome(ofSize: fontSize, style: style)
         let iconTextAttributed = NSMutableAttributedString(string:iconText, attributes: [NSAttributedString.Key.font: fontFontAwesome])
-        let mutableAttributedText = NSMutableAttributedString(attributedString: labelText)
-        iconTextAttributed.append(mutableAttributedText)
+        if prepend {
+            let mutableAttributedText = NSMutableAttributedString(attributedString: labelText)
+            iconTextAttributed.append(mutableAttributedText)
+            print(iconTextAttributed)
+        }
         label.attributedText = iconTextAttributed
     }
     
@@ -100,13 +108,13 @@ class ProfileViewController: UIViewController {
         btnSave.layer.cornerRadius = 5
         btnSave.addTarget(self, action: #selector(btnSavePressed), for: .touchDown)
         
-        configureIcon(label: &self.lblCompanyTag, icon: .building)
-        configureIcon(label: &self.lblBlogTag, icon: .newspaper, style: .solid)
-        configureIcon(label: &self.lblLocationTag, icon: .mapMarker, style: .solid)
-        configureIcon(label: &self.lblEmailTag, icon: .envelope)
-        configureIcon(label: &self.lblHireabilityTag, icon: .briefcase, style: .solid)
-        configureIcon(label: &self.lblNoteTag, icon: .stickyNote)
-        
+        configureIcon(label: &self.lblCompanyIcon, icon: .building)
+        configureIcon(label: &self.lblBlogIcon, icon: .globe, style: .solid)
+        configureIcon(label: &self.lblLocationIcon, icon: .mapMarker, style: .solid)
+        configureIcon(label: &self.lblEmailIcon, icon: .envelope)
+        configureIcon(label: &self.lblHirabilityIcon, icon: .briefcase, style: .solid)
+        self.configureIcon(label: &self.lblNoteIcon, icon: .stickyNote)
+
         showSkeletons()
     }
     
@@ -176,7 +184,9 @@ extension ProfileViewController: ViewModelDelegate {
             self.lblLocation.text = presented.location
             self.lblEmail.text = presented.email
             self.lblHireability.text = presented.hireability
-            self.lblFollow.text = "\(presented.followers) followers • \(presented.following) following"
+            let lblFollowText = "\(presented.followers) followers • \(presented.following) following"
+            self.lblFollow.attributedText = NSAttributedString(string: lblFollowText)
+            self.configureIcon(label: &self.lblFollow, icon: .userFriends, style: .solid, prepend: true)
             self.tvNote.text = presented.note
             self.hideSkeletons()
             self.viewModel.fetchImage(for: self.viewModel.user) { result in

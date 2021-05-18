@@ -41,7 +41,7 @@ class UserInfoPresenter {
     }
     var location: String { return self.userInfo.location ?? "-" }
     var email: String { return self.userInfo.email ?? "-" }
-    var hireability: String { return self.userInfo.isHireable ? "Yes" : "No"  }
+    var hireability: String { return self.userInfo.isHireable ? "Hireable" : "Not currently hireable"  }
     var note: String { return self.userInfo.note ?? "" }
 
 }

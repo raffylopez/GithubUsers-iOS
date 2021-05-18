@@ -61,17 +61,24 @@
                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
                                                 </userDefinedRuntimeAttributes>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="123,456 followers • 123,456 following" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ViU-J9-u6E">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ViU-J9-u6E">
                                                 <rect key="frame" x="64" y="349" width="286.5" height="21"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <attributedString key="attributedText">
+                                                    <fragment content="123,456 followers • 123,456 following">
+                                                        <attributes>
+                                                            <color key="NSColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <font key="NSFont" metaFont="system" size="17"/>
+                                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                        </attributes>
+                                                    </fragment>
+                                                </attributedString>
                                                 <nil key="highlightedColor"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
                                                 </userDefinedRuntimeAttributes>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="mojombo" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CgS-se-yPz">
-                                                <rect key="frame" x="162" y="253.5" width="90.5" height="26"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="login" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CgS-se-yPz">
+                                                <rect key="frame" x="185" y="253.5" width="44.5" height="26"/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="22"/>
                                                 <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -79,43 +86,30 @@
                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
                                                 </userDefinedRuntimeAttributes>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C82-WE-cQs">
-                                                <rect key="frame" x="20" y="398" width="74" height="20"/>
-                                                <attributedString key="attributedText">
-                                                    <fragment content="Company">
-                                                        <attributes>
-                                                            <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                            <font key="NSFont" size="17" name="HelveticaNeue"/>
-                                                        </attributes>
-                                                    </fragment>
-                                                </attributedString>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Company" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C82-WE-cQs">
+                                                <rect key="frame" x="51" y="398" width="74" height="20"/>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                                                 <nil key="highlightedColor"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
                                                 </userDefinedRuntimeAttributes>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Odd-Sv-OjI">
-                                                <rect key="frame" x="20" y="456.5" width="35" height="20"/>
-                                                <attributedString key="attributedText">
-                                                    <fragment content="Blog">
-                                                        <attributes>
-                                                            <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                            <font key="NSFont" size="17" name="HelveticaNeue"/>
-                                                        </attributes>
-                                                    </fragment>
-                                                </attributedString>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Blog" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Odd-Sv-OjI">
+                                                <rect key="frame" x="51" y="456.5" width="35" height="20"/>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                                                 <nil key="highlightedColor"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
                                                 </userDefinedRuntimeAttributes>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XA5-ed-CtI">
-                                                <rect key="frame" x="20" y="533" width="66" height="20"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XA5-ed-CtI">
+                                                <rect key="frame" x="18" y="535" width="27.5" height="20"/>
                                                 <attributedString key="attributedText">
-                                                    <fragment content="Location">
+                                                    <fragment content=" ico">
                                                         <attributes>
-                                                            <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="NSColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                                             <font key="NSFont" size="17" name="HelveticaNeue"/>
+                                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                                         </attributes>
                                                     </fragment>
                                                 </attributedString>
@@ -125,11 +119,12 @@
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z41-Ic-0Un">
-                                                <rect key="frame" x="20" y="567" width="42" height="20"/>
+                                                <rect key="frame" x="20" y="569" width="23" height="20"/>
                                                 <attributedString key="attributedText">
-                                                    <fragment content="Email">
+                                                    <fragment content="ico">
                                                         <attributes>
                                                             <font key="NSFont" size="17" name="HelveticaNeue"/>
+                                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                                         </attributes>
                                                     </fragment>
                                                 </attributedString>
@@ -139,11 +134,12 @@
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3LT-Bz-M9I">
-                                                <rect key="frame" x="20" y="601" width="72.5" height="20"/>
+                                                <rect key="frame" x="20" y="603" width="23" height="20"/>
                                                 <attributedString key="attributedText">
-                                                    <fragment content="Hireable?">
+                                                    <fragment content="ico">
                                                         <attributes>
                                                             <font key="NSFont" size="17" name="HelveticaNeue"/>
+                                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                                         </attributes>
                                                     </fragment>
                                                 </attributedString>
@@ -153,14 +149,14 @@
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dtk-Kb-p5h">
-                                                <rect key="frame" x="20" y="851" width="374" height="34"/>
+                                                <rect key="frame" x="20" y="853" width="374" height="34"/>
                                                 <color key="backgroundColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <state key="normal" title="Save">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Company Placeholder Value" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PKy-fU-e6B">
-                                                <rect key="frame" x="20" y="422" width="332" height="20.5"/>
+                                                <rect key="frame" x="51" y="422" width="311.5" height="20.5"/>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
                                                 <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -168,8 +164,8 @@
                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
                                                 </userDefinedRuntimeAttributes>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="https://www.aaaaaabloglinkplaceholdervalue.com" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vg1-ne-4eS">
-                                                <rect key="frame" x="20" y="480.5" width="332" height="40.5"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="https://www.somebloglinkplaceholdervalue.com" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vg1-ne-4eS">
+                                                <rect key="frame" x="51" y="480.5" width="311.5" height="40.5"/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                 <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -177,26 +173,24 @@
                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
                                                 </userDefinedRuntimeAttributes>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location Placeholder Value" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vqn-5T-6Ru">
-                                                <rect key="frame" x="196.5" y="532.5" width="197.5" height="20"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Location Placeholder Value" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vqn-5T-6Ru">
+                                                <rect key="frame" x="51" y="535" width="197.5" height="20"/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
-                                                <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email Placeholder Value" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="stt-8P-lBI">
-                                                <rect key="frame" x="220" y="566.5" width="174" height="20"/>
+                                                <rect key="frame" x="51" y="569" width="174" height="20"/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
-                                                <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hireability Placeholder Value" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ESA-uG-OTN">
-                                                <rect key="frame" x="189.5" y="600.5" width="204.5" height="20"/>
+                                                <rect key="frame" x="51" y="603" width="204.5" height="20"/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                 <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -204,8 +198,45 @@
                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
                                                 </userDefinedRuntimeAttributes>
                                             </label>
+                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="AqR-WK-wyC">
+                                                <rect key="frame" x="20" y="665" width="374" height="180"/>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="180" id="uph-Ed-uZI"/>
+                                                </constraints>
+                                                <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <fontDescription key="fontDescription" type="system" weight="thin" pointSize="17"/>
+                                                <textInputTraits key="textInputTraits" autocorrectionType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
+                                            </textView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ico" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tzz-VK-d12">
+                                                <rect key="frame" x="20" y="398" width="23" height="20"/>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ico" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ox3-ip-X6D">
+                                                <rect key="frame" x="20" y="456.5" width="23" height="20"/>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ico" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nzX-2z-jVa">
+                                                <rect key="frame" x="20" y="637" width="23" height="20"/>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EtB-ok-OIz">
-                                                <rect key="frame" x="20" y="635" width="37" height="20"/>
+                                                <rect key="frame" x="51" y="637" width="37" height="20"/>
                                                 <attributedString key="attributedText">
                                                     <fragment content="Note">
                                                         <attributes>
@@ -218,59 +249,61 @@
                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
                                                 </userDefinedRuntimeAttributes>
                                             </label>
-                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="AqR-WK-wyC">
-                                                <rect key="frame" x="20" y="663" width="374" height="180"/>
-                                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="180" id="uph-Ed-uZI"/>
-                                                </constraints>
-                                                <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                <fontDescription key="fontDescription" type="system" weight="thin" pointSize="17"/>
-                                                <textInputTraits key="textInputTraits" autocorrectionType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
-                                            </textView>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                         <constraints>
-                                            <constraint firstItem="Vg1-ne-4eS" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="3QX-TH-RrF"/>
-                                            <constraint firstItem="ESA-uG-OTN" firstAttribute="firstBaseline" secondItem="3LT-Bz-M9I" secondAttribute="firstBaseline" id="3mf-Ro-1Nn"/>
+                                            <constraint firstItem="Ox3-ip-X6D" firstAttribute="height" secondItem="Odd-Sv-OjI" secondAttribute="height" id="2ci-7Y-tAj"/>
+                                            <constraint firstItem="Tzz-VK-d12" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="3Bd-b6-Z2M"/>
+                                            <constraint firstItem="vqn-5T-6Ru" firstAttribute="leading" secondItem="Odd-Sv-OjI" secondAttribute="leading" id="3o2-Wc-ZKB"/>
+                                            <constraint firstItem="stt-8P-lBI" firstAttribute="top" secondItem="vqn-5T-6Ru" secondAttribute="bottom" constant="14" id="4yz-q6-lvS"/>
                                             <constraint firstItem="PKy-fU-e6B" firstAttribute="top" secondItem="C82-WE-cQs" secondAttribute="bottom" constant="4" id="5IS-Pt-7UZ"/>
                                             <constraint firstItem="Vg1-ne-4eS" firstAttribute="top" secondItem="Odd-Sv-OjI" secondAttribute="bottom" constant="4" id="8vr-qu-F6g"/>
                                             <constraint firstItem="iN0-bL-dAB" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="99i-XQ-AKt"/>
-                                            <constraint firstItem="z41-Ic-0Un" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="BHD-6O-O7c"/>
-                                            <constraint firstItem="Vg1-ne-4eS" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.8" constant="1" id="BHI-qq-68d"/>
-                                            <constraint firstItem="XA5-ed-CtI" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="DBT-94-DjC"/>
-                                            <constraint firstItem="z41-Ic-0Un" firstAttribute="top" secondItem="XA5-ed-CtI" secondAttribute="bottom" constant="14" id="E0l-AE-grT"/>
+                                            <constraint firstItem="EtB-ok-OIz" firstAttribute="top" secondItem="ESA-uG-OTN" secondAttribute="bottom" constant="14" id="ACI-dx-FVQ"/>
+                                            <constraint firstItem="3LT-Bz-M9I" firstAttribute="height" secondItem="ESA-uG-OTN" secondAttribute="height" id="AjG-zr-jjg"/>
+                                            <constraint firstItem="Vg1-ne-4eS" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.75" constant="1" id="BHI-qq-68d"/>
+                                            <constraint firstItem="PKy-fU-e6B" firstAttribute="leading" secondItem="C82-WE-cQs" secondAttribute="leading" id="DhL-6q-Wg2"/>
                                             <constraint firstAttribute="height" constant="1000" id="E3B-Dy-maD"/>
                                             <constraint firstItem="lDM-xp-l2F" firstAttribute="top" secondItem="iN0-bL-dAB" secondAttribute="bottom" constant="18" id="GKw-sM-oXU"/>
+                                            <constraint firstItem="Ox3-ip-X6D" firstAttribute="centerX" secondItem="Tzz-VK-d12" secondAttribute="centerX" id="HNe-uc-UQY"/>
+                                            <constraint firstItem="nzX-2z-jVa" firstAttribute="top" secondItem="EtB-ok-OIz" secondAttribute="top" id="Hb5-2f-Liu"/>
                                             <constraint firstItem="AqR-WK-wyC" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="HtF-m5-zKY"/>
-                                            <constraint firstItem="stt-8P-lBI" firstAttribute="firstBaseline" secondItem="z41-Ic-0Un" secondAttribute="firstBaseline" id="IHR-zt-dj0"/>
-                                            <constraint firstItem="C82-WE-cQs" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="Ihh-Ql-1ob"/>
-                                            <constraint firstItem="XA5-ed-CtI" firstAttribute="top" secondItem="Vg1-ne-4eS" secondAttribute="bottom" constant="12" id="LDV-Ru-9oo"/>
-                                            <constraint firstItem="vqn-5T-6Ru" firstAttribute="firstBaseline" secondItem="XA5-ed-CtI" secondAttribute="firstBaseline" id="M25-jo-acb"/>
-                                            <constraint firstItem="EtB-ok-OIz" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="NSX-oR-KPe"/>
+                                            <constraint firstItem="ESA-uG-OTN" firstAttribute="leading" secondItem="stt-8P-lBI" secondAttribute="leading" id="Mwv-i8-igh"/>
                                             <constraint firstItem="C82-WE-cQs" firstAttribute="top" secondItem="ViU-J9-u6E" secondAttribute="bottom" constant="28" id="Nnz-mA-fbm"/>
+                                            <constraint firstItem="XA5-ed-CtI" firstAttribute="centerX" secondItem="Ox3-ip-X6D" secondAttribute="centerX" id="OD9-Yy-buS"/>
                                             <constraint firstItem="dtk-Kb-p5h" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="OWA-59-1aD"/>
                                             <constraint firstItem="CgS-se-yPz" firstAttribute="top" secondItem="lDM-xp-l2F" secondAttribute="bottom" constant="4" id="Ogv-64-noA"/>
+                                            <constraint firstItem="Tzz-VK-d12" firstAttribute="height" secondItem="C82-WE-cQs" secondAttribute="height" id="PnY-Ez-Jso"/>
                                             <constraint firstItem="waL-2C-ndG" firstAttribute="top" secondItem="CgS-se-yPz" secondAttribute="bottom" constant="20" id="PtI-S3-lpu"/>
-                                            <constraint firstItem="EtB-ok-OIz" firstAttribute="top" secondItem="3LT-Bz-M9I" secondAttribute="bottom" constant="14" id="Q4c-15-ZEF"/>
+                                            <constraint firstItem="stt-8P-lBI" firstAttribute="leading" secondItem="vqn-5T-6Ru" secondAttribute="leading" id="RSb-Wl-LKZ"/>
                                             <constraint firstItem="waL-2C-ndG" firstAttribute="centerX" secondItem="CgS-se-yPz" secondAttribute="centerX" id="RVL-HV-vwX"/>
-                                            <constraint firstItem="3LT-Bz-M9I" firstAttribute="top" secondItem="z41-Ic-0Un" secondAttribute="bottom" constant="14" id="SJW-1m-gkv"/>
-                                            <constraint firstItem="stt-8P-lBI" firstAttribute="trailing" secondItem="vqn-5T-6Ru" secondAttribute="trailing" id="Ua3-AF-b7t"/>
+                                            <constraint firstItem="Vg1-ne-4eS" firstAttribute="leading" secondItem="Odd-Sv-OjI" secondAttribute="leading" id="S7h-8w-h03"/>
+                                            <constraint firstItem="3LT-Bz-M9I" firstAttribute="top" secondItem="ESA-uG-OTN" secondAttribute="top" id="Tgd-uU-FbR"/>
+                                            <constraint firstItem="ESA-uG-OTN" firstAttribute="top" secondItem="stt-8P-lBI" secondAttribute="bottom" constant="14" id="VZP-Bq-HiH"/>
                                             <constraint firstAttribute="trailing" secondItem="dtk-Kb-p5h" secondAttribute="trailing" constant="20" id="Vf8-4X-wFi"/>
+                                            <constraint firstItem="XA5-ed-CtI" firstAttribute="height" secondItem="vqn-5T-6Ru" secondAttribute="height" id="WIV-DF-nsr"/>
+                                            <constraint firstItem="Tzz-VK-d12" firstAttribute="top" secondItem="C82-WE-cQs" secondAttribute="top" id="YkM-Dj-zAZ"/>
                                             <constraint firstItem="CgS-se-yPz" firstAttribute="centerX" secondItem="lDM-xp-l2F" secondAttribute="centerX" id="YxL-m3-34L"/>
                                             <constraint firstItem="lDM-xp-l2F" firstAttribute="centerX" secondItem="iN0-bL-dAB" secondAttribute="centerX" id="ZXH-Uw-uju"/>
                                             <constraint firstItem="Odd-Sv-OjI" firstAttribute="top" secondItem="PKy-fU-e6B" secondAttribute="bottom" constant="14" id="agC-Pa-7hb"/>
                                             <constraint firstAttribute="trailing" secondItem="AqR-WK-wyC" secondAttribute="trailing" constant="20" id="azH-SC-mjs"/>
+                                            <constraint firstItem="nzX-2z-jVa" firstAttribute="centerX" secondItem="3LT-Bz-M9I" secondAttribute="centerX" id="b6W-dr-IME"/>
+                                            <constraint firstItem="3LT-Bz-M9I" firstAttribute="centerX" secondItem="z41-Ic-0Un" secondAttribute="centerX" id="c9Y-IA-9L3"/>
                                             <constraint firstItem="ViU-J9-u6E" firstAttribute="centerX" secondItem="waL-2C-ndG" secondAttribute="centerX" id="cx0-5c-n1q"/>
+                                            <constraint firstItem="XA5-ed-CtI" firstAttribute="top" secondItem="vqn-5T-6Ru" secondAttribute="top" id="cyx-5t-1AM"/>
                                             <constraint firstItem="AqR-WK-wyC" firstAttribute="top" secondItem="EtB-ok-OIz" secondAttribute="bottom" constant="8" id="czb-bA-vyt"/>
+                                            <constraint firstItem="z41-Ic-0Un" firstAttribute="height" secondItem="stt-8P-lBI" secondAttribute="height" id="ggV-Ta-W8g"/>
                                             <constraint firstItem="Odd-Sv-OjI" firstAttribute="leading" secondItem="C82-WE-cQs" secondAttribute="leading" id="hbQ-cI-QdN"/>
+                                            <constraint firstItem="vqn-5T-6Ru" firstAttribute="top" secondItem="Vg1-ne-4eS" secondAttribute="bottom" constant="14" id="hrl-0v-tOa"/>
                                             <constraint firstItem="ViU-J9-u6E" firstAttribute="top" secondItem="waL-2C-ndG" secondAttribute="baseline" constant="28" id="i8J-KD-Gic"/>
-                                            <constraint firstItem="PKy-fU-e6B" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.8" constant="1" id="kf4-ki-OoP"/>
-                                            <constraint firstItem="ESA-uG-OTN" firstAttribute="trailing" secondItem="stt-8P-lBI" secondAttribute="trailing" id="liT-hW-oI3"/>
-                                            <constraint firstItem="PKy-fU-e6B" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="qo6-K5-yLc"/>
+                                            <constraint firstItem="C82-WE-cQs" firstAttribute="leading" secondItem="Tzz-VK-d12" secondAttribute="trailing" constant="8" id="iMa-7U-UqW"/>
+                                            <constraint firstItem="PKy-fU-e6B" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.75" constant="1" id="kf4-ki-OoP"/>
+                                            <constraint firstItem="EtB-ok-OIz" firstAttribute="leading" secondItem="ESA-uG-OTN" secondAttribute="leading" id="phk-jQ-JMi"/>
                                             <constraint firstItem="dtk-Kb-p5h" firstAttribute="top" secondItem="AqR-WK-wyC" secondAttribute="bottom" constant="8" id="rNP-Hv-M40"/>
-                                            <constraint firstItem="3LT-Bz-M9I" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="tFs-xS-DIw"/>
-                                            <constraint firstAttribute="trailing" secondItem="vqn-5T-6Ru" secondAttribute="trailing" constant="20" id="tuB-pA-67c"/>
+                                            <constraint firstItem="z41-Ic-0Un" firstAttribute="top" secondItem="stt-8P-lBI" secondAttribute="top" id="sSJ-gJ-VLc"/>
+                                            <constraint firstItem="Ox3-ip-X6D" firstAttribute="top" secondItem="Odd-Sv-OjI" secondAttribute="top" id="uau-sK-XPF"/>
+                                            <constraint firstItem="z41-Ic-0Un" firstAttribute="centerX" secondItem="XA5-ed-CtI" secondAttribute="centerX" id="xXL-lw-OqL"/>
+                                            <constraint firstItem="nzX-2z-jVa" firstAttribute="height" secondItem="EtB-ok-OIz" secondAttribute="height" id="z5e-s2-ymg"/>
                                             <constraint firstItem="iN0-bL-dAB" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="28" id="zJh-PD-gO5"/>
                                         </constraints>
                                     </view>
@@ -301,18 +334,23 @@
                         <outlet property="imgUser" destination="mEz-Pu-Lfx" id="zmq-uR-8kU"/>
                         <outlet property="lblBio" destination="waL-2C-ndG" id="hlI-UB-R4U"/>
                         <outlet property="lblBlog" destination="Vg1-ne-4eS" id="QxA-Be-tG1"/>
+                        <outlet property="lblBlogIcon" destination="Ox3-ip-X6D" id="ha8-iM-Vge"/>
                         <outlet property="lblBlogTag" destination="Odd-Sv-OjI" id="0tF-Un-AGD"/>
                         <outlet property="lblCompany" destination="PKy-fU-e6B" id="YNr-Cb-gwy"/>
+                        <outlet property="lblCompanyIcon" destination="Tzz-VK-d12" id="qWx-SQ-ZEi"/>
                         <outlet property="lblCompanyTag" destination="C82-WE-cQs" id="Af0-xP-t8r"/>
                         <outlet property="lblEmail" destination="stt-8P-lBI" id="9QQ-P5-qln"/>
+                        <outlet property="lblEmailIcon" destination="z41-Ic-0Un" id="im4-6l-ONl"/>
                         <outlet property="lblEmailTag" destination="z41-Ic-0Un" id="Zgv-rn-gxh"/>
                         <outlet property="lblFollow" destination="ViU-J9-u6E" id="zDc-Hr-wNU"/>
+                        <outlet property="lblHirabilityIcon" destination="3LT-Bz-M9I" id="bxY-tA-bfv"/>
                         <outlet property="lblHireability" destination="ESA-uG-OTN" id="YjQ-ea-i0b"/>
                         <outlet property="lblHireabilityTag" destination="3LT-Bz-M9I" id="8OI-uJ-1Nb"/>
                         <outlet property="lblLocation" destination="vqn-5T-6Ru" id="TCo-96-T1n"/>
-                        <outlet property="lblLocationTag" destination="XA5-ed-CtI" id="MDt-3F-6z2"/>
+                        <outlet property="lblLocationIcon" destination="XA5-ed-CtI" id="MDt-3F-6z2"/>
                         <outlet property="lblLogin" destination="CgS-se-yPz" id="ZAh-kA-Kdd"/>
                         <outlet property="lblName" destination="lDM-xp-l2F" id="qbp-vC-jOT"/>
+                        <outlet property="lblNoteIcon" destination="nzX-2z-jVa" id="fCR-dl-uZy"/>
                         <outlet property="lblNoteTag" destination="EtB-ok-OIz" id="X0L-x3-glJ"/>
                         <outlet property="nameTopContraint" destination="GKw-sM-oXU" id="CNM-ZH-Xv7"/>
                         <outlet property="tvNote" destination="AqR-WK-wyC" id="z2C-EE-gvQ"/>
