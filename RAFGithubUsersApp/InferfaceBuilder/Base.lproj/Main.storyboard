@@ -80,11 +80,12 @@
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C82-WE-cQs">
-                                                <rect key="frame" x="20" y="398" width="77.5" height="20"/>
+                                                <rect key="frame" x="20" y="398" width="74" height="20"/>
                                                 <attributedString key="attributedText">
                                                     <fragment content="Company">
                                                         <attributes>
-                                                            <font key="NSFont" size="17" name="HelveticaNeue-Bold"/>
+                                                            <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                            <font key="NSFont" size="17" name="HelveticaNeue"/>
                                                         </attributes>
                                                     </fragment>
                                                 </attributedString>
@@ -94,11 +95,12 @@
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Odd-Sv-OjI">
-                                                <rect key="frame" x="20" y="456.5" width="37.5" height="20"/>
+                                                <rect key="frame" x="20" y="456.5" width="35" height="20"/>
                                                 <attributedString key="attributedText">
                                                     <fragment content="Blog">
                                                         <attributes>
-                                                            <font key="NSFont" size="17" name="HelveticaNeue-Bold"/>
+                                                            <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                            <font key="NSFont" size="17" name="HelveticaNeue"/>
                                                         </attributes>
                                                     </fragment>
                                                 </attributedString>
@@ -108,11 +110,12 @@
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XA5-ed-CtI">
-                                                <rect key="frame" x="20" y="533" width="71" height="20"/>
+                                                <rect key="frame" x="20" y="533" width="66" height="20"/>
                                                 <attributedString key="attributedText">
                                                     <fragment content="Location">
                                                         <attributes>
-                                                            <font key="NSFont" size="17" name="HelveticaNeue-Bold"/>
+                                                            <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                            <font key="NSFont" size="17" name="HelveticaNeue"/>
                                                         </attributes>
                                                     </fragment>
                                                 </attributedString>
@@ -122,11 +125,11 @@
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z41-Ic-0Un">
-                                                <rect key="frame" x="20" y="567" width="45" height="20"/>
+                                                <rect key="frame" x="20" y="567" width="42" height="20"/>
                                                 <attributedString key="attributedText">
                                                     <fragment content="Email">
                                                         <attributes>
-                                                            <font key="NSFont" size="17" name="HelveticaNeue-Bold"/>
+                                                            <font key="NSFont" size="17" name="HelveticaNeue"/>
                                                         </attributes>
                                                     </fragment>
                                                 </attributedString>
@@ -136,11 +139,11 @@
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3LT-Bz-M9I">
-                                                <rect key="frame" x="20" y="601" width="77" height="21"/>
+                                                <rect key="frame" x="20" y="601" width="72.5" height="20"/>
                                                 <attributedString key="attributedText">
                                                     <fragment content="Hireable?">
                                                         <attributes>
-                                                            <font key="NSFont" size="17" name="HelveticaNeue-Bold"/>
+                                                            <font key="NSFont" size="17" name="HelveticaNeue"/>
                                                         </attributes>
                                                     </fragment>
                                                 </attributedString>
@@ -150,7 +153,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dtk-Kb-p5h">
-                                                <rect key="frame" x="20" y="853" width="374" height="34"/>
+                                                <rect key="frame" x="20" y="851" width="374" height="34"/>
                                                 <color key="backgroundColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <state key="normal" title="Save">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -175,7 +178,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location Placeholder Value" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vqn-5T-6Ru">
-                                                <rect key="frame" x="196.5" y="533" width="197.5" height="20"/>
+                                                <rect key="frame" x="196.5" y="532.5" width="197.5" height="20"/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                 <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -184,7 +187,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email Placeholder Value" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="stt-8P-lBI">
-                                                <rect key="frame" x="220" y="567" width="174" height="20"/>
+                                                <rect key="frame" x="220" y="566.5" width="174" height="20"/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                 <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -193,7 +196,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hireability Placeholder Value" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ESA-uG-OTN">
-                                                <rect key="frame" x="189.5" y="601" width="204.5" height="20"/>
+                                                <rect key="frame" x="189.5" y="600.5" width="204.5" height="20"/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                 <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -202,11 +205,11 @@
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EtB-ok-OIz">
-                                                <rect key="frame" x="20" y="636" width="39" height="21"/>
+                                                <rect key="frame" x="20" y="635" width="37" height="20"/>
                                                 <attributedString key="attributedText">
                                                     <fragment content="Note">
                                                         <attributes>
-                                                            <font key="NSFont" size="17" name="HelveticaNeue-Bold"/>
+                                                            <font key="NSFont" size="17" name="HelveticaNeue"/>
                                                         </attributes>
                                                     </fragment>
                                                 </attributedString>
@@ -216,7 +219,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="AqR-WK-wyC">
-                                                <rect key="frame" x="20" y="665" width="374" height="180"/>
+                                                <rect key="frame" x="20" y="663" width="374" height="180"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="180" id="uph-Ed-uZI"/>
