@@ -9,8 +9,9 @@
 import Foundation
 
 class GithubUsersApi {
-    let configurableForceFailure: Bool = false
-    
+    let confForcedFail: Bool = false
+    var confQueuedNetworkRequests: Bool = true
+
     typealias T = GithubUser
     let usersListUri: String
     let userInfoUriPrefix: String
@@ -47,36 +48,37 @@ class GithubUsersApi {
             }).resume()
     }
     
-    var synchronous = false
-    
-    func fetchUsers(since: Int = 0, completion: ((Result<[GithubUser], Error>) -> Void)? = nil) {
-        let dispatchGroup = DispatchGroup()
-        if synchronous {
-            dispatchGroup.enter()
-        }
-        var uri = URLComponents(string: usersListUri)
-        uri?.queryItems = [
-            URLQueryItem(name: "access_token", value: getConfig().githubAccessToken),
-            URLQueryItem(name: "since", value: "\(since)")
-        ]
 
-        let task = URLSession.shared.githubUsersTask(with: uri!.url!, completionHandler: { (githubUsers, _, error) in
-            if self.synchronous { dispatchGroup.leave() }
-            if let error = error {
-                completion?(.failure(error))
-                return
+    func fetchUsers(since: Int = 0, completion: ((Result<[GithubUser], Error>) -> Void)? = nil) {
+        DispatchQueue.global().async {
+            let dispatchGroup = DispatchGroup()
+            if self.confQueuedNetworkRequests {
+                dispatchGroup.enter()
             }
-            if let githubUsers = githubUsers {
-                if self.configurableForceFailure {
-                    completion?(.failure(AppError.generalError))
+            var uri = URLComponents(string: self.usersListUri)
+            uri?.queryItems = [
+                URLQueryItem(name: "access_token", value: getConfig().githubAccessToken),
+                URLQueryItem(name: "since", value: "\(since)")
+            ]
+            
+            let task = URLSession.shared.githubUsersTask(with: uri!.url!, completionHandler: { (githubUsers, _, error) in
+                if self.confQueuedNetworkRequests { dispatchGroup.leave() }
+                if let error = error {
+                    completion?(.failure(error))
                     return
                 }
-                completion?(.success(githubUsers))
-                return
-            }
-            completion?(.failure(AppError.emptyResult))
-        })
-        task.resume()
-        if synchronous { dispatchGroup.wait() }
+                if let githubUsers = githubUsers {
+                    if self.confForcedFail {
+                        completion?(.failure(AppError.generalError))
+                        return
+                    }
+                    completion?(.success(githubUsers))
+                    return
+                }
+                completion?(.failure(AppError.emptyResult))
+            })
+            task.resume()
+            if self.confQueuedNetworkRequests { dispatchGroup.wait() }
+        }
     }
 }
