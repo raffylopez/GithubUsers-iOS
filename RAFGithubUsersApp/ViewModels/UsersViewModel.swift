@@ -11,70 +11,7 @@ import UIKit
 import CoreData
 
 class UsersViewModel {
-    func dbgClearStoresOnAppLaunch() {
-        try? usersDatabaseService.deleteAll()
-        fetchFromNetworkMergingWithDatastore() {
-            print("COREDATA \(#function)")
-            self.updateFromDiskSource()
-        }
-    }
-    
-    init(apiService: GithubUsersApi, databaseService: UsersProvider) {
-        self.apiService = apiService
-        self.usersDatabaseService = databaseService
-        imageStore = ImageStore()
-        // dbgClearStoresOnAppLaunch() // DEBUG
-    }
-
-    func fetchFromNetworkMergingWithDatastore(completion: (()->Void)? = nil) {
-        processUserRequest { result in
-            switch result {
-            case let .success(users):
-                if let user = users.last {
-                    self.since = Int(user.id)
-                }
-                self.lastBatchCount = users.count
-                print_r(array: users)
-                // aaaaa
-                completion?()
-            case let .failure(error):
-                preconditionFailure(error.localizedDescription)
-            }
-        }
-    }
-
-    private(set) var users: [User]! = [] {
-        didSet {
-            if users.count > 0 {
-                self.onDataAvailable()
-                delegate?.onDataAvailable()
-            }
-        }
-    }
-
-    private func resetState() {
-        self.since = 0
-        self.currentPage = 0
-        self.lastBatchCount = 0
-    }
-    
-    func clearDiskStore() {
-        do {
-            try usersDatabaseService.deleteAll()
-        } catch {
-            fatalError(error.localizedDescription) // TODO
-        }
-    }
-    
-    /* Freshen stored objects with new data from the network  */
-    public func clearData() {
-        resetState()
-//        clearDiskStore()
-        imageStore.removeAllImages()
-        self.users = []
-        // TODO: Create clear event notif
-    }
-    
+    /* MARK: - Properties */
     var delegate: ViewModelDelegate? = nil
     
     typealias OnDataAvailable = ( () -> Void )
@@ -84,8 +21,13 @@ class UsersViewModel {
     
     var since: Int = 0
     var currentPage: Int = 0
-    var lastBatchCount: Int = 0
-    
+    var lastBatchCount: Int = 0 {
+        didSet {
+            totalDisplayCount += lastBatchCount
+        }
+    }
+    var totalDisplayCount: Int = 0
+
     var currentCount: Int {
         return users.count
     }
@@ -94,6 +36,7 @@ class UsersViewModel {
     let usersDatabaseService: UsersProvider
     
     let imageStore: ImageStore!
+    
     var isFetchInProgress: Bool = false {
         didSet {
             print("Fetch in progress: \(isFetchInProgress)")
@@ -106,7 +49,7 @@ class UsersViewModel {
             delegate?.onFetchDone()
         }
     }
-
+    
     private let session: URLSession! = {
         let config = URLSessionConfiguration.default
         return URLSession(configuration: config)
@@ -116,6 +59,71 @@ class UsersViewModel {
             UserPresenter(user)
         })
     }
+    let userInfoProvider: UserInfoProvider = CoreDataService.shared
+
+    private(set) var users: [User]! = [] {
+        didSet {
+            if users.count > 0 {
+                self.onDataAvailable()
+                delegate?.onDataAvailable()
+            }
+        }
+    }
+    
+    /* MARK: - Debug */
+
+    func dbgClearDataStoresOnAppLaunch() {
+        try? usersDatabaseService.deleteAll()
+        fetchFromNetworkMergingWithDatastore() {
+            print("COREDATA \(#function)")
+            self.loadUsersFromDisk()
+        }
+    }
+    
+    /* MARK: - Inits */
+    init(apiService: GithubUsersApi, databaseService: UsersProvider) {
+        self.apiService = apiService
+        self.usersDatabaseService = databaseService
+        imageStore = ImageStore()
+        // dbgClearDataStoresOnAppLaunch() // DEBUG
+//        self.updateFromDiskSource { }
+    }
+
+    /* MARK: - Interface */
+    public func fetchFromNetworkMergingWithDatastore(completion: (()->Void)? = nil) {
+        processUserRequest { result in
+            switch result {
+            case let .success(users):
+                if let user = users.last {
+                    self.since = Int(user.id)
+                }
+                self.lastBatchCount = users.count
+//                print_r(array: users) // DEBUG
+                self.loadUsersFromDisk()
+                // aaaaa
+                completion?()
+            case let .failure(error):  // INCLUDES NO INTERNET
+//                preconditionFailure(error.localizedDescription)
+                self.loadUsersFromDisk() // get first 30 only
+            }
+        }
+    }
+
+    private func resetState() {
+        self.since = 0
+        self.currentPage = 0
+        self.lastBatchCount = 0
+    }
+    
+    /* Freshen stored objects with new data from the network  */
+    public func clearData() {
+        resetState()
+//        clearDiskStore()
+        imageStore.removeAllImages()
+        self.users = []
+        // TODO: Create clear event notif
+    }
+    
 
     /**
      Binds closure to model describing what to perform when data becomes available
@@ -132,8 +140,7 @@ class UsersViewModel {
      closure
      */
     
-    let userInfoProvider: UserInfoProvider = CoreDataService.shared
-    
+
 //    func fetchUsers(onRetryError: ((Int)->())? = nil, completion: ((Result<[User], Error>)->Void)? = nil) {
 //
 //
@@ -146,10 +153,9 @@ class UsersViewModel {
 ////            print("user not found")
 ////        }
 //    }
-
-    func fetchUsersFromDisk(completion: @escaping ((Result<[User], Error>)->Void)) {
+    private func fetchUsersFromDisk(completion: @escaping ((Result<[User], Error>)->Void)) {
         // if offline, display from coredata, then keep retrying
-        usersDatabaseService.getUsers { (result) in
+        usersDatabaseService.getUsers(limit: totalDisplayCount) { (result) in
             switch result {
             case let .failure(error):
                 completion(.failure(error))
@@ -167,7 +173,7 @@ class UsersViewModel {
      
      This function makes absolutely no network calls.
      */
-    func updateFromDiskSource(onError: ((Error)->Void)? = nil, onSuccess: (()->Void)? = nil) {
+    private func loadUsersFromDisk(count: Int? = 0, onError: ((Error)->Void)? = nil, onSuccess: (()->Void)? = nil) {
         fetchUsersFromDisk { result in
             switch result {
             case let .failure(error):
@@ -214,13 +220,13 @@ class UsersViewModel {
                     var fetchedUsers: [User]?
                     context.performAndWait {
                         do {
-//                            fetchedUsers = try context.fetch(fetchRequest)
                             fetchedUsers = try fetchRequest.execute()
                         } catch {
                             preconditionFailure()
                         }
                     }
                     if let existingUser = fetchedUsers?.first {
+                        existingUser.merge(with: githubUser, moc: context)
                         return existingUser
                     }
 
@@ -291,7 +297,7 @@ class UsersViewModel {
                 }
                 print("COREDATA SINCE: \(self.since)" )
                 print("COREDATA USERS RETURNED: \(users.count)" )
-                self.updateFromDiskSource()
+                self.loadUsersFromDisk()
             case let .failure(error):
                 preconditionFailure("Error in \(#function): \(error)")
             }
@@ -363,7 +369,7 @@ class UsersViewModel {
             }
 
             /* Update model datasource, which should trigger view controller */
-            self.updateFromDiskSource {
+            self.loadUsersFromDisk {
                 self.since = Int(self.users.last?.id ?? 0)
                 self.currentPage += 1
                 completion?(.success(users))
@@ -437,7 +443,7 @@ class UsersViewModel {
                 }
                 
                 /* Update model datasource, which should trigger view controller */
-                self.updateFromDiskSource {
+                self.loadUsersFromDisk {
                     self.since = Int(self.users.last?.id ?? 0)
                     self.currentPage += 1
                     completion?(.success(users))

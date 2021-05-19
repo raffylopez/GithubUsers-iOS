@@ -208,7 +208,6 @@ class UsersViewController: UITableViewController {
         
         // if network is available, freshen datastore objects
         
-        viewModel.updateFromDiskSource { }
     }
 
     private func setupNavbar() {
@@ -280,6 +279,8 @@ class UsersViewController: UITableViewController {
         setupViews()
         setupHandlers()
         setupReachability()
+        self.fetchMoreTableDataDisplayingResults()
+
     }
     
     private func clearData() {
@@ -297,7 +298,6 @@ class UsersViewController: UITableViewController {
     func fetchMoreTableDataDisplayingResults(completion: (()->Void)? = nil) {
         ToastAlertMessageDisplay.main.makeToastActivity()
         self.viewModel.fetchFromNetworkMergingWithDatastore {
-            self.viewModel.updateFromDiskSource()
             ToastAlertMessageDisplay.main.hideToastActivity()
         }
         
