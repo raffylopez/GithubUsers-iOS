@@ -235,49 +235,60 @@ class UsersViewModel {
             return
         }
         self.isFetchInProgress = true
-
+        
+        let privateMOC = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        let context = CoreDataService.persistentContainer.viewContext
+        privateMOC.parent = context
+        
         self.apiService.fetchUsers(since: self.since) { (result: Result<[GithubUser], Error>) in
-            let context = CoreDataService.persistentContainer.viewContext
             self.isFetchInProgress = false
             switch result {
             case let .success(githubUsers):
                 self.currentPage += 1
-                let users: [User] = githubUsers.map { githubUser in
-                    /* Does the user already exist in storage? */
-                    let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
-                    fetchRequest.entity = NSEntityDescription.entity(forEntityName: String.init(describing: User.self), in: context)
-                    let predicate = NSPredicate( format: "\(#keyPath(User.id)) == \(githubUser.id)" )
-                    fetchRequest.predicate = predicate
-                    var fetchedUsers: [User]?
-                    context.performAndWait {
-                        do {
-                            fetchedUsers = try fetchRequest.execute()
-                        } catch {
-                            preconditionFailure()
+                privateMOC.perform {
+                    let users: [User] = githubUsers.map { githubUser in
+                        let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
+                        fetchRequest.entity = NSEntityDescription.entity(forEntityName: String.init(describing: User.self), in: context)
+                        let predicate = NSPredicate( format: "\(#keyPath(User.id)) == \(githubUser.id)" )
+                        fetchRequest.predicate = predicate
+                        var fetchedUsers: [User]?
+                        context.performAndWait {
+                            do {
+                                fetchedUsers = try fetchRequest.execute()
+                            } catch {
+                                preconditionFailure()
+                            }
                         }
-                    }
-                    if let existingUser = fetchedUsers?.first {
-                        existingUser.merge(with: githubUser, moc: context)
-                        return existingUser
-                    }
-
-                    var user: User!
-                    context.performAndWait {
+                        if let existingUser = fetchedUsers?.first {
+                            existingUser.merge(with: githubUser, moc: context)
+                            return existingUser
+                        }
+                        
+                        var user: User!
                         user = User(from: githubUser, moc: context)
+                        return user
                     }
-                    return user
+                    
+                    do {
+                        if privateMOC.hasChanges {
+                            try privateMOC.save()
+                        }
+                        context.performAndWait {
+                            do {
+                                if context.hasChanges {
+                                    try context.save()
+                                }
+                            } catch {
+                                fatalError("Failed to save context: \(error)")
+                            }
+                        }
+                    } catch {
+                        completion?(.failure(error))
+                        fatalError("Failed to save context: \(error)")
+                    }
+                    completion?(.success(users))
+                    
                 }
-                context.performAndWait {
-                do {
-                        try context.save()
-                } catch {
-                    completion?(.failure(error))
-                    preconditionFailure()
-                }
-                }
-
-                completion?(.success(users))
-
             case let .failure(error):
                 completion?(.failure(error))
             }

@@ -20,6 +20,7 @@ protocol UsersProvider {
     func deleteAll() throws
 }
 
+
 extension CoreDataService: UsersProvider {
     func getUserCount() -> Int {
         let entityName = String(describing: User.self)
