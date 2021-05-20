@@ -13,18 +13,18 @@ import CoreData
 // MARK: - AmiiboElementsViewModel
 class ProfileViewModel {
     
-    init(user: User, indexPath: IndexPath, apiService: GithubUsersApi, databaseService: UserInfoProvider) {
+    init(cell: UserTableViewCellBase, apiService: GithubUsersApi, databaseService: UserInfoProvider) {
         self.apiService = apiService
-        self.user = user
+        self.cell = cell
+        self.user = cell.user
         self.databaseService = databaseService
-        self.indexPath = indexPath
         imageStore = ImageStore()
     }
     
     var delegate: ViewModelDelegate? = nil
+    let cell: UserTableViewCellBase
     let user: User
-    let indexPath: IndexPath
-    
+
     typealias OnDataAvailable = ( () -> Void )
     var onDataAvailable: OnDataAvailable = {}
     var onFetchInProgress: (() -> Void) = {}

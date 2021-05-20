@@ -10,7 +10,19 @@ import UIKit
 import SkeletonView
 
 class UserTableViewCellBase: UITableViewCell {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.selectionStyle = .none
+        setupViews()
+        setupLayout()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+    
     var user: User!
+    var indexPath: IndexPath!
     weak var delegate: UserListTableViewCellDelegate?
     
     var spinner: UIActivityIndicatorView! = {
@@ -43,17 +55,6 @@ class UserTableViewCellBase: UITableViewCell {
         stackView.spacing = 8
         stackView.axis = .vertical
         return stackView }()
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.selectionStyle = .none
-        setupViews()
-        setupLayout()
-    }
-
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
     
     internal func setupViews() {
         guard let lblName = lblName,
@@ -93,9 +94,10 @@ class UserTableViewCellBase: UITableViewCell {
         NSLayoutConstraint.activate(hcn)
     }
     
-    internal func updateWith(user: User) {
+    internal func updateWith(user: User, indexPath: IndexPath) {
         self.lblName.text = user.login ?? ""
         self.lblSeries.text = user.urlHtml
+        self.indexPath = indexPath
     }
 }
 

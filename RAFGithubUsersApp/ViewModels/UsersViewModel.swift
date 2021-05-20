@@ -74,7 +74,7 @@ class UsersViewModel {
 
     func dbgClearDataStoresOnAppLaunch() {
         try? usersDatabaseService.deleteAll()
-        fetchFromNetworkMergingWithDatastore() {
+        updateUsers() {
             print("STATS \(#function)")
             self.loadUsersFromDisk()
         }
@@ -95,7 +95,7 @@ class UsersViewModel {
     }
     
     /* MARK: - Interface */
-    public func fetchFromNetworkMergingWithDatastore(completion: (()->Void)? = nil) {
+    public func updateUsers(completion: (()->Void)? = nil) {
         processUserRequest { result in
             switch result {
             case let .success(users):
@@ -267,11 +267,13 @@ class UsersViewModel {
                     }
                     return user
                 }
+                context.performAndWait {
                 do {
-                    try context.save()
+                        try context.save()
                 } catch {
                     completion?(.failure(error))
                     preconditionFailure()
+                }
                 }
 
                 completion?(.success(users))

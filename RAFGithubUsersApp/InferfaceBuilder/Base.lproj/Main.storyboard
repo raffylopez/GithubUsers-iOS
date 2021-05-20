@@ -42,7 +42,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lorem ipsum dolor sit" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lDM-xp-l2F">
-                                                <rect key="frame" x="61" y="216" width="292" height="33.5"/>
+                                                <rect key="frame" x="20" y="216" width="374" height="33.5"/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="28"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -78,7 +78,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="login" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CgS-se-yPz">
-                                                <rect key="frame" x="185" y="253.5" width="44.5" height="26"/>
+                                                <rect key="frame" x="40" y="253.5" width="334" height="26"/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="22"/>
                                                 <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -103,7 +103,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XA5-ed-CtI">
-                                                <rect key="frame" x="18" y="535" width="27.5" height="20"/>
+                                                <rect key="frame" x="18" y="535" width="27.5" height="20.5"/>
                                                 <attributedString key="attributedText">
                                                     <fragment content=" ico">
                                                         <attributes>
@@ -119,7 +119,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z41-Ic-0Un">
-                                                <rect key="frame" x="20" y="569" width="23" height="20"/>
+                                                <rect key="frame" x="20" y="569.5" width="23" height="20.5"/>
                                                 <attributedString key="attributedText">
                                                     <fragment content="ico">
                                                         <attributes>
@@ -134,7 +134,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3LT-Bz-M9I">
-                                                <rect key="frame" x="20" y="603" width="23" height="20"/>
+                                                <rect key="frame" x="20" y="604" width="23" height="20.5"/>
                                                 <attributedString key="attributedText">
                                                     <fragment content="ico">
                                                         <attributes>
@@ -148,10 +148,10 @@
                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
                                                 </userDefinedRuntimeAttributes>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dtk-Kb-p5h">
-                                                <rect key="frame" x="20" y="853" width="374" height="34"/>
-                                                <color key="backgroundColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <state key="normal" title="Save">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dtk-Kb-p5h">
+                                                <rect key="frame" x="20" y="860.5" width="374" height="34"/>
+                                                <color key="backgroundColor" red="0.13804864880000001" green="0.52657216790000005" blue="0.2095660567" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal" title="Save Note">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
                                             </button>
@@ -173,24 +173,24 @@
                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
                                                 </userDefinedRuntimeAttributes>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Location Placeholder Value" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vqn-5T-6Ru">
-                                                <rect key="frame" x="51" y="535" width="197.5" height="20"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Location Placeholder Value" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vqn-5T-6Ru">
+                                                <rect key="frame" x="51" y="535" width="343" height="20.5"/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                 <nil key="highlightedColor"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
                                                 </userDefinedRuntimeAttributes>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email Placeholder Value" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="stt-8P-lBI">
-                                                <rect key="frame" x="51" y="569" width="174" height="20"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email Placeholder Value" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="stt-8P-lBI">
+                                                <rect key="frame" x="51" y="569.5" width="343" height="20.5"/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                 <nil key="highlightedColor"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
                                                 </userDefinedRuntimeAttributes>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hireability Placeholder Value" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ESA-uG-OTN">
-                                                <rect key="frame" x="51" y="603" width="204.5" height="20"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hireability Placeholder Value" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ESA-uG-OTN">
+                                                <rect key="frame" x="51" y="604" width="343" height="20.5"/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                 <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -199,7 +199,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="AqR-WK-wyC">
-                                                <rect key="frame" x="20" y="665" width="374" height="180"/>
+                                                <rect key="frame" x="20" y="666.5" width="374" height="180"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="180" id="uph-Ed-uZI"/>
@@ -208,7 +208,7 @@
                                                 <fontDescription key="fontDescription" type="system" weight="thin" pointSize="17"/>
                                                 <textInputTraits key="textInputTraits" autocorrectionType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                             </textView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ico" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tzz-VK-d12">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="253" verticalHuggingPriority="251" text="ico" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tzz-VK-d12">
                                                 <rect key="frame" x="20" y="398" width="23" height="20"/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                                                 <nil key="textColor"/>
@@ -227,7 +227,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ico" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nzX-2z-jVa">
-                                                <rect key="frame" x="20" y="637" width="23" height="20"/>
+                                                <rect key="frame" x="20" y="638.5" width="23" height="20"/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -236,7 +236,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EtB-ok-OIz">
-                                                <rect key="frame" x="51" y="637" width="37" height="20"/>
+                                                <rect key="frame" x="51" y="638.5" width="37" height="20"/>
                                                 <attributedString key="attributedText">
                                                     <fragment content="Note">
                                                         <attributes>
@@ -249,6 +249,13 @@
                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
                                                 </userDefinedRuntimeAttributes>
                                             </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IMH-dN-e3J">
+                                                <rect key="frame" x="20" y="902.5" width="374" height="34"/>
+                                                <color key="backgroundColor" red="0.97266167400000003" green="0.97649759049999996" blue="0.98052924870000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal" title="Delete Note">
+                                                    <color key="titleColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                         <constraints>
@@ -257,6 +264,7 @@
                                             <constraint firstItem="vqn-5T-6Ru" firstAttribute="leading" secondItem="Odd-Sv-OjI" secondAttribute="leading" id="3o2-Wc-ZKB"/>
                                             <constraint firstItem="stt-8P-lBI" firstAttribute="top" secondItem="vqn-5T-6Ru" secondAttribute="bottom" constant="14" id="4yz-q6-lvS"/>
                                             <constraint firstItem="PKy-fU-e6B" firstAttribute="top" secondItem="C82-WE-cQs" secondAttribute="bottom" constant="4" id="5IS-Pt-7UZ"/>
+                                            <constraint firstItem="IMH-dN-e3J" firstAttribute="top" secondItem="dtk-Kb-p5h" secondAttribute="bottom" constant="8" id="8sb-AV-Nbx"/>
                                             <constraint firstItem="Vg1-ne-4eS" firstAttribute="top" secondItem="Odd-Sv-OjI" secondAttribute="bottom" constant="4" id="8vr-qu-F6g"/>
                                             <constraint firstItem="iN0-bL-dAB" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="99i-XQ-AKt"/>
                                             <constraint firstItem="EtB-ok-OIz" firstAttribute="top" secondItem="ESA-uG-OTN" secondAttribute="bottom" constant="14" id="ACI-dx-FVQ"/>
@@ -264,10 +272,13 @@
                                             <constraint firstItem="Vg1-ne-4eS" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.75" constant="1" id="BHI-qq-68d"/>
                                             <constraint firstItem="PKy-fU-e6B" firstAttribute="leading" secondItem="C82-WE-cQs" secondAttribute="leading" id="DhL-6q-Wg2"/>
                                             <constraint firstAttribute="height" constant="1000" id="E3B-Dy-maD"/>
+                                            <constraint firstAttribute="trailing" secondItem="stt-8P-lBI" secondAttribute="trailing" constant="20" id="Fge-3q-L90"/>
+                                            <constraint firstItem="lDM-xp-l2F" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="Fwr-sS-eIM"/>
                                             <constraint firstItem="lDM-xp-l2F" firstAttribute="top" secondItem="iN0-bL-dAB" secondAttribute="bottom" constant="18" id="GKw-sM-oXU"/>
                                             <constraint firstItem="Ox3-ip-X6D" firstAttribute="centerX" secondItem="Tzz-VK-d12" secondAttribute="centerX" id="HNe-uc-UQY"/>
                                             <constraint firstItem="nzX-2z-jVa" firstAttribute="top" secondItem="EtB-ok-OIz" secondAttribute="top" id="Hb5-2f-Liu"/>
                                             <constraint firstItem="AqR-WK-wyC" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="HtF-m5-zKY"/>
+                                            <constraint firstAttribute="trailing" secondItem="CgS-se-yPz" secondAttribute="trailing" constant="40" id="MHa-s8-H4I"/>
                                             <constraint firstItem="ESA-uG-OTN" firstAttribute="leading" secondItem="stt-8P-lBI" secondAttribute="leading" id="Mwv-i8-igh"/>
                                             <constraint firstItem="C82-WE-cQs" firstAttribute="top" secondItem="ViU-J9-u6E" secondAttribute="bottom" constant="28" id="Nnz-mA-fbm"/>
                                             <constraint firstItem="XA5-ed-CtI" firstAttribute="centerX" secondItem="Ox3-ip-X6D" secondAttribute="centerX" id="OD9-Yy-buS"/>
@@ -285,6 +296,7 @@
                                             <constraint firstItem="Tzz-VK-d12" firstAttribute="top" secondItem="C82-WE-cQs" secondAttribute="top" id="YkM-Dj-zAZ"/>
                                             <constraint firstItem="CgS-se-yPz" firstAttribute="centerX" secondItem="lDM-xp-l2F" secondAttribute="centerX" id="YxL-m3-34L"/>
                                             <constraint firstItem="lDM-xp-l2F" firstAttribute="centerX" secondItem="iN0-bL-dAB" secondAttribute="centerX" id="ZXH-Uw-uju"/>
+                                            <constraint firstAttribute="trailing" secondItem="vqn-5T-6Ru" secondAttribute="trailing" constant="20" id="aF0-Ac-yvj"/>
                                             <constraint firstItem="Odd-Sv-OjI" firstAttribute="top" secondItem="PKy-fU-e6B" secondAttribute="bottom" constant="14" id="agC-Pa-7hb"/>
                                             <constraint firstAttribute="trailing" secondItem="AqR-WK-wyC" secondAttribute="trailing" constant="20" id="azH-SC-mjs"/>
                                             <constraint firstItem="nzX-2z-jVa" firstAttribute="centerX" secondItem="3LT-Bz-M9I" secondAttribute="centerX" id="b6W-dr-IME"/>
@@ -292,16 +304,22 @@
                                             <constraint firstItem="ViU-J9-u6E" firstAttribute="centerX" secondItem="waL-2C-ndG" secondAttribute="centerX" id="cx0-5c-n1q"/>
                                             <constraint firstItem="XA5-ed-CtI" firstAttribute="top" secondItem="vqn-5T-6Ru" secondAttribute="top" id="cyx-5t-1AM"/>
                                             <constraint firstItem="AqR-WK-wyC" firstAttribute="top" secondItem="EtB-ok-OIz" secondAttribute="bottom" constant="8" id="czb-bA-vyt"/>
+                                            <constraint firstAttribute="trailing" secondItem="ESA-uG-OTN" secondAttribute="trailing" constant="20" id="e32-ZR-BE0"/>
                                             <constraint firstItem="z41-Ic-0Un" firstAttribute="height" secondItem="stt-8P-lBI" secondAttribute="height" id="ggV-Ta-W8g"/>
                                             <constraint firstItem="Odd-Sv-OjI" firstAttribute="leading" secondItem="C82-WE-cQs" secondAttribute="leading" id="hbQ-cI-QdN"/>
                                             <constraint firstItem="vqn-5T-6Ru" firstAttribute="top" secondItem="Vg1-ne-4eS" secondAttribute="bottom" constant="14" id="hrl-0v-tOa"/>
                                             <constraint firstItem="ViU-J9-u6E" firstAttribute="top" secondItem="waL-2C-ndG" secondAttribute="baseline" constant="28" id="i8J-KD-Gic"/>
                                             <constraint firstItem="C82-WE-cQs" firstAttribute="leading" secondItem="Tzz-VK-d12" secondAttribute="trailing" constant="8" id="iMa-7U-UqW"/>
                                             <constraint firstItem="PKy-fU-e6B" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.75" constant="1" id="kf4-ki-OoP"/>
+                                            <constraint firstItem="IMH-dN-e3J" firstAttribute="height" secondItem="dtk-Kb-p5h" secondAttribute="height" id="mEI-X6-zKj"/>
+                                            <constraint firstItem="IMH-dN-e3J" firstAttribute="width" secondItem="dtk-Kb-p5h" secondAttribute="width" id="nTf-yv-ov1"/>
                                             <constraint firstItem="EtB-ok-OIz" firstAttribute="leading" secondItem="ESA-uG-OTN" secondAttribute="leading" id="phk-jQ-JMi"/>
-                                            <constraint firstItem="dtk-Kb-p5h" firstAttribute="top" secondItem="AqR-WK-wyC" secondAttribute="bottom" constant="8" id="rNP-Hv-M40"/>
+                                            <constraint firstItem="IMH-dN-e3J" firstAttribute="leading" secondItem="dtk-Kb-p5h" secondAttribute="leading" id="r6B-pF-psl"/>
+                                            <constraint firstItem="CgS-se-yPz" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="40" id="r8r-C0-WRU"/>
+                                            <constraint firstItem="dtk-Kb-p5h" firstAttribute="top" secondItem="AqR-WK-wyC" secondAttribute="bottom" constant="14" id="rNP-Hv-M40"/>
                                             <constraint firstItem="z41-Ic-0Un" firstAttribute="top" secondItem="stt-8P-lBI" secondAttribute="top" id="sSJ-gJ-VLc"/>
                                             <constraint firstItem="Ox3-ip-X6D" firstAttribute="top" secondItem="Odd-Sv-OjI" secondAttribute="top" id="uau-sK-XPF"/>
+                                            <constraint firstAttribute="trailing" secondItem="lDM-xp-l2F" secondAttribute="trailing" constant="20" id="vpG-eL-804"/>
                                             <constraint firstItem="z41-Ic-0Un" firstAttribute="centerX" secondItem="XA5-ed-CtI" secondAttribute="centerX" id="xXL-lw-OqL"/>
                                             <constraint firstItem="nzX-2z-jVa" firstAttribute="height" secondItem="EtB-ok-OIz" secondAttribute="height" id="z5e-s2-ymg"/>
                                             <constraint firstItem="iN0-bL-dAB" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="28" id="zJh-PD-gO5"/>
@@ -330,6 +348,7 @@
                     <connections>
                         <outlet property="bioTopConstraint" destination="PtI-S3-lpu" id="Fad-r6-nEr"/>
                         <outlet property="boxBlue" destination="iN0-bL-dAB" id="rH2-fW-sUt"/>
+                        <outlet property="btnClear" destination="IMH-dN-e3J" id="4FK-Rn-rHS"/>
                         <outlet property="btnSave" destination="dtk-Kb-p5h" id="Jft-2E-7if"/>
                         <outlet property="imgUser" destination="mEz-Pu-Lfx" id="zmq-uR-8kU"/>
                         <outlet property="lblBio" destination="waL-2C-ndG" id="hlI-UB-R4U"/>

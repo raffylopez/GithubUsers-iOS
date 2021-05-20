@@ -8,6 +8,6 @@
 
 import UIKit
 
-protocol ProfileViewDelegate: class {
+protocol ProfileViewDelegate: class, ViewModelDelegate {
     func didSaveNote(at indexPath: IndexPath)
 }

@@ -10,5 +10,5 @@ import UIKit
 
 protocol UserTableViewCell: UITableViewCell {
     func update(displaying image: (UIImage, ImageSource)?)
-    func updateWith(user: User)
+    func updateWith(user: User, indexPath: IndexPath)
 }

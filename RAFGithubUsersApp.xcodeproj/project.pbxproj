@@ -56,6 +56,8 @@
 		E1E141482651AD3300C282FE /* User+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E141472651AD3200C282FE /* User+CoreDataClass.swift */; };
 		E1E1414A265443EE00C282FE /* DebugUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E14149265443EC00C282FE /* DebugUserTableViewCell.swift */; };
 		E1E1414C26544A8400C282FE /* DebugUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E1414B26544A8300C282FE /* DebugUtils.swift */; };
+		E1E217972656BAC100B2A365 /* ProfileViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E217962656B66A00B2A365 /* ProfileViewDelegate.swift */; };
+		E1E2179A2656C83D00B2A365 /* UIButtonExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E217992656C83D00B2A365 /* UIButtonExtensions.swift */; };
 		E1F129B0265029D600EF34F8 /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F129AF265029D500EF34F8 /* CoreDataService.swift */; };
 		E1F129B326503B8100EF34F8 /* UsersProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F129B226503B0600EF34F8 /* UsersProvider.swift */; };
 		E1F2C142264D826200041F03 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F2C141264D826200041F03 /* Toast.swift */; };
@@ -162,6 +164,7 @@
 		E1E14149265443EC00C282FE /* DebugUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugUserTableViewCell.swift; sourceTree = "<group>"; };
 		E1E1414B26544A8300C282FE /* DebugUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugUtils.swift; sourceTree = "<group>"; };
 		E1E217962656B66A00B2A365 /* ProfileViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewDelegate.swift; sourceTree = "<group>"; };
+		E1E217992656C83D00B2A365 /* UIButtonExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonExtensions.swift; sourceTree = "<group>"; };
 		E1F129AF265029D500EF34F8 /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
 		E1F129B226503B0600EF34F8 /* UsersProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersProvider.swift; sourceTree = "<group>"; };
 		E1F2C141264D826200041F03 /* Toast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
@@ -560,6 +563,7 @@
 			isa = PBXGroup;
 			children = (
 				E1FA38F4264B0867001EFA5C /* StringExtensions.swift */,
+				E1E217992656C83D00B2A365 /* UIButtonExtensions.swift */,
 				E1510C6C264C462200E59C35 /* UIViewExtensions.swift */,
 				E1510C68264C428B00E59C35 /* UIImageExtensions.swift */,
 			);
@@ -712,6 +716,7 @@
 				E160EBC1264A6D44002820EC /* UsersViewController.swift in Sources */,
 				E1E1414C26544A8400C282FE /* DebugUtils.swift in Sources */,
 				E129A665264EB4130035A99B /* UserInfoPresenter.swift in Sources */,
+				E1E217972656BAC100B2A365 /* ProfileViewDelegate.swift in Sources */,
 				E189A180264AE3FD00CBD45A /* AppError.swift in Sources */,
 				E1F447BC26511B560073B193 /* UserInfoProvider.swift in Sources */,
 				E189A17D264AE0D400CBD45A /* GithubUser.swift in Sources */,
@@ -728,6 +733,7 @@
 				E1E1414A265443EE00C282FE /* DebugUserTableViewCell.swift in Sources */,
 				E189A166264AD86600CBD45A /* AppConfig.swift in Sources */,
 				E1FA38F2264B083A001EFA5C /* UserPresenter.swift in Sources */,
+				E1E2179A2656C83D00B2A365 /* UIButtonExtensions.swift in Sources */,
 				E160EBE3264A7686002820EC /* ViewControllersFactory.swift in Sources */,
 				E1510C66264C10A600E59C35 /* FFBadgedBarButtonItem.m in Sources */,
 				E1F6E025264D08E800A023A8 /* ShimmerUserTableViewCell.swift in Sources */,

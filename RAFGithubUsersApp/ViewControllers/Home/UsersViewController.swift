@@ -299,7 +299,7 @@ class UsersViewController: UITableViewController {
     
     func fetchMoreTableDataDisplayingResults(completion: (()->Void)? = nil) {
         ToastAlertMessageDisplay.main.makeToastActivity()
-        self.viewModel.fetchFromNetworkMergingWithDatastore {
+        self.viewModel.updateUsers {
             ToastAlertMessageDisplay.main.hideToastActivity()
         }
         
@@ -396,7 +396,7 @@ extension UsersViewController {
                 getUserTableViewCell(associatedUser: user, AlternativeNotedTableViewCell.self, cellForRowAt: indexPath) :
                 getUserTableViewCell(associatedUser: user, AlternativeTableViewCell.self, cellForRowAt: indexPath)
             cell.delegate = self
-            cell.updateWith(user: user)
+            cell.updateWith(user: user, indexPath: indexPath)
             return cell
         }
         cell = hasNote ?
@@ -404,7 +404,7 @@ extension UsersViewController {
             getUserTableViewCell(associatedUser: user, StandardTableViewCell.self, cellForRowAt: indexPath)
 
         cell.delegate = self
-        cell.updateWith(user: user)
+        cell.updateWith(user: user, indexPath: indexPath)
 //        self.navigationItem.rightBarButtonItem?.title = "\(indexPath.row)"
         //        let cell: UserTableViewCellBase = multiple(of: 4, indexPath.row + 1) && confImageInversionOnFourthRows ?
         //            getUserTableViewCell(associatedUser: user, AlternativeTableViewCell.self, cellForRowAt: indexPath) :
@@ -419,8 +419,13 @@ extension UsersViewController: UserListTableViewCellDelegate {
     }
     
     func didTouchCellPanel(cell: UserTableViewCellBase) {
-        let viewModel = ProfileViewModel(user: cell.user, apiService: GithubUsersApi(), databaseService: CoreDataService.shared)
-        self.navigationController?.pushViewController(ViewControllersFactory.instance(vcType: .userProfile(viewModel)), animated: true)
+        guard !self.viewModel.isFetchInProgress else {
+            return
+        }
+        let viewModel = ProfileViewModel(cell: cell, apiService: GithubUsersApi(), databaseService: CoreDataService.shared)
+        let profileViewController = ViewControllersFactory.instance(vcType: .userProfile(viewModel)) as! ProfileViewController
+        profileViewController.delegate = self
+        self.navigationController?.pushViewController(profileViewController, animated: true)
     }
     
 }
@@ -497,6 +502,10 @@ extension UsersViewController: ViewModelDelegate {
     func onFetchDone() {
         //
     }
-    
-    
+}
+
+extension UsersViewController: ProfileViewDelegate {
+    func didSaveNote(at indexPath: IndexPath) {
+        self.tableView.reloadRows(at: [indexPath], with: .none)
+    }
 }

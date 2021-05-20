@@ -59,8 +59,8 @@ class ShimmerTableViewCell: UserTableViewCellBase {
         UIHelper.initializeView(view: stackView, parent: self)
     }
     
-    override internal func updateWith(user: User) {
-        super.updateWith(user: user)
+    override internal func updateWith(user: User, indexPath: IndexPath) {
+        super.updateWith(user: user, indexPath: indexPath)
         OperationQueue.main.addOperation {
             self.skeletonize(view: self.imgViewChar)
         }

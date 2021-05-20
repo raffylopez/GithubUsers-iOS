@@ -11,6 +11,7 @@ import SkeletonView
 import FontAwesome
 
 class ProfileViewController: UIViewController {
+    var delegate: ProfileViewDelegate! = nil
     @IBOutlet var boxBlue: UIView!
     @IBOutlet var imgUser: UIImageView!
     
@@ -33,6 +34,7 @@ class ProfileViewController: UIViewController {
     
     @IBOutlet var tvNote: UITextView!
     @IBOutlet var btnSave: UIButton!
+    @IBOutlet var btnClear: UIButton!
     
     @IBOutlet var nameTopContraint: NSLayoutConstraint!
     @IBOutlet var bioTopConstraint: NSLayoutConstraint!
@@ -62,7 +64,7 @@ class ProfileViewController: UIViewController {
     private func showSkeletons() {
         let tags = [lblCompanyIcon, lblBlogIcon, lblEmailIcon, lblHirabilityIcon, lblNoteIcon, lblCompanyTag, lblBlogTag, lblLocationIcon, lblEmailTag, lblHireabilityTag, lblNoteTag]
         let values = [lblName, lblLogin, lblBio, lblFollow, lblCompany, lblBlog, lblLocation, lblEmail, lblHireability]
-        let views = [boxBlue, tvNote, btnSave ]
+        let views = [boxBlue, tvNote, btnSave, btnClear ]
         tags.forEach { self.skeletonize(label: $0!) }
         values.forEach { self.skeletonize(label: $0!) }
         views.forEach { self.skeletonize(view: $0!) }
@@ -71,13 +73,12 @@ class ProfileViewController: UIViewController {
     private func hideSkeletons() {
         let tags = [lblCompanyIcon, lblBlogIcon, lblEmailIcon, lblHirabilityIcon, lblNoteIcon, lblCompanyTag, lblBlogTag, lblLocationIcon, lblEmailTag, lblHireabilityTag, lblNoteTag]
         let values = [lblName, lblLogin, lblBio, lblFollow, lblCompany, lblBlog, lblLocation, lblEmail, lblHireability]
-        let views = [tvNote, btnSave ]
+        let views = [tvNote, btnSave, btnClear ]
         tags.forEach { $0?.hideSkeleton() }
         values.forEach { $0?.hideSkeleton() }
         views.forEach { $0?.hideSkeleton() }
     }
     
-
     private func setupLayout() {
         tvNote.layer.borderColor = UIColor.systemGray.cgColor
         tvNote.layer.borderWidth = 0
@@ -90,11 +91,16 @@ class ProfileViewController: UIViewController {
         boxBlue.layer.cornerRadius = boxBlue.frame.size.width / 2
         boxBlue.clipsToBounds = true
         
-        btnSave.setTitleColor(.red, for: .selected)
-        
         btnSave.layer.cornerRadius = 5
-        btnSave.addTarget(self, action: #selector(btnSavePressed), for: .touchDown)
-        
+        btnSave.addTarget(self, action: #selector(btnSavePressed), for: .touchUpInside)
+
+        btnClear.setTitleColor(.red, for: .selected)
+        btnClear.layer.cornerRadius = 5
+        btnClear.layer.borderColor = UIColor.systemGray6.cgColor
+        btnClear.addTarget(self, action: #selector(btnClearPressed), for: .touchUpInside)
+
+        btnClear.clipsToBounds = true
+        btnSave.clipsToBounds = true
         UIHelper.configureAttributedLabelWithIcon(label: self.lblCompanyIcon, icon: .building)
         UIHelper.configureAttributedLabelWithIcon(label: self.lblBlogIcon, icon: .globe, style: .solid)
         UIHelper.configureAttributedLabelWithIcon(label: self.lblLocationIcon, icon: .mapMarker, style: .solid)
@@ -105,7 +111,29 @@ class ProfileViewController: UIViewController {
         showSkeletons()
     }
     
+    @objc func btnClearPressed() {
+        self.tvNote.text = ""
+        if let userInfo = self.viewModel.userInfo {
+            userInfo.note = self.tvNote.text
+            userInfo.user = self.viewModel.user
+            do {
+                try self.viewModel.databaseService.save()
+            } catch {
+                preconditionFailure("Unable to save note! \(error)")
+            }
+            ToastAlertMessageDisplay.main.display(message: "Note deleted.".localized())
+            delegate.didSaveNote(at: self.viewModel.cell.indexPath)
+        }
+    }
+    
     @objc func btnSavePressed() {
+        let hcolor = UIColor(red: 28/255, green: 107/255, blue: 43/255, alpha: 1)
+        btnSave.setBackgroundColor(hcolor, for: .focused)
+        btnSave.setBackgroundColor(hcolor, for: .highlighted)
+        btnSave.setBackgroundColor(hcolor, for: .selected)
+//        btnSave.setTitleColor(hcolor, for: .focused)
+//        btnSave.setTitleColor(hcolor, for: .highlighted)
+//        btnSave.setTitleColor(hcolor, for: .selected)
         if let userInfo = self.viewModel.userInfo {
             userInfo.note = self.tvNote.text
             userInfo.user = self.viewModel.user
@@ -115,6 +143,7 @@ class ProfileViewController: UIViewController {
                 preconditionFailure("Unable to save note! \(error)")
             }
             ToastAlertMessageDisplay.main.display(message: "Note saved.".localized())
+            delegate.didSaveNote(at: self.viewModel.cell.indexPath)
         }
     }
     

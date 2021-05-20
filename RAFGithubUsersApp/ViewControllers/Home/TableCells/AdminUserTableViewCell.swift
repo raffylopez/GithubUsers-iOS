@@ -20,8 +20,8 @@ class AdminUserTableViewCell: UserTableViewCellBase {
         super.init(coder: coder)
     }
     
-    override func updateWith(user: User) {
-        super.updateWith(user: user)
+    override internal func updateWith(user: User, indexPath: IndexPath) {
+        super.updateWith(user: user, indexPath: indexPath)
         self.lblName.textColor = .red
     }
 
