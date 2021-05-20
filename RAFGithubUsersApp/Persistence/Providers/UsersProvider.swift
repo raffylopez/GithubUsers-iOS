@@ -13,7 +13,7 @@ protocol UsersProvider {
     func translate(from apiUser: GithubUser) -> User
     func translate(from apiUser: GithubUser, with userInfo: UserInfo) -> User
     func getUsers(callback: @escaping (Result<[User], Error>) -> Void)
-    func getUsers(limit: Int, callback: @escaping (Result<[User], Error>) -> Void)
+    func getUsers(limit: Int?, callback: @escaping (Result<[User], Error>) -> Void)
     func getUserCount() -> Int
     func getUser(id: Int) -> User?
     func saveAll() throws
@@ -97,12 +97,14 @@ extension CoreDataService: UsersProvider {
         }
     }
     
-    /* Gets all users. May include duplicates. */
-    func getUsers(limit: Int, callback: @escaping (Result<[User], Error>) -> Void) {
+    /* Get n users. If limit is nil, fetch all */
+    func getUsers(limit: Int? = nil, callback: @escaping (Result<[User], Error>) -> Void) {
         let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: #keyPath(User.id), ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
-        fetchRequest.fetchLimit = limit
+        if let limit = limit {
+            fetchRequest.fetchLimit = limit
+        }
         context.perform {
             do {
                 var allUsers: [User]!

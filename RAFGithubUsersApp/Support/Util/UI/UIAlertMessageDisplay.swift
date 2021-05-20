@@ -18,6 +18,7 @@ class ToastAlertMessageDisplay: UIAlertMessageDisplay {
     static let appView = UIApplication.shared.windows.first?.rootViewController?.view
     func display(message: String) {
         OperationQueue.main.addOperation {
+            Self.appView?.hideAllToasts()
             Self.appView?.makeToast(message)
         }
     }
@@ -26,9 +27,16 @@ class ToastAlertMessageDisplay: UIAlertMessageDisplay {
             Self.appView?.hideAllToasts()
         }
     }
+    func stickyToast(message: String) {
+        OperationQueue.main.addOperation {
+            Self.appView?.hideAllToasts()
+            Self.appView?.makeToast(message, duration: TimeInterval(Int.max))
+
+        }
+    }
     func makeToastActivity() {
         OperationQueue.main.addOperation {
-            Self.appView?.makeToastActivity(.bottom)
+            Self.appView?.makeToastActivity(.center)
         }
     }
     func hideToastActivity() {

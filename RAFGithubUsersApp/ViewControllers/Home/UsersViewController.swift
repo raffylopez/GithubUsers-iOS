@@ -156,8 +156,8 @@ class UsersViewController: UITableViewController {
         self.viewModel.delegate = self
         let onDataAvailable = {
 
-            print("COREDATA TOTAL USERS DATASOURCE COUNT (onDataAvailable): \(self.viewModel.users.count)" )
-            print("COREDATA UserCount: \(self.viewModel.users.count)")
+            print("STATS TOTAL USERS DATASOURCE COUNT (onDataAvailable): \(self.viewModel.users.count)" )
+            print("STATS UserCount: \(self.viewModel.users.count)")
             
 //            self.viewModel.currentPage = 1 /* DEBUG: FORCE*/
 
@@ -189,7 +189,7 @@ class UsersViewController: UITableViewController {
                 let newIndexPathsToInsert: [IndexPath] = self.calculateIndexPathsToInsert(from: self.viewModel.lastBatchCount)
                 let indexPathsToReload = self.visibleIndexPathsToReload(intersecting: newIndexPathsToInsert)
                 
-                print("COREDATA To reload(new): \(newIndexPathsToInsert.count), since: \(self.viewModel.since), currentCount: \(self.viewModel.currentCount), lastBatchCount: \(self.viewModel.lastBatchCount), start: \(newIndexPathsToInsert[0].row), end: end: \(newIndexPathsToInsert[newIndexPathsToInsert.count-1].row) ")
+                print("STATS To reload(new): \(newIndexPathsToInsert.count), since: \(self.viewModel.since), currentCount: \(self.viewModel.currentCount), lastBatchCount: \(self.viewModel.lastBatchCount), start: \(newIndexPathsToInsert[0].row), end: end: \(newIndexPathsToInsert[newIndexPathsToInsert.count-1].row) ")
                 
                 /* Ensure slide animations are disabled on row insertion (slide animation used by default on insert) */
                 UIView.setAnimationsEnabled(false)
@@ -285,7 +285,7 @@ class UsersViewController: UITableViewController {
     
     private func clearData() {
         self.viewModel.clearData()
-        self.tableView.reloadData()
+        self.tableView.reloadData() // TODO
     }
     
     // MARK: - Selector targets
@@ -367,8 +367,8 @@ class UsersViewController: UITableViewController {
     private func calculateIndexPathsToInsert(from newUsers: Int, offset: Int = 0) -> [IndexPath] {
         let startIndex = (self.viewModel.users.count - newUsers) + offset
         let endIndex = (startIndex + newUsers)
-        print("COREDATA vmuc:\(self.viewModel.users.count), n:\(newUsers)")
-        print("COREDATA STARTINDEX: \(startIndex), ENDINDEX: \(endIndex)")
+        print("STATS vmuc:\(self.viewModel.users.count), n:\(newUsers)")
+        print("STATS STARTINDEX: \(startIndex), ENDINDEX: \(endIndex)")
 //        if self.viewModel.currentPage == 1 {
 //            return ((startIndex)..<(endIndex-1)).map { IndexPath(row: $0, section: 0) }
 //        }
@@ -392,7 +392,7 @@ extension UsersViewController {
             getUserTableViewCell(associatedUser: user, StandardTableViewCell.self, cellForRowAt: indexPath)
         cell.delegate = self
         cell.updateWith(user: user)
-        
+//        self.navigationItem.rightBarButtonItem?.title = "\(indexPath.row)"
         return cell
     }
 }
