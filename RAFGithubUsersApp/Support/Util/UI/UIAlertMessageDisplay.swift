@@ -31,12 +31,11 @@ class ToastAlertMessageDisplay: UIAlertMessageDisplay {
         OperationQueue.main.addOperation {
             Self.appView?.hideAllToasts()
             Self.appView?.makeToast(message, duration: TimeInterval(Int.max))
-
         }
     }
     func makeToastActivity() {
         OperationQueue.main.addOperation {
-            Self.appView?.makeToastActivity(.center)
+            Self.appView?.makeToastActivity(.bottom)
         }
     }
     func hideToastActivity() {

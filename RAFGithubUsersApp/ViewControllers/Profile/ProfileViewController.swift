@@ -77,20 +77,7 @@ class ProfileViewController: UIViewController {
         views.forEach { $0?.hideSkeleton() }
     }
     
-    func configureIcon(label: inout UILabel, icon: FontAwesome, style: FontAwesomeStyle = .regular, prepend: Bool = false) {
-        guard let labelText = label.attributedText else { return }
-        let fontSize = label.font.pointSize
-        let iconText = prepend ? "\(String.fontAwesomeIcon(name: icon)) ": String.fontAwesomeIcon(name: icon)
-        let fontFontAwesome = UIFont.fontAwesome(ofSize: fontSize, style: style)
-        let iconTextAttributed = NSMutableAttributedString(string:iconText, attributes: [NSAttributedString.Key.font: fontFontAwesome])
-        if prepend {
-            let mutableAttributedText = NSMutableAttributedString(attributedString: labelText)
-            iconTextAttributed.append(mutableAttributedText)
-            print(iconTextAttributed)
-        }
-        label.attributedText = iconTextAttributed
-    }
-    
+
     private func setupLayout() {
         tvNote.layer.borderColor = UIColor.systemGray.cgColor
         tvNote.layer.borderWidth = 0
@@ -108,12 +95,12 @@ class ProfileViewController: UIViewController {
         btnSave.layer.cornerRadius = 5
         btnSave.addTarget(self, action: #selector(btnSavePressed), for: .touchDown)
         
-        configureIcon(label: &self.lblCompanyIcon, icon: .building)
-        configureIcon(label: &self.lblBlogIcon, icon: .globe, style: .solid)
-        configureIcon(label: &self.lblLocationIcon, icon: .mapMarker, style: .solid)
-        configureIcon(label: &self.lblEmailIcon, icon: .envelope)
-        configureIcon(label: &self.lblHirabilityIcon, icon: .briefcase, style: .solid)
-        self.configureIcon(label: &self.lblNoteIcon, icon: .stickyNote)
+        UIHelper.configureAttributedLabelWithIcon(label: self.lblCompanyIcon, icon: .building)
+        UIHelper.configureAttributedLabelWithIcon(label: self.lblBlogIcon, icon: .globe, style: .solid)
+        UIHelper.configureAttributedLabelWithIcon(label: self.lblLocationIcon, icon: .mapMarker, style: .solid)
+        UIHelper.configureAttributedLabelWithIcon(label: self.lblEmailIcon, icon: .envelope)
+        UIHelper.configureAttributedLabelWithIcon(label: self.lblHirabilityIcon, icon: .briefcase, style: .solid)
+        UIHelper.configureAttributedLabelWithIcon(label: self.lblNoteIcon, icon: .stickyNote)
 
         showSkeletons()
     }
@@ -164,8 +151,6 @@ class ProfileViewController: UIViewController {
     }
 }
 
-
-
 extension ProfileViewController: ViewModelDelegate {
     func onDataAvailable() {
         let presented = self.viewModel.userInfo.presented
@@ -186,7 +171,7 @@ extension ProfileViewController: ViewModelDelegate {
             self.lblHireability.text = presented.hireability
             let lblFollowText = "\(presented.followers) followers • \(presented.following) following"
             self.lblFollow.attributedText = NSAttributedString(string: lblFollowText)
-            self.configureIcon(label: &self.lblFollow, icon: .userFriends, style: .solid, prepend: true)
+            UIHelper.configureAttributedLabelWithIcon(label: self.lblFollow, icon: .userFriends, style: .solid, prepend: true)
             self.tvNote.text = presented.note
             self.hideSkeletons()
             self.viewModel.fetchImage(for: self.viewModel.user) { result in

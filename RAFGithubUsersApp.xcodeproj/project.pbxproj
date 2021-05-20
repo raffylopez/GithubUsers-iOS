@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E12437782656A94A004C4DCA /* NoteInvertedUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12437772656A94A004C4DCA /* NoteInvertedUserTableViewCell.swift */; };
+		E124377A2656AC16004C4DCA /* NoteNormalUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12437792656AC15004C4DCA /* NoteNormalUserTableViewCell.swift */; };
 		E129A665264EB4130035A99B /* UserInfoPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E129A664264EB4130035A99B /* UserInfoPresenter.swift */; };
 		E146CC2D264D887400C3FA51 /* ConnectionMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E146CC2C264D887400C3FA51 /* ConnectionMonitor.swift */; };
 		E146CC2F264D8FEC00C3FA51 /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E146CC2E264D8FEC00C3FA51 /* Reachability.framework */; };
@@ -23,8 +25,6 @@
 		E1510C6F264C478100E59C35 /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1510C6E264C478100E59C35 /* UserTableViewCell.swift */; };
 		E1510C71264C4A9800E59C35 /* UserTableViewCellBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1510C70264C4A9800E59C35 /* UserTableViewCellBase.swift */; };
 		E1510C75264C4D7A00E59C35 /* UserListTableViewCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1510C74264C4D7A00E59C35 /* UserListTableViewCellDelegate.swift */; };
-		E1510C7A264C6A1000E59C35 /* StubUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1510C79264C6A0F00E59C35 /* StubUserTableViewCell.swift */; };
-		E1510C7C264C6A7A00E59C35 /* NoteUserTableViewCell copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1510C7B264C6A7A00E59C35 /* NoteUserTableViewCell copy.swift */; };
 		E1510C80264C9B9300E59C35 /* AdminUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1510C7F264C9B9200E59C35 /* AdminUserTableViewCell.swift */; };
 		E160EBBD264A6D44002820EC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E160EBBC264A6D44002820EC /* AppDelegate.swift */; };
 		E160EBBF264A6D44002820EC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E160EBBE264A6D44002820EC /* SceneDelegate.swift */; };
@@ -54,7 +54,7 @@
 		E1D04A7E264BB58300C4E5FD /* NormalUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D04A7D264BB57F00C4E5FD /* NormalUserTableViewCell.swift */; };
 		E1D04A80264BB5CF00C4E5FD /* UIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D04A7F264BB5CF00C4E5FD /* UIHelper.swift */; };
 		E1E141482651AD3300C282FE /* User+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E141472651AD3200C282FE /* User+CoreDataClass.swift */; };
-		E1E1414A265443EE00C282FE /* NormalUserTableViewCell copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E14149265443EC00C282FE /* NormalUserTableViewCell copy.swift */; };
+		E1E1414A265443EE00C282FE /* DebugUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E14149265443EC00C282FE /* DebugUserTableViewCell.swift */; };
 		E1E1414C26544A8400C282FE /* DebugUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E1414B26544A8300C282FE /* DebugUtils.swift */; };
 		E1F129B0265029D600EF34F8 /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F129AF265029D500EF34F8 /* CoreDataService.swift */; };
 		E1F129B326503B8100EF34F8 /* UsersProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F129B226503B0600EF34F8 /* UsersProvider.swift */; };
@@ -104,6 +104,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E12437772656A94A004C4DCA /* NoteInvertedUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteInvertedUserTableViewCell.swift; sourceTree = "<group>"; };
+		E12437792656AC15004C4DCA /* NoteNormalUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteNormalUserTableViewCell.swift; sourceTree = "<group>"; };
 		E129A664264EB4130035A99B /* UserInfoPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoPresenter.swift; sourceTree = "<group>"; };
 		E146CC2C264D887400C3FA51 /* ConnectionMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionMonitor.swift; sourceTree = "<group>"; };
 		E146CC2E264D8FEC00C3FA51 /* Reachability.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Reachability.framework; path = Carthage/Build/iOS/Reachability.framework; sourceTree = "<group>"; };
@@ -120,7 +122,7 @@
 		E1510C70264C4A9800E59C35 /* UserTableViewCellBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableViewCellBase.swift; sourceTree = "<group>"; };
 		E1510C74264C4D7A00E59C35 /* UserListTableViewCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListTableViewCellDelegate.swift; sourceTree = "<group>"; };
 		E1510C79264C6A0F00E59C35 /* StubUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubUserTableViewCell.swift; sourceTree = "<group>"; };
-		E1510C7B264C6A7A00E59C35 /* NoteUserTableViewCell copy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NoteUserTableViewCell copy.swift"; sourceTree = "<group>"; };
+		E1510C7B264C6A7A00E59C35 /* NoteUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteUserTableViewCell.swift; sourceTree = "<group>"; };
 		E1510C7F264C9B9200E59C35 /* AdminUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminUserTableViewCell.swift; sourceTree = "<group>"; };
 		E1510C83264CF45100E59C35 /* SkeletonView.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SkeletonView.framework; path = Carthage/Build/iOS/SkeletonView.framework; sourceTree = "<group>"; };
 		E160EBB9264A6D44002820EC /* GithubApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GithubApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -157,8 +159,9 @@
 		E1D04A7D264BB57F00C4E5FD /* NormalUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NormalUserTableViewCell.swift; sourceTree = "<group>"; };
 		E1D04A7F264BB5CF00C4E5FD /* UIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIHelper.swift; sourceTree = "<group>"; };
 		E1E141472651AD3200C282FE /* User+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "User+CoreDataClass.swift"; sourceTree = "<group>"; };
-		E1E14149265443EC00C282FE /* NormalUserTableViewCell copy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NormalUserTableViewCell copy.swift"; sourceTree = "<group>"; };
+		E1E14149265443EC00C282FE /* DebugUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugUserTableViewCell.swift; sourceTree = "<group>"; };
 		E1E1414B26544A8300C282FE /* DebugUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugUtils.swift; sourceTree = "<group>"; };
+		E1E217962656B66A00B2A365 /* ProfileViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewDelegate.swift; sourceTree = "<group>"; };
 		E1F129AF265029D500EF34F8 /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
 		E1F129B226503B0600EF34F8 /* UsersProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersProvider.swift; sourceTree = "<group>"; };
 		E1F2C141264D826200041F03 /* Toast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
@@ -166,7 +169,7 @@
 		E1F4479426505C680073B193 /* SKSplashIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKSplashIcon.m; sourceTree = "<group>"; };
 		E1F4479526505C680073B193 /* SKSplashView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKSplashView.h; sourceTree = "<group>"; };
 		E1F4479626505C680073B193 /* SKSplashView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKSplashView.m; sourceTree = "<group>"; };
-		E1F447992650CC610073B193 /* ShimmerUserTableViewCell copy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ShimmerUserTableViewCell copy.swift"; sourceTree = "<group>"; };
+		E1F447992650CC610073B193 /* SkeletonizedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonizedTableViewCell.swift; sourceTree = "<group>"; };
 		E1F447BB26511B560073B193 /* UserInfoProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoProvider.swift; sourceTree = "<group>"; };
 		E1F447BE26511E790073B193 /* UserInfo+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserInfo+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E1F6E024264D08E800A023A8 /* ShimmerUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmerUserTableViewCell.swift; sourceTree = "<group>"; };
@@ -202,6 +205,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E124377B2656ACAD004C4DCA /* Archive */ = {
+			isa = PBXGroup;
+			children = (
+				E1510C7B264C6A7A00E59C35 /* NoteUserTableViewCell.swift */,
+				E1510C79264C6A0F00E59C35 /* StubUserTableViewCell.swift */,
+			);
+			path = Archive;
+			sourceTree = "<group>";
+		};
 		E146CC26264D877600C3FA51 /* FFBadgedBarButtonItem */ = {
 			isa = PBXGroup;
 			children = (
@@ -235,6 +247,7 @@
 		E1510C7D264C70C300E59C35 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				E1E217952656B66000B2A365 /* Base Types */,
 				E160EBE4264A76FF002820EC /* ProfileViewController.swift */,
 			);
 			path = Profile;
@@ -243,15 +256,16 @@
 		E1510C7E264C710F00E59C35 /* TableCells */ = {
 			isa = PBXGroup;
 			children = (
+				E124377B2656ACAD004C4DCA /* Archive */,
 				E1510C78264C4E0000E59C35 /* Base Types */,
 				E1D04A7D264BB57F00C4E5FD /* NormalUserTableViewCell.swift */,
-				E1E14149265443EC00C282FE /* NormalUserTableViewCell copy.swift */,
+				E12437792656AC15004C4DCA /* NoteNormalUserTableViewCell.swift */,
 				E1510C6A264C459200E59C35 /* InvertedUserTableViewCell.swift */,
-				E1510C79264C6A0F00E59C35 /* StubUserTableViewCell.swift */,
+				E12437772656A94A004C4DCA /* NoteInvertedUserTableViewCell.swift */,
+				E1E14149265443EC00C282FE /* DebugUserTableViewCell.swift */,
 				E1F6E024264D08E800A023A8 /* ShimmerUserTableViewCell.swift */,
-				E1F447992650CC610073B193 /* ShimmerUserTableViewCell copy.swift */,
+				E1F447992650CC610073B193 /* SkeletonizedTableViewCell.swift */,
 				E1510C7F264C9B9200E59C35 /* AdminUserTableViewCell.swift */,
-				E1510C7B264C6A7A00E59C35 /* NoteUserTableViewCell copy.swift */,
 			);
 			path = TableCells;
 			sourceTree = "<group>";
@@ -488,6 +502,14 @@
 			path = Home;
 			sourceTree = "<group>";
 		};
+		E1E217952656B66000B2A365 /* Base Types */ = {
+			isa = PBXGroup;
+			children = (
+				E1E217962656B66A00B2A365 /* ProfileViewDelegate.swift */,
+			);
+			path = "Base Types";
+			sourceTree = "<group>";
+		};
 		E1F129AE2650283700EF34F8 /* Types */ = {
 			isa = PBXGroup;
 			children = (
@@ -694,6 +716,7 @@
 				E1F447BC26511B560073B193 /* UserInfoProvider.swift in Sources */,
 				E189A17D264AE0D400CBD45A /* GithubUser.swift in Sources */,
 				E1A5B352265454680069655B /* UIAlertMessageDisplay.swift in Sources */,
+				E124377A2656AC16004C4DCA /* NoteNormalUserTableViewCell.swift in Sources */,
 				E1FA38F7264B0B9D001EFA5C /* ImageSource.swift in Sources */,
 				E1F6E029264D765000A023A8 /* ProfileViewModel.swift in Sources */,
 				E160EBE5264A76FF002820EC /* ProfileViewController.swift in Sources */,
@@ -702,7 +725,7 @@
 				E1510C80264C9B9300E59C35 /* AdminUserTableViewCell.swift in Sources */,
 				E1E141482651AD3300C282FE /* User+CoreDataClass.swift in Sources */,
 				E189A17A264AE08300CBD45A /* GithubUsersApi.swift in Sources */,
-				E1E1414A265443EE00C282FE /* NormalUserTableViewCell copy.swift in Sources */,
+				E1E1414A265443EE00C282FE /* DebugUserTableViewCell.swift in Sources */,
 				E189A166264AD86600CBD45A /* AppConfig.swift in Sources */,
 				E1FA38F2264B083A001EFA5C /* UserPresenter.swift in Sources */,
 				E160EBE3264A7686002820EC /* ViewControllersFactory.swift in Sources */,
@@ -710,12 +733,11 @@
 				E1F6E025264D08E800A023A8 /* ShimmerUserTableViewCell.swift in Sources */,
 				E1510C75264C4D7A00E59C35 /* UserListTableViewCellDelegate.swift in Sources */,
 				E1510C71264C4A9800E59C35 /* UserTableViewCellBase.swift in Sources */,
-				E1510C7A264C6A1000E59C35 /* StubUserTableViewCell.swift in Sources */,
-				E1510C7C264C6A7A00E59C35 /* NoteUserTableViewCell copy.swift in Sources */,
 				E1880BE5264E8BEA0026D6DC /* ViewModelDelegate.swift in Sources */,
 				E1F129B0265029D600EF34F8 /* CoreDataService.swift in Sources */,
 				E189A16D264ADD3000CBD45A /* Api.swift in Sources */,
 				E1F4479826505C680073B193 /* SKSplashView.m in Sources */,
+				E12437782656A94A004C4DCA /* NoteInvertedUserTableViewCell.swift in Sources */,
 				E146CC2D264D887400C3FA51 /* ConnectionMonitor.swift in Sources */,
 				E1D04A7E264BB58300C4E5FD /* NormalUserTableViewCell.swift in Sources */,
 				E1FA38FD264B1BB7001EFA5C /* JSONSchemaSupport.swift in Sources */,

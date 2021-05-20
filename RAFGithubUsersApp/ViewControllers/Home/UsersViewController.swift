@@ -42,10 +42,11 @@ class UsersViewController: UITableViewController {
     
     var lastConnectionState: ConnectionState = .reachable
     // MARK: Configure table cell types
-    typealias StandardTableViewCell = DebugUserTableViewCell
-    typealias NoteTableViewCell = NoteUserTableViewCell
+    typealias StandardTableViewCell = NormalUserTableViewCell
+    typealias StandardNotedTableViewCell = NoteNormalUserTableViewCell
     typealias AlternativeTableViewCell = InvertedUserTableViewCell
-    typealias DummyTableViewCell = StubUserTableViewCell
+    typealias AlternativeNotedTableViewCell = NoteInvertedUserTableViewCell
+    typealias DummyTableViewCell = DebugUserTableViewCell
 
     // MARK: - Properties and attributes
     var viewModel: UsersViewModel!
@@ -82,8 +83,9 @@ class UsersViewController: UITableViewController {
 
     private func registerTableCellTypes() {
         registerReuseId(StandardTableViewCell.self)
-        registerReuseId(NoteUserTableViewCell.self)
+        registerReuseId(StandardNotedTableViewCell.self)
         registerReuseId(AlternativeTableViewCell.self)
+        registerReuseId(AlternativeNotedTableViewCell.self)
         registerReuseId(DummyTableViewCell.self)
     }
     
@@ -332,10 +334,8 @@ class UsersViewController: UITableViewController {
         if isLoadingLastCell(for: indexPath) {
             fetchMoreTableDataDisplayingResults()
         }
-        
-        
-        viewModel.fetchImage(for: element) { result in
 
+        viewModel.fetchImage(for: element) { result in
             guard let photoIndex = self.viewModel.users.firstIndex(of: element),
                 case let .success(image) = result else {
                     return
@@ -387,12 +387,28 @@ class UsersViewController: UITableViewController {
 extension UsersViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let user = viewModel.users[indexPath.row]
-        let cell: UserTableViewCellBase = multiple(of: 4, indexPath.row + 1) && confImageInversionOnFourthRows ?
-            getUserTableViewCell(associatedUser: user, AlternativeTableViewCell.self, cellForRowAt: indexPath) :
+        var cell: UserTableViewCellBase!
+
+        let hasNote = user.userInfo != nil && user.userInfo?.note != nil && user.userInfo?.note != ""
+        
+        if (multiple(of: 4, indexPath.row + 1) && confImageInversionOnFourthRows) {
+            cell = hasNote ?
+                getUserTableViewCell(associatedUser: user, AlternativeNotedTableViewCell.self, cellForRowAt: indexPath) :
+                getUserTableViewCell(associatedUser: user, AlternativeTableViewCell.self, cellForRowAt: indexPath)
+            cell.delegate = self
+            cell.updateWith(user: user)
+            return cell
+        }
+        cell = hasNote ?
+            getUserTableViewCell(associatedUser: user, StandardNotedTableViewCell.self, cellForRowAt: indexPath) :
             getUserTableViewCell(associatedUser: user, StandardTableViewCell.self, cellForRowAt: indexPath)
+
         cell.delegate = self
         cell.updateWith(user: user)
 //        self.navigationItem.rightBarButtonItem?.title = "\(indexPath.row)"
+        //        let cell: UserTableViewCellBase = multiple(of: 4, indexPath.row + 1) && confImageInversionOnFourthRows ?
+        //            getUserTableViewCell(associatedUser: user, AlternativeTableViewCell.self, cellForRowAt: indexPath) :
+        //            getUserTableViewCell(associatedUser: user, StandardTableViewCell.self, cellForRowAt: indexPath)
         return cell
     }
 }

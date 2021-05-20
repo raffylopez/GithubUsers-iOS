@@ -10,6 +10,7 @@ import UIKit
 
 class InvertedUserTableViewCell: UserTableViewCellBase {
     let store: ImageStore = ImageStore()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.selectionStyle = .none
@@ -25,6 +26,7 @@ class InvertedUserTableViewCell: UserTableViewCellBase {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
+    
 }
 
 extension InvertedUserTableViewCell: UserTableViewCell {

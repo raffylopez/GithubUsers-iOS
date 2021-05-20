@@ -12,8 +12,18 @@ import CoreData
 
 // MARK: - AmiiboElementsViewModel
 class ProfileViewModel {
+    
+    init(user: User, indexPath: IndexPath, apiService: GithubUsersApi, databaseService: UserInfoProvider) {
+        self.apiService = apiService
+        self.user = user
+        self.databaseService = databaseService
+        self.indexPath = indexPath
+        imageStore = ImageStore()
+    }
+    
     var delegate: ViewModelDelegate? = nil
     let user: User
+    let indexPath: IndexPath
     
     typealias OnDataAvailable = ( () -> Void )
     var onDataAvailable: OnDataAvailable = {}
@@ -48,13 +58,6 @@ class ProfileViewModel {
         }
     }
 
-    init(user: User, apiService: GithubUsersApi, databaseService: UserInfoProvider) {
-        self.apiService = apiService
-        self.user = user
-        self.databaseService = databaseService
-        imageStore = ImageStore()
-    }
-    
     /**
      Binds closure to model describing what to perform when data becomes available
      */
