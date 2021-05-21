@@ -20,11 +20,6 @@ class AdminUserTableViewCell: UserTableViewCellBase {
         super.init(coder: coder)
     }
     
-    override internal func updateWith(user: User, indexPath: IndexPath) {
-        super.updateWith(user: user, indexPath: indexPath)
-        self.lblName.textColor = .red
-    }
-
 }
 
 extension AdminUserTableViewCell: UserTableViewCell {

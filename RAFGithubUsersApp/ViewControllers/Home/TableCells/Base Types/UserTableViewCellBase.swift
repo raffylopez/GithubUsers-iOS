@@ -21,8 +21,14 @@ class UserTableViewCellBase: UITableViewCell {
         super.init(coder: coder)
     }
     
-    var user: User!
+    var user: User! {
+        didSet {
+                self.lblName.text = user.login ?? ""
+                self.lblSeries.text = user.urlHtml
+        }
+    }
     var indexPath: IndexPath!
+    var tableView: UITableView!
     weak var delegate: UserListTableViewCellDelegate?
     
     var spinner: UIActivityIndicatorView! = {
@@ -94,11 +100,6 @@ class UserTableViewCellBase: UITableViewCell {
         NSLayoutConstraint.activate(hcn)
     }
     
-    internal func updateWith(user: User, indexPath: IndexPath) {
-        self.lblName.text = user.login ?? ""
-        self.lblSeries.text = user.urlHtml
-        self.indexPath = indexPath
-    }
 }
 
 // MARK: - Custom Methods

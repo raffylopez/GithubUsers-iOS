@@ -107,6 +107,8 @@ class UsersViewController: UITableViewController {
         let cell  = tableView.dequeueReusableCell(withIdentifier: String(describing: T.self), for: indexPath)
         if let cell = cell as? T {
             cell.user = associatedUser
+            cell.indexPath = indexPath
+            cell.delegate = self
             return cell
         }
         fatalError("Cannot dequeue to \(String(describing:T.self))")
@@ -420,16 +422,12 @@ extension UsersViewController {
             cell = hasNote ?
                 getUserTableViewCell(associatedUser: user, AlternativeNotedTableViewCell.self, cellForRowAt: indexPath) :
                 getUserTableViewCell(associatedUser: user, AlternativeTableViewCell.self, cellForRowAt: indexPath)
-            cell.delegate = self
-            cell.updateWith(user: user, indexPath: indexPath)
             return cell
         }
         cell = hasNote ?
             getUserTableViewCell(associatedUser: user, StandardNotedTableViewCell.self, cellForRowAt: indexPath) :
             getUserTableViewCell(associatedUser: user, StandardTableViewCell.self, cellForRowAt: indexPath)
 
-        cell.delegate = self
-        cell.updateWith(user: user, indexPath: indexPath)
 //        self.navigationItem.rightBarButtonItem?.title = "\(indexPath.row)"
         //        let cell: UserTableViewCellBase = multiple(of: 4, indexPath.row + 1) && confImageInversionOnFourthRows ?
         //            getUserTableViewCell(associatedUser: user, AlternativeTableViewCell.self, cellForRowAt: indexPath) :

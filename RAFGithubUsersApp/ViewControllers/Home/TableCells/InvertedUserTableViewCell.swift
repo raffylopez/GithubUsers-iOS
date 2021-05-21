@@ -18,11 +18,6 @@ class InvertedUserTableViewCell: UserTableViewCellBase {
         setupLayout()
     }
 
-    override internal func updateWith(user: User, indexPath: IndexPath) {
-        super.updateWith(user: user, indexPath: indexPath)
-        self.lblName.text = self.lblName.text ?? ""
-    }
-    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }

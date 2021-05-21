@@ -20,9 +20,4 @@ class DebugUserTableViewCell: NormalUserTableViewCell {
         super.init(coder: coder)
     }
     
-    override internal func updateWith(user: User, indexPath: IndexPath) {
-        super.updateWith(user: user, indexPath: indexPath)
-        self.lblName.text = "\(user.id) - \(user.login ?? "-")"
-    }
-
 }
