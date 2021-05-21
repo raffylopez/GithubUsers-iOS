@@ -11,6 +11,17 @@ import UIKit
 
 class UsersViewController: UITableViewController {
     
+    init(viewModel: UsersViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    /* Storyboard not supported*/
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) not supported")
+    }
+    
+
     fileprivate func startSplashAnimation() {
         let icon: SKSplashIcon = SKSplashIcon(image: UIImage(named: "github_splash_dark")!)
         guard let splashView = SKSplashView(splashIcon: icon, animationType: .none),
@@ -22,7 +33,6 @@ class UsersViewController: UITableViewController {
         splashView.startAnimation()
     }
     
-
     // MARK: - Configurables
     /**
      Enables look-ahead prefetching for table cells for infinite-scroll implementation.
@@ -157,15 +167,18 @@ class UsersViewController: UITableViewController {
 
         self.viewModel.delegate = self
         let onDataAvailable = {
-
+            guard !self.viewModel.users.isEmpty && !self.search.isActive else {
+//                self.tableView.reloadData()
+                return
+            }
             print("STATS TOTAL USERS DATASOURCE COUNT (onDataAvailable): \(self.viewModel.users.count)" )
             print("STATS UserCount: \(self.viewModel.users.count)")
             
 //            self.viewModel.currentPage = 1 /* DEBUG: FORCE*/
 
-            if let users = self.viewModel.users, let first = users.first {
-                print(first)
-            }
+//            if let users = self.viewModel.users, let first = users.first {
+//                print(first)
+//             }  // DEBUG
 
             OperationQueue.main.addOperation {
                 ToastAlertMessageDisplay.main.hideToastActivity()
@@ -302,8 +315,6 @@ class UsersViewController: UITableViewController {
         self.viewModel.updateUsers {
             ToastAlertMessageDisplay.main.hideToastActivity()
         }
-        
-        
 //        self.viewModel.fetchUsers { result in
 //            DispatchQueue.main.async {
 //                self.refreshControl?.endRefreshing()
@@ -329,9 +340,15 @@ class UsersViewController: UITableViewController {
 
     // MARK: - UITableViewDelegate methods
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard !self.viewModel.users.isEmpty && self.viewModel.users.count - 1 >= indexPath.row else {
+            return
+        }
+//        guard !self.search.isActive else {
+//            return
+//        }
         let element = self.viewModel.users[indexPath.row]
         
-        if isLoadingLastCell(for: indexPath) {
+        if isLoadingLastCell(for: indexPath) && !self.search.isActive {
             fetchMoreTableDataDisplayingResults()
         }
 
@@ -352,7 +369,10 @@ class UsersViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if viewModel.users.count > 0 {
         return viewModel.users.count
+        }
+        return 1
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -386,6 +406,11 @@ class UsersViewController: UITableViewController {
 // MARK: • UITableViewDatasource methods
 extension UsersViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard !self.viewModel.users.isEmpty && self.viewModel.users.count - 1 >= indexPath.row else {
+//            self.tableView.reloadData()
+            return UITableViewCell()
+        }
+        
         let user = viewModel.users[indexPath.row]
         var cell: UserTableViewCellBase!
 
@@ -433,6 +458,25 @@ extension UsersViewController: UserListTableViewCellDelegate {
 extension UsersViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         // TODO
+//        self.viewModel.clearUsers()
+        guard let text = searchController.searchBar.text else {
+            return
+        }
+        self.viewModel.searchUsers(for: text)
+        self.tableView.reloadData()
+//        self.tableView.dataSource = self.viewModel.filteredUsers
+//        var request = NSFetchRequest(entityName: "User")
+//        filteredTableData.removeAll(keepCapacity: false)
+//        let searchPredicate = NSPredicate(format: "SELF.infos CONTAINS[c] %@", searchController.searchBar.text)
+//        let array = (series as NSArray).filteredArrayUsingPredicate(searchPredicate)
+//
+//        for item in array
+//        {
+//            let infoString = item.infos
+//            filteredTableData.append(infoString)
+//        }
+//
+//        self.tableView.reloadData()
     }
     
 }

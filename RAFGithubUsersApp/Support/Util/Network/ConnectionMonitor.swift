@@ -18,11 +18,20 @@ protocol ReachabilityDelegate {
 class ConnectionMonitor {
     let confIntervalInSeconds: Int = 5;
     let confReachabilityIp: String = "http://www.google.com"
+    let confApiIp: String = "http://api.github.com"
     
     var delegate: ReachabilityDelegate? = nil
 
     static let shared = ConnectionMonitor()
     private var reachability : Reachability!
+    
+    var isApiReachable: Bool {
+        if let reachability = try? Reachability(hostname: self.confReachabilityIp),
+            reachability.connection == .unavailable {
+            return false
+        }
+        return true
+    }
     
     func observeReachability() throws {
         self.reachability = try? Reachability()

@@ -18,10 +18,11 @@ protocol UsersProvider {
     func getUser(id: Int) -> User?
     func saveAll() throws
     func deleteAll() throws
+    func filterUsers(with term: String, callback: @escaping (Result<[User], Error>) -> Void)
 }
 
-
 extension CoreDataService: UsersProvider {
+
     func getUserCount() -> Int {
         let entityName = String(describing: User.self)
         let fetchRequest: NSFetchRequest<User> = NSFetchRequest(entityName: entityName)
@@ -36,9 +37,27 @@ extension CoreDataService: UsersProvider {
             }
         }
         return count
-
-
     }
+
+    func filterUsers(with term: String, callback: @escaping (Result<[User], Error>) -> Void) {
+        let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: #keyPath(User.id), ascending: true)
+        let searchPredicate = NSPredicate(format: "\(#keyPath(User.login)) CONTAINS[c] %@", term)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        fetchRequest.predicate = searchPredicate
+        
+//        let searchPredicate = NSPredicate(format: "SELF.login CONTAINS[c] %@", term)
+        context.perform {
+            do {
+                var filteredUsers: [User]!
+                filteredUsers = try self.context.fetch(fetchRequest)
+                callback(.success(filteredUsers))
+            } catch {
+                callback(.failure(error))
+            }
+        }
+    }
+    
 
     func getUser(id: Int) -> User? {
         let entityName = String(describing: User.self)
@@ -53,8 +72,6 @@ extension CoreDataService: UsersProvider {
             return existingInfo
         }
         return nil
-
-
     }
     func translate(from apiUser: GithubUser) -> User {
         var managedUser: User!

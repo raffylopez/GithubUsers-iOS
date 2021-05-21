@@ -53,6 +53,7 @@
 		E1D04A7B264BAF1900C4E5FD /* MockApiTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A186264AE9AC00CBD45A /* MockApiTests.swift */; };
 		E1D04A7E264BB58300C4E5FD /* NormalUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D04A7D264BB57F00C4E5FD /* NormalUserTableViewCell.swift */; };
 		E1D04A80264BB5CF00C4E5FD /* UIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D04A7F264BB5CF00C4E5FD /* UIHelper.swift */; };
+		E1DAC2362658124200C745F5 /* UsersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1674C9C26580F3A00FAF245 /* UsersViewModel.swift */; };
 		E1E141482651AD3300C282FE /* User+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E141472651AD3200C282FE /* User+CoreDataClass.swift */; };
 		E1E1414A265443EE00C282FE /* DebugUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E14149265443EC00C282FE /* DebugUserTableViewCell.swift */; };
 		E1E1414C26544A8400C282FE /* DebugUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E1414B26544A8300C282FE /* DebugUtils.swift */; };
@@ -68,7 +69,6 @@
 		E1F6E025264D08E800A023A8 /* ShimmerUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F6E024264D08E800A023A8 /* ShimmerUserTableViewCell.swift */; };
 		E1F6E027264D648700A023A8 /* fakeuserslist.json in Resources */ = {isa = PBXBuildFile; fileRef = E189A182264AE77800CBD45A /* fakeuserslist.json */; };
 		E1F6E029264D765000A023A8 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F6E028264D764F00A023A8 /* ProfileViewModel.swift */; };
-		E1FA38F0264B07D1001EFA5C /* UsersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A18C264AF8F900CBD45A /* UsersViewModel.swift */; };
 		E1FA38F1264B07D7001EFA5C /* ImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189A18E264AF96300CBD45A /* ImageStore.swift */; };
 		E1FA38F2264B083A001EFA5C /* UserPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FA38EF264B05E4001EFA5C /* UserPresenter.swift */; };
 		E1FA38F5264B086F001EFA5C /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FA38F4264B0867001EFA5C /* StringExtensions.swift */; };
@@ -141,6 +141,8 @@
 		E160EBD8264A6D47002820EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E160EBE2264A7592002820EC /* ViewControllersFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllersFactory.swift; sourceTree = "<group>"; };
 		E160EBE4264A76FF002820EC /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		E1674C9B26580F2100FAF245 /* ProfileViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewDelegate.swift; sourceTree = "<group>"; };
+		E1674C9C26580F3A00FAF245 /* UsersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersViewModel.swift; sourceTree = "<group>"; };
 		E1880BE4264E8BEA0026D6DC /* ViewModelDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelDelegate.swift; sourceTree = "<group>"; };
 		E189A155264ACC2A00CBD45A /* UserDataModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataModelTest.swift; sourceTree = "<group>"; };
 		E189A15F264AD5CF00CBD45A /* AppConfig.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = AppConfig.plist; sourceTree = "<group>"; };
@@ -213,6 +215,8 @@
 			children = (
 				E1510C7B264C6A7A00E59C35 /* NoteUserTableViewCell.swift */,
 				E1510C79264C6A0F00E59C35 /* StubUserTableViewCell.swift */,
+				E1674C9B26580F2100FAF245 /* ProfileViewDelegate.swift */,
+				E189A18C264AF8F900CBD45A /* UsersViewModel.swift */,
 			);
 			path = Archive;
 			sourceTree = "<group>";
@@ -421,7 +425,7 @@
 			children = (
 				E1880BE4264E8BEA0026D6DC /* ViewModelDelegate.swift */,
 				E1F6E028264D764F00A023A8 /* ProfileViewModel.swift */,
-				E189A18C264AF8F900CBD45A /* UsersViewModel.swift */,
+				E1674C9C26580F3A00FAF245 /* UsersViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -712,6 +716,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E1F2C142264D826200041F03 /* Toast.swift in Sources */,
+				E1DAC2362658124200C745F5 /* UsersViewModel.swift in Sources */,
 				E1510C6D264C462200E59C35 /* UIViewExtensions.swift in Sources */,
 				E160EBC1264A6D44002820EC /* UsersViewController.swift in Sources */,
 				E1E1414C26544A8400C282FE /* DebugUtils.swift in Sources */,
@@ -726,7 +731,6 @@
 				E1F6E029264D765000A023A8 /* ProfileViewModel.swift in Sources */,
 				E160EBE5264A76FF002820EC /* ProfileViewController.swift in Sources */,
 				E1510C69264C428B00E59C35 /* UIImageExtensions.swift in Sources */,
-				E1FA38F0264B07D1001EFA5C /* UsersViewModel.swift in Sources */,
 				E1510C80264C9B9300E59C35 /* AdminUserTableViewCell.swift in Sources */,
 				E1E141482651AD3300C282FE /* User+CoreDataClass.swift in Sources */,
 				E189A17A264AE08300CBD45A /* GithubUsersApi.swift in Sources */,

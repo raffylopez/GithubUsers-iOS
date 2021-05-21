@@ -25,8 +25,7 @@ class ViewControllersFactory {
     public static func instance(vcType: VcType) -> UIViewController {
         switch vcType {
         case let .usersList(viewModel):
-            let controller = UsersViewController()
-            controller.viewModel = viewModel
+            let controller = UsersViewController(viewModel: viewModel)
             return controller
         case let .userProfile(viewModel):
             let controller = StoryBoard.main.instantiateViewController(identifier: String(describing: ProfileViewController.self)) as! ProfileViewController

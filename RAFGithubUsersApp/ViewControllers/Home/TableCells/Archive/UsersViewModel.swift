@@ -147,9 +147,6 @@ class UsersViewModel {
      Public-facing routine to be accessed by viewcontroller. Wraps around processRequest.
      */
     public func updateUsers(completion: (()->Void)? = nil) {
-        guard ConnectionMonitor.shared.isApiReachable else {
-            return
-        }
         processUserRequest { result in
             switch result {
             case let .success(users):
@@ -185,6 +182,7 @@ class UsersViewModel {
                         completion?()
                         print(error.localizedDescription)
                     }
+
                 }
             }
         }
@@ -214,9 +212,44 @@ class UsersViewModel {
     func bind(availability: @escaping OnDataAvailable) {
         self.onDataAvailable = availability
     }
-
+    
     /**
-     Fetch data from coredata, and set it to users attribute, triggering
+     Starts fetching user data from api service. Additional calls to this method
+     are terminated at the onset, while a fetch is already in progress.
+     
+     Data availability notification is performed through an observable viewmodel
+     closure
+     */
+    
+
+//    func fetchUsers(onRetryError: ((Int)->())? = nil, completion: ((Result<[User], Error>)->Void)? = nil) {
+//
+//
+//
+////        if let user = databaseService.getUser(id: 1) {
+////            print (user)
+////            print (user.login)
+////            print (user.userInfo)
+////        } else {
+////            print("user not found")
+////        }
+//    }
+//    private func fetchUsersFromDisk(completion: @escaping ((Result<[User], Error>)->Void)) {
+//        // if offline, display from coredata, then keep retrying
+//        usersDatabaseService.getUsers(limit: totalDisplayCount) { (result) in
+//            switch result {
+//            case let .failure(error):
+//                completion(.failure(error))
+//            case let .success(users):
+//                completion(.success(users))
+//            }
+//        }
+//    }
+    
+    /**
+     Used for updating table view.
+     
+     Fetch data from coredata, and set it to users attribute, thereby triggering
      view controller closure.
      
      This function makes absolutely no network calls.
@@ -335,6 +368,217 @@ class UsersViewModel {
         }
     }
 
+//    /* Combination of processRequest and updatedatasource */
+//    /* TODO: closure-based notifiers */
+//    func fetchUsers(onRetryError: ((Int)->())? = nil, completion: ((Result<[User], Error>)->Void)? = nil) {
+//
+//        print("STATS USER COUNT (PRE-FETCH): \(usersDatabaseService.getUserCount())" )
+//        guard !isFetchInProgress else {
+//            return
+//        }
+//
+//        processUserRequest { result in
+//            self.isFetchInProgress = false
+//            switch result {
+//            case let .success(users):
+//                print("STATS USER COUNT (POST-FETCH): \(self.usersDatabaseService.getUserCount())" )
+//                if let user = users.last {
+//                    self.since = Int(user.id)
+//                }
+//                print("STATS SINCE: \(self.since)" )
+//                print("STATS USERS RETURNED: \(users.count)" )
+//                self.updateDataSource()
+//            case let .failure(_):
+//                preconditionFailure("BLAH")
+//            }
+//        }
+//    }
+//    let localAccessOnly: Bool = true
+
+//    /* Combination of processRequest and updatedatasource */
+//    func fetchUsers_(onRetryError: ((Int)->())? = nil, completion: ((Result<[User], Error>)->Void)? = nil) {
+////        try? usersDatabaseService.deleteAll()
+//
+//        print("STATS USER COUNT (PRE-FETCH): \(usersDatabaseService.getUserCount())" )
+//        guard !isFetchInProgress else {
+//            return
+//        }
+//
+//        processUserRequest { result in
+//            self.isFetchInProgress = false
+//            switch result {
+//            case let .success(users):
+//                print("STATS USER COUNT (POST-FETCH): \(self.usersDatabaseService.getUserCount())" )
+//                if let user = users.last {
+//                    self.since = Int(user.id)
+//                }
+//                print("STATS SINCE: \(self.since)" )
+//                print("STATS USERS RETURNED: \(users.count)" )
+//                self.loadUsersFromDisk()
+//            case let .failure(error):
+//                preconditionFailure("Error in \(#function): \(error)")
+//            }
+//        }
+        
+//        fetchUsersFromDisk { result in
+//            switch result {
+//            case let .success(users):
+//                self.updateDataSource { }
+//            case let .failure(error):
+//                preconditionFailure()
+//            }
+//        }
+//
+//        guard !localAccessOnly else { return }
+//
+//        let context = CoreDataService.persistentContainer.viewContext
+//        ToastAlertMessageDisplay.main.makeToastActivity()
+//
+//        try! self.usersDatabaseService.deleteAll()
+//
+//        /* Pre-fetch state toggles */
+//        self.isFetchInProgress = true
+//
+//        /* Process User request*/
+//        let onTaskSuccess = { (githubUsers: [GithubUser]) in
+//            /* Post-fetch state toggles */
+//            self.isFetchInProgress = false
+//
+//            self.lastBatchCount = githubUsers.count
+//            self.currentPage += 1
+//
+//            /* Map out api collection, and write to coredata */
+//            let users: [User] = githubUsers.map { githubUser in
+//                /* Does the user already exist in storage? */
+//                let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
+//                fetchRequest.entity = NSEntityDescription.entity(forEntityName: String.init(describing: User.self), in: context)
+//                let predicate = NSPredicate( format: "\(#keyPath(User.id)) == \(githubUser.id)" )
+//                fetchRequest.predicate = predicate
+//                var fetchedUsers: [User]?
+//                do {
+//                    fetchedUsers = try context.fetch(fetchRequest)
+//                } catch {
+//                    preconditionFailure()
+//                }
+//
+//                if let existingUser = fetchedUsers?.first {
+//                    /* If so, return from storage*/
+//                    print(existingUser)
+//                    return existingUser
+//                }
+//
+//                /* Otherwise, create new */
+//                var user: User!
+//                context.performAndWait {
+//                    user = User(from: githubUser, moc: context)
+//                }
+//                return user
+//            }
+////                if let existingUserInfo = self.userInfoProvider.getUserInfo(with: githubUser.id) {
+////                    return self.databaseService.translate(from: githubUser, with: existingUserInfo)
+////                }
+////                return self.databaseService.translate(from: githubUser)
+//
+//            do {
+//                try context.save()
+//            } catch {
+//                preconditionFailure()
+//            }
+//
+//            /* Update model datasource, which should trigger view controller */
+//            self.loadUsersFromDisk {
+//                self.since = Int(self.users.last?.id ?? 0)
+//                self.currentPage += 1
+//                completion?(.success(users))
+//            }
+//
+//            // TODO: State variable toggles
+//            guard let user = self.users.last else {
+//                self.since = 0
+//                return
+//            }
+//            self.since = Int(user.id)
+//
+//            // TODO: Delegate success
+//            completion?(.success(users))
+//        }
+//
+//        let onTaskError: ((Int, Int, Error)->Void)? = { attemptCount, delayTillNext, error in
+//            completion?(.failure(error))
+//            self.delegate?.onRetryError(n: attemptCount, nextAttemptInMilliseconds: delayTillNext, error: error)
+//        }
+//
+//        let queue = DispatchQueue(label: "serialized_queue", qos: .background)
+//        let retryAttempts = 5
+//
+////        ScheduledTask(task: self.apiService.fetchUsers).retryWithBackoff(times: retryAttempts, taskParam: since, queue: queue, onTaskSuccess: onTaskSuccess, onTaskError: onTaskError)
+//
+//        self.apiService.fetchUsers(since: self.since) { result in
+//            if case let .success(githubUsers) = result {
+//                /* Post-fetch state toggles */
+//                self.isFetchInProgress = false
+//
+//                self.lastBatchCount = githubUsers.count
+//                self.currentPage += 1
+//
+//                /* Map out api collection, and write to coredata */
+//                let users: [User] = githubUsers.map { githubUser in
+//                    /* Does the user already exist in storage? */
+//                    let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
+//                    fetchRequest.entity = NSEntityDescription.entity(forEntityName: String.init(describing: User.self), in: context)
+//                    let predicate = NSPredicate( format: "\(#keyPath(User.id)) == \(githubUser.id)" )
+//                    fetchRequest.predicate = predicate
+//                    var fetchedUsers: [User]?
+//                    do {
+//                        fetchedUsers = try context.fetch(fetchRequest)
+//                    } catch {
+//                        preconditionFailure()
+//                    }
+//
+//                    if let existingUser = fetchedUsers?.first {
+//                        /* If so, return from storage*/
+//                        print(existingUser)
+//                        return existingUser
+//                    }
+//
+//                    /* Otherwise, create new */
+//                    var user: User!
+//                    context.performAndWait {
+//                        user = User(from: githubUser, moc: context)
+//                    }
+//                    return user
+//                }
+//                //                if let existingUserInfo = self.userInfoProvider.getUserInfo(with: githubUser.id) {
+//                //                    return self.databaseService.translate(from: githubUser, with: existingUserInfo)
+//                //                }
+//                //                return self.databaseService.translate(from: githubUser)
+//
+//                do {
+//                    try context.save()
+//                } catch {
+//                    preconditionFailure()
+//                }
+//
+//                /* Update model datasource, which should trigger view controller */
+//                self.loadUsersFromDisk {
+//                    self.since = Int(self.users.last?.id ?? 0)
+//                    self.currentPage += 1
+//                    completion?(.success(users))
+//                }
+//
+//                // TODO: State variable toggles
+//                guard let user = self.users.last else {
+//                    self.since = 0
+//                    return
+//                }
+//                self.since = Int(user.id)
+//
+//                // TODO: Delegate success
+//                completion?(.success(users))
+//            }
+//        }
+//    }
+
     /**
      Fetches photo media (based on avatar url). Call is asynchronous or synchronous,but the latter
      leads to less than optimal performance.
@@ -351,7 +595,7 @@ class UsersViewModel {
             DispatchQueue.main.async {
                 completion(.success((image, .cache)))
             }
-            return
+            return // !!!
         }
 
         let request = URLRequest(url: imageUrl)

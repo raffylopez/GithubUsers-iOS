@@ -31,9 +31,6 @@ class GithubUsersApi {
             URLQueryItem(name: "access_token", value: getConfig().githubAccessToken)
         ]
         
-        guard let url = uri.url else {
-            preconditionFailure("Can't build url")
-        }
         URLSession.shared.githubUserInfoTask(with: URL(string: userInfoUri)!, completionHandler: { githubUserInfo, response, error in
             if let error = error {
                 completion?(.failure(error))
@@ -43,7 +40,6 @@ class GithubUsersApi {
                 completion?(.success(githubUserInfo))
                 return
             }
-            print(url)
             completion?(.failure(AppError.emptyResult))
             }).resume()
     }
