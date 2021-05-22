@@ -52,14 +52,14 @@ class UsersViewController: UITableViewController {
     
     var lastConnectionState: ConnectionState = .reachable
     // MARK: Configure table cell types
-//    typealias StandardTableViewCell = NormalUserTableViewCell
-//    typealias StandardNotedTableViewCell = NoteNormalUserTableViewCell
-//    typealias AlternativeTableViewCell = InvertedUserTableViewCell
-//    typealias AlternativeNotedTableViewCell = NoteInvertedUserTableViewCell
-    typealias StandardTableViewCell = DebugUserTableViewCell
-    typealias StandardNotedTableViewCell = DebugUserTableViewCell
-    typealias AlternativeTableViewCell = DebugUserTableViewCell
-    typealias AlternativeNotedTableViewCell = DebugUserTableViewCell
+    typealias StandardTableViewCell = NormalUserTableViewCell
+    typealias StandardNotedTableViewCell = NoteNormalUserTableViewCell
+    typealias AlternativeTableViewCell = InvertedUserTableViewCell
+    typealias AlternativeNotedTableViewCell = NoteInvertedUserTableViewCell
+//    typealias StandardTableViewCell = DebugUserTableViewCell
+//    typealias StandardNotedTableViewCell = DebugUserTableViewCell
+//    typealias AlternativeTableViewCell = DebugUserTableViewCell
+//    typealias AlternativeNotedTableViewCell = DebugUserTableViewCell
     
     typealias DummyTableViewCell = DebugUserTableViewCell
 

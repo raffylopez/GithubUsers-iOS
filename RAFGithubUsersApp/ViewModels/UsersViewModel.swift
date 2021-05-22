@@ -109,7 +109,7 @@ class UsersViewModel {
 
     public func searchUsers(for term: String) {
         if term.isEmpty  {
-            self.usersDatabaseService.getUsers{ result in
+            self.usersDatabaseService.getUsers (limit: nil){ result in
                 switch result {
                 case let .success(users):
 //                    self.filteredUsers = users
@@ -306,15 +306,15 @@ class UsersViewModel {
                         let predicate = NSPredicate( format: "\(#keyPath(User.id)) == \(githubUser.id)" )
                         fetchRequest.predicate = predicate
                         var fetchedUsers: [User]?
-                        context.performAndWait {
+//                        context.performAndWait {
                             do {
                                 fetchedUsers = try fetchRequest.execute()
                             } catch {
                                 preconditionFailure()
                             }
-                        }
+//                        }
                         if let existingUser = fetchedUsers?.first {
-                            existingUser.merge(with: githubUser, moc: context)
+                            existingUser.merge(with: githubUser, moc: privateMOC)
                             return existingUser
                         }
                         
@@ -417,15 +417,15 @@ class UsersViewModel {
                         let predicate = NSPredicate( format: "\(#keyPath(User.id)) == \(githubUser.id)" )
                         fetchRequest.predicate = predicate
                         var fetchedUsers: [User]?
-                        context.performAndWait {
+//                        context.performAndWait {
                             do {
                                 fetchedUsers = try fetchRequest.execute()
                             } catch {
                                 preconditionFailure()
                             }
-                        }
+//                        }
                         if let existingUser = fetchedUsers?.first {
-                            existingUser.merge(with: githubUser, moc: context)
+                            existingUser.merge(with: githubUser, moc: privateMOC)
                             return existingUser
                         }
                         

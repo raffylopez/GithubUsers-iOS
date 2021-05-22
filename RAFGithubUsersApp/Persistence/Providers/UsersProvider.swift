@@ -12,7 +12,6 @@ import CoreData
 protocol UsersProvider {
     func translate(from apiUser: GithubUser) -> User
     func translate(from apiUser: GithubUser, with userInfo: UserInfo) -> User
-    func getUsers(callback: @escaping (Result<[User], Error>) -> Void)
     func getUsers(limit: Int?, callback: @escaping (Result<[User], Error>) -> Void)
     func getUserCount() -> Int
     func getUser(id: Int) -> User?
@@ -98,23 +97,6 @@ extension CoreDataService: UsersProvider {
         try coordinator.execute(deleteRequest, with: context)
     }
 
-    /* Gets all users. May include duplicates. */
-    func getUsers(callback: @escaping (Result<[User], Error>) -> Void) {
-        let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: #keyPath(User.id), ascending: true)
-        fetchRequest.sortDescriptors = [sortDescriptor]
-        
-        context.performAndWait {
-            do {
-                var allUsers: [User]!
-                allUsers = try self.context.fetch(fetchRequest)
-                callback(.success(allUsers))
-            } catch {
-                callback(.failure(error))
-            }
-        }
-    }
-    
     /* Get n users. If limit is nil, fetch all */
     func getUsers(limit: Int? = nil, callback: @escaping (Result<[User], Error>) -> Void) {
         let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
