@@ -192,7 +192,7 @@ class UsersViewController: UITableViewController {
                 ToastAlertMessageDisplay.main.hideToastActivity()
                 
                 /* RECALICTRANT */
-                if self.viewModel.currentPage <= 1 { /* User performed a refresh/first load */
+                if self.viewModel.currentStartIndex <= 30 { /* User performed a refresh/first load */
                     self.tableView.alpha = 0
                     self.tableView.alpha = 1
                     UIView.transition(with: self.tableView,
@@ -208,11 +208,13 @@ class UsersViewController: UITableViewController {
                     self.refreshControl?.endRefreshing()
                     return
                 }
-                
-                let newIndexPathsToInsert: [IndexPath] = self.calculateIndexPathsToInsert(from: self.viewModel.lastBatchCount)
+
+                let startIndex = self.viewModel.currentStartIndex - 30
+                let endIndex = startIndex + 30
+                let newIndexPathsToInsert: [IndexPath] = (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
                 let indexPathsToReload = self.visibleIndexPathsToReload(intersecting: newIndexPathsToInsert)
                 
-                print("STATS To reload(new): \(newIndexPathsToInsert.count), since: \(self.viewModel.since), currentCount: \(self.viewModel.currentCount), lastBatchCount: \(self.viewModel.lastBatchCount), start: \(newIndexPathsToInsert[0].row), end: end: \(newIndexPathsToInsert[newIndexPathsToInsert.count-1].row) ")
+//                print("STATS To reload(new): \(newIndexPathsToInsert.count), since: \(self.viewModel.since), currentCount: \(self.viewModel.currentCount), lastBatchCount: \(self.viewModel.lastBatchCount), start: \(newIndexPathsToInsert[0].row), end: end: \(newIndexPathsToInsert[newIndexPathsToInsert.count-1].row) ")
                 
                 /* Ensure slide animations are disabled on row insertion (slide animation used by default on insert) */
                 UIView.setAnimationsEnabled(false)
@@ -274,47 +276,28 @@ class UsersViewController: UITableViewController {
         self.navigationItem.leftBarButtonItem = leftBarItem
     }
     
-    func refreshStaleOnScroll() {
+    func refreshStaleOnScroll(completion: @escaping ()->Void) {
         self.viewModel.refreshStale { result in
             DispatchQueue.main.async {
-                let contentOffset = self.tableView.contentOffset
-                self.tableView.reloadData()
-                self.tableView.layoutIfNeeded()
-                self.tableView.setContentOffset(contentOffset, animated: false)
+                let startIndex = self.viewModel.currentStartIndex - 30
+                let endIndex = startIndex + 30
+                let newIndexPathsToInsert: [IndexPath] = (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
+                let indexPathsToReload = self.visibleIndexPathsToReload(intersecting: newIndexPathsToInsert)
+                self.tableView?.beginUpdates()
+                self.tableView?.reloadRows(at: indexPathsToReload, with: .fade)
+                self.tableView?.endUpdates()
+                completion()
             }
         }
     }
 
     @objc func refreshStaleOnDemand() {
         self.viewModel.refreshStale { result in
-//            switch result {
-//            case let .success(_):
-//                let endIndex = self.viewModel.users.count - 1
-//                let paths = (0..<endIndex).map { IndexPath(row: $0, section: 0) }
-//                self.tableView.reloadRows(at: paths, with: .none)
-//            case let .failure(_):
-//                break
-//            }
             DispatchQueue.main.async {
-//                let paths: [IndexPath] = self.tableView.visibleCells.map {
-//                    let cell = $0 as! UserTableViewCellBase
-//                    return cell.indexPath
-//                }
-//                self.tableView.reloadRows(at: paths, with: .none)
-//                self.tableView.reloadData()
-//                self.tableView.layoutIfNeeded()
-//                let paths: [IndexPath] = self.tableView.visibleCells.map {
-//                    let cell = $0 as! UserTableViewCellBase
-//                    return cell.indexPath
-//                }
                 let contentOffset = self.tableView.contentOffset
                 self.tableView.reloadData()
                 self.tableView.layoutIfNeeded()
                 self.tableView.setContentOffset(contentOffset, animated: false)
-                //                self.tableView.reloadRows(at: paths, with: .none)
-//                self.tableView.estimatedRowHeight = 1000
-//                self.tableView.estimatedSectionFooterHeight = 100.0
-//                self.tableView.estimatedSectionHeaderHeight = 500.0
             }
         }
     }
@@ -417,6 +400,7 @@ class UsersViewController: UITableViewController {
         search.dismiss(animated: true, completion: nil)
     }
 
+    var isRefreshing = false
     // MARK: - UITableViewDelegate methods
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         guard !self.viewModel.users.isEmpty && self.viewModel.users.count - 1 >= indexPath.row else {
@@ -432,8 +416,13 @@ class UsersViewController: UITableViewController {
         }
 
         if let cell = cell as? UserTableViewCellBase {
-            if self.viewModel.staleIds.contains(cell.user.id) {
-                self.refreshStaleOnScroll()
+            if !isRefreshing && self.viewModel.staleIds.contains(cell.user.id) {
+                isRefreshing = true
+                ToastAlertMessageDisplay.main.hideAllToasts()
+                ToastAlertMessageDisplay.main.stickyToast(message: "Updating...")
+                self.refreshStaleOnScroll {
+                    self.isRefreshing = false
+                }
             }
         }
         
@@ -520,10 +509,6 @@ extension UsersViewController {
         cell.tag = indexPath.row
         cell.updateCell()
 
-//        self.navigationItem.rightBarButtonItem?.title = "\(indexPath.row)"
-        //        let cell: UserTableViewCellBase = multiple(of: 4, indexPath.row + 1) && confImageInversionOnFourthRows ?
-        //            getUserTableViewCell(associatedUser: user, AlternativeTableViewCell.self, cellForRowAt: indexPath) :
-        //            getUserTableViewCell(associatedUser: user, StandardTableViewCell.self, cellForRowAt: indexPath)
         return cell
     }
 }
@@ -554,19 +539,6 @@ extension UsersViewController: UISearchResultsUpdating {
         }
         self.viewModel.searchUsers(for: text)
         self.tableView.reloadData()
-//        self.tableView.dataSource = self.viewModel.filteredUsers
-//        var request = NSFetchRequest(entityName: "User")
-//        filteredTableData.removeAll(keepCapacity: false)
-//        let searchPredicate = NSPredicate(format: "SELF.infos CONTAINS[c] %@", searchController.searchBar.text)
-//        let array = (series as NSArray).filteredArrayUsingPredicate(searchPredicate)
-//
-//        for item in array
-//        {
-//            let infoString = item.infos
-//            filteredTableData.append(infoString)
-//        }
-//
-//        self.tableView.reloadData()
     }
     
 }

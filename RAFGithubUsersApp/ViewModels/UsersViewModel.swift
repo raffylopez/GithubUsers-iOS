@@ -162,8 +162,7 @@ class UsersViewModel {
                 if let user = combinedUsers.last {
                     self.since = Int(user.id)
                 }
-                ToastAlertMessageDisplay.main.hideAllToasts()
-                ToastAlertMessageDisplay.main.stickyToast(message: "Working offline")
+                self.currentStartIndex = combinedUsers.count
                 completion?()
             case let .failure(error):
                 completion?()
@@ -231,6 +230,7 @@ class UsersViewModel {
         self.onDataAvailable = availability
     }
 
+    var currentStartIndex = 0
     /**
      Fetch data from coredata, and set it to users attribute, triggering
      view controller closure.
@@ -373,8 +373,8 @@ class UsersViewModel {
 
     public func refreshStale(completion: ((Result<[User], Error>)->Void)? = nil) {
         guard ConnectionMonitor.shared.isApiReachable else {
-            ToastAlertMessageDisplay.main.display(message: "Network unreachable.")
-            completion?(.failure(AppError.networkError))
+//            ToastAlertMessageDisplay.main.display(message: "Network unreachable.")
+//            completion?(.failure(AppError.networkError))
             return
         }
 
@@ -389,6 +389,7 @@ class UsersViewModel {
                 self.unregisterStale(users: users)
 //                print_r(array: users)
                 print_r(array: self.staleIds)
+                
                 ToastAlertMessageDisplay.main.display(message: "\(self.staleIds.count) stale entries left to update")
                 completion?(.success(users))
             case let .failure(error):
