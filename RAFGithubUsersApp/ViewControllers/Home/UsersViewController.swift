@@ -52,10 +52,15 @@ class UsersViewController: UITableViewController {
     
     var lastConnectionState: ConnectionState = .reachable
     // MARK: Configure table cell types
-    typealias StandardTableViewCell = NormalUserTableViewCell
-    typealias StandardNotedTableViewCell = NoteNormalUserTableViewCell
-    typealias AlternativeTableViewCell = InvertedUserTableViewCell
-    typealias AlternativeNotedTableViewCell = NoteInvertedUserTableViewCell
+//    typealias StandardTableViewCell = NormalUserTableViewCell
+//    typealias StandardNotedTableViewCell = NoteNormalUserTableViewCell
+//    typealias AlternativeTableViewCell = InvertedUserTableViewCell
+//    typealias AlternativeNotedTableViewCell = NoteInvertedUserTableViewCell
+    typealias StandardTableViewCell = DebugUserTableViewCell
+    typealias StandardNotedTableViewCell = DebugUserTableViewCell
+    typealias AlternativeTableViewCell = DebugUserTableViewCell
+    typealias AlternativeNotedTableViewCell = DebugUserTableViewCell
+    
     typealias DummyTableViewCell = DebugUserTableViewCell
 
     // MARK: - Properties and attributes
@@ -103,12 +108,13 @@ class UsersViewController: UITableViewController {
      Generic method that uses reflection to obtain a table view cell subtype instance,
      with dequeue identifier based on reflected type
      */
-    private func getUserTableViewCell<T>(associatedUser: User, _ type: T.Type, cellForRowAt indexPath: IndexPath) -> T where T:UserTableViewCellBase {
+    private func buildCell<T>(associatedUser: User, _ type: T.Type, cellForRowAt indexPath: IndexPath) -> T where T:UserTableViewCellBase {
         let cell  = tableView.dequeueReusableCell(withIdentifier: String(describing: T.self), for: indexPath)
         if let cell = cell as? T {
             cell.user = associatedUser
             cell.indexPath = indexPath
             cell.delegate = self
+            cell.owningController = self
             return cell
         }
         fatalError("Cannot dequeue to \(String(describing:T.self))")
@@ -219,6 +225,10 @@ class UsersViewController: UITableViewController {
                 self.tableView?.reloadRows(at: indexPathsToReload, with: .fade)
                 //                self.tableView?.reloadRows(at: [IndexPath(row: 29, section: 0)], with: .none)
                 //                self.tableView?.reloadSections(IndexSet(integer: 0), with: .fade)
+                    let contentOffset = self.tableView.contentOffset
+                    self.tableView.reloadData()
+                    self.tableView.layoutIfNeeded()
+                    self.tableView.setContentOffset(contentOffset, animated: false)
             }
         }
         self.viewModel.bind(availability: onDataAvailable)
@@ -229,8 +239,8 @@ class UsersViewController: UITableViewController {
 
     private func setupNavbar() {
         let imgSize = CGFloat(24)
-        let imgHeight = CGFloat(imgSize)
-        let imgWidth = CGFloat(imgSize)
+//        let imgHeight = CGFloat(imgSize)
+//        let imgWidth = CGFloat(imgSize)
         let spacing = CGFloat(5.0)
 //        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: imgWidth, height: imgHeight))
 //        imageView.contentMode = .scaleAspectFit
@@ -261,8 +271,43 @@ class UsersViewController: UITableViewController {
         //        navigationItem.leftBarButtonItem = leftBarItem
         self.navigationItem.searchController = search
         self.title = "Browse Users".localized()
+        let leftBarItem = UIBarButtonItem(title: "Refresh Stale".localized(), style: .plain, target: self, action: #selector(self.refreshStale))
+        self.navigationItem.leftBarButtonItem = leftBarItem
     }
     
+    @objc func refreshStale() {
+        self.viewModel.refreshStale { result in
+//            switch result {
+//            case let .success(_):
+//                let endIndex = self.viewModel.users.count - 1
+//                let paths = (0..<endIndex).map { IndexPath(row: $0, section: 0) }
+//                self.tableView.reloadRows(at: paths, with: .none)
+//            case let .failure(_):
+//                break
+//            }
+            DispatchQueue.main.async {
+//                let paths: [IndexPath] = self.tableView.visibleCells.map {
+//                    let cell = $0 as! UserTableViewCellBase
+//                    return cell.indexPath
+//                }
+//                self.tableView.reloadRows(at: paths, with: .none)
+                let contentOffset = self.tableView.contentOffset
+//                self.tableView.reloadData()
+//                self.tableView.layoutIfNeeded()
+//                let paths: [IndexPath] = self.tableView.visibleCells.map {
+//                    let cell = $0 as! UserTableViewCellBase
+//                    return cell.indexPath
+//                }
+                                self.tableView.reloadData()
+//                self.tableView.reloadRows(at: paths, with: .none)
+                self.tableView.layoutIfNeeded()
+                self.tableView.setContentOffset(contentOffset, animated: false)
+//                self.tableView.estimatedRowHeight = 1000
+//                self.tableView.estimatedSectionFooterHeight = 100.0
+//                self.tableView.estimatedSectionHeaderHeight = 500.0
+            }
+        }
+    }
     private func setupViews() {
         setupNavbar()
         self.refreshControl = UIRefreshControl()
@@ -383,7 +428,7 @@ class UsersViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 130
+        return 100
     }
     
     private func calculateIndexPathsToInsert(from newUsers: Int, offset: Int = 0) -> [IndexPath] {
@@ -420,13 +465,17 @@ extension UsersViewController {
         
         if (multiple(of: 4, indexPath.row + 1) && confImageInversionOnFourthRows) {
             cell = hasNote ?
-                getUserTableViewCell(associatedUser: user, AlternativeNotedTableViewCell.self, cellForRowAt: indexPath) :
-                getUserTableViewCell(associatedUser: user, AlternativeTableViewCell.self, cellForRowAt: indexPath)
+                buildCell(associatedUser: user, AlternativeNotedTableViewCell.self, cellForRowAt: indexPath) :
+                buildCell(associatedUser: user, AlternativeTableViewCell.self, cellForRowAt: indexPath)
+            cell.tag = indexPath.row
+            cell.updateCell()
             return cell
         }
         cell = hasNote ?
-            getUserTableViewCell(associatedUser: user, StandardNotedTableViewCell.self, cellForRowAt: indexPath) :
-            getUserTableViewCell(associatedUser: user, StandardTableViewCell.self, cellForRowAt: indexPath)
+            buildCell(associatedUser: user, StandardNotedTableViewCell.self, cellForRowAt: indexPath) :
+            buildCell(associatedUser: user, StandardTableViewCell.self, cellForRowAt: indexPath)
+        cell.tag = indexPath.row
+        cell.updateCell()
 
 //        self.navigationItem.rightBarButtonItem?.title = "\(indexPath.row)"
         //        let cell: UserTableViewCellBase = multiple(of: 4, indexPath.row + 1) && confImageInversionOnFourthRows ?

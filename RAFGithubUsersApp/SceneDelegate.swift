@@ -46,11 +46,28 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.makeKeyAndVisible()
     }
     
+
+    func dbgClearDataStoresOnAppLaunch() {
+        let context = CoreDataService.persistentContainer.viewContext
+        let usersDatabaseService = CoreDataService.shared
+        context.performAndWait {
+            try? usersDatabaseService.deleteAll()
+        }
+        do {
+            try context.save()
+        } catch {
+            fatalError("Can't delete coredata store")
+        }
+        //        try? userInfoProvider.delete()
+        //        updateUsers() {
+        //            self.loadUsersFromDisk()
+        //        }
+    }
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.windowScene = scene
-
+//        dbgClearDataStoresOnAppLaunch() // DEBUG
         setupViewControllers()
     }
 

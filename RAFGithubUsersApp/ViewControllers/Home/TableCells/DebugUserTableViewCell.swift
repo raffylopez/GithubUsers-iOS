@@ -15,9 +15,23 @@ class DebugUserTableViewCell: NormalUserTableViewCell {
         setupViews()
         setupLayout()
     }
-    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
     
+    override internal func updateCell() {
+        self.lblName.text = "\(user.id) - \(user.login ?? "-")"
+        
+        guard let controller = self.owningController as? UsersViewController else {
+            return
+        }
+        
+        if controller.viewModel.staleIds.firstIndex(of: self.user.id) != nil  {
+            self.lblSeries.text = "stale"
+            self.backgroundColor = .red
+        } else {
+            self.backgroundColor = .systemBackground
+            self.lblSeries.text = "updated"
+        }
+    }
 }

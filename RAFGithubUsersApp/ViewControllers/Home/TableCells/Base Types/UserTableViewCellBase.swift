@@ -17,18 +17,26 @@ class UserTableViewCellBase: UITableViewCell {
         setupLayout()
     }
     
+//    internal func setUser(user: User) {
+//        self.user = user
+//    }
+
+    internal func updateCell() {
+        self.lblName.text = user.login ?? ""
+        self.lblSeries.text = user.urlHtml
+    }
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
     
     var user: User! {
         didSet {
-                self.lblName.text = user.login ?? ""
-                self.lblSeries.text = user.urlHtml
+            updateCell()
         }
     }
     var indexPath: IndexPath!
     var tableView: UITableView!
+    var owningController: UIViewController? = nil
     weak var delegate: UserListTableViewCellDelegate?
     
     var spinner: UIActivityIndicatorView! = {

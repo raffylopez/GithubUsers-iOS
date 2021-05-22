@@ -47,7 +47,7 @@ extension CoreDataService: UsersProvider {
         fetchRequest.predicate = searchPredicate
         
 //        let searchPredicate = NSPredicate(format: "SELF.login CONTAINS[c] %@", term)
-        context.perform {
+        context.performAndWait {
             do {
                 var filteredUsers: [User]!
                 filteredUsers = try self.context.fetch(fetchRequest)
@@ -104,7 +104,7 @@ extension CoreDataService: UsersProvider {
         let sortDescriptor = NSSortDescriptor(key: #keyPath(User.id), ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
         
-        context.perform {
+        context.performAndWait {
             do {
                 var allUsers: [User]!
                 allUsers = try self.context.fetch(fetchRequest)
@@ -123,7 +123,7 @@ extension CoreDataService: UsersProvider {
         if let limit = limit {
             fetchRequest.fetchLimit = limit
         }
-        context.perform {
+        context.performAndWait {
             do {
                 var allUsers: [User]!
                 allUsers = try self.context.fetch(fetchRequest)

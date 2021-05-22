@@ -73,20 +73,12 @@ class UsersViewModel {
     
     /* MARK: - Debug */
 
-    func dbgClearDataStoresOnAppLaunch() {
-        try? usersDatabaseService.deleteAll()
-        updateUsers() {
-            print("STATS \(#function)")
-            self.loadUsersFromDisk()
-        }
-    }
-    
+
     /* MARK: - Inits */
     init(apiService: GithubUsersApi, databaseService: UsersProvider) {
         self.apiService = apiService
         self.usersDatabaseService = databaseService
         imageStore = ImageStore()
-        // dbgClearDataStoresOnAppLaunch() // DEBUG
 //        self.updateFromDiskSource { }
     }
  
@@ -142,17 +134,60 @@ class UsersViewModel {
         }
     }
     
+    func loadOfflineData(completion: (()->Void)? = nil) {
+        print("STATS totalDisplayCount: \(self.totalDisplayCount)")
+        let userCount = self.usersDatabaseService.getUserCount()
+        print("STATS userCount: \(userCount)")
+        
+        guard userCount > 0 else {
+            completion?()
+            return
+        }
+        
+        switch self.totalDisplayCount % userCount {
+        case 0 where self.totalDisplayCount < userCount, self.totalDisplayCount: /* Start or middle */
+            self.totalDisplayCount += self.confOfflineIncrements
+        case 0 where self.totalDisplayCount >= userCount: /* Ending with equal values */
+            return
+        default: /* Ending with runoffs */
+            self.totalDisplayCount += self.usersDatabaseService.getUserCount() % self.confOfflineIncrements
+        }
+        
+        self.loadUsersFromDisk(count: self.totalDisplayCount) { result in
+            switch result {
+            case let .success(combinedUsers):
+                let start = combinedUsers.count - self.confOfflineIncrements
+                let end = combinedUsers.count
+                self.registerStale(users: combinedUsers[(start..<end)].map { $0 })
+                if let user = combinedUsers.last {
+                    self.since = Int(user.id)
+                }
+                ToastAlertMessageDisplay.main.hideAllToasts()
+                ToastAlertMessageDisplay.main.display(message: "Working offline")
+                completion?()
+            case let .failure(error):
+                completion?()
+                print(error.localizedDescription)
+            }
+        }
+
+    }
+    
+    
     /* MARK: - Interface */
     /**
      Public-facing routine to be accessed by viewcontroller. Wraps around processRequest.
      */
     public func updateUsers(completion: (()->Void)? = nil) {
         guard ConnectionMonitor.shared.isApiReachable else {
+            loadOfflineData(completion: completion)
+            completion?()
             return
         }
         processUserRequest { result in
             switch result {
             case let .success(users):
+                self.unregisterStale(users: users)
                 if let user = users.last {
                     self.since = Int(user.id)
                 }
@@ -162,30 +197,8 @@ class UsersViewModel {
                 completion?()
             case let .failure(error):  // INCLUDES NO INTERNET
                 print(error.localizedDescription)
-                print("STATS totalDisplayCount: \(self.totalDisplayCount)")
-                let userCount = self.usersDatabaseService.getUserCount()
-                print("STATS userCount: \(userCount)")
-
-                switch self.totalDisplayCount % userCount {
-                case 0 where self.totalDisplayCount < userCount, self.totalDisplayCount: /* Start or middle */
-                    self.totalDisplayCount += self.confOfflineIncrements
-                case 0 where self.totalDisplayCount >= userCount: /* Ending with equal values */
-                    return
-                default: /* Ending with runoffs */
-                    self.totalDisplayCount += self.usersDatabaseService.getUserCount() % self.confOfflineIncrements
-                }
-                
-                self.loadUsersFromDisk(count: self.totalDisplayCount) { result in
-                    switch result {
-                    case .success(_):// TODO
-                        ToastAlertMessageDisplay.main.hideAllToasts()
-                        ToastAlertMessageDisplay.main.stickyToast(message: "Working offline")
-                        completion?()
-                    case let .failure(error):
-                        completion?()
-                        print(error.localizedDescription)
-                    }
-                }
+                self.loadOfflineData(completion: completion)
+                completion?()
             }
         }
     }
@@ -232,7 +245,6 @@ class UsersViewModel {
                 if let user = users.last {
                     self.since = Int(user.id)
                 }
-                
                 self.users = users
                 print("STATS TOTAL USERS TABLEDATASOURCE COUNT (UpdateDataSource): \(self.users.count)" )
                 print("STATS TOTAL USERS COREDATA COUNT: \(self.usersDatabaseService.getUserCount())" )
@@ -270,13 +282,15 @@ class UsersViewModel {
      of network-based objects and old database objects. The count is based on the
      size of the batch received.
      */
-    func processUserRequest(completion: ((Result<[User], Error>)->Void)? = nil) {
+    func processUserRequest(completion: @escaping ((Result<[User], Error>)->Void)) {
         guard !isFetchInProgress else {
+            completion(.failure(AppError.fetchInProgress))
             return
         }
         self.isFetchInProgress = true
         
         let privateMOC = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+//        let privateMOC = CoreDataService.privateMOC
         let context = CoreDataService.persistentContainer.viewContext
         privateMOC.parent = context
         
@@ -305,7 +319,7 @@ class UsersViewModel {
                         }
                         
                         var user: User!
-                        user = User(from: githubUser, moc: context)
+                        user = User(from: githubUser, moc: privateMOC)
                         return user
                     }
                     
@@ -323,14 +337,125 @@ class UsersViewModel {
                             }
                         }
                     } catch {
-                        completion?(.failure(error))
+                        completion(.failure(error))
                         fatalError("Failed to save context: \(error)")
                     }
-                    completion?(.success(users))
+                    completion(.success(users))
                     
                 }
             case let .failure(error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    // MARK: - Stale data classification
+    
+    var staleIds:[Int64] = []
+    private func registerStale(users: [User]) {
+        users.forEach { user in
+            staleIds.append(user.id)
+        }
+        staleIds = staleIds.unique
+        staleIds.sort()
+    }
+    
+    private func unregisterStale(users: [User]) {
+        users.forEach { user in
+            if let indexOf = staleIds.firstIndex(of: user.id) {
+                staleIds.remove(at: indexOf)
+            }
+        }
+    }
+
+    public func refreshStale(completion: ((Result<[User], Error>)->Void)? = nil) {
+        guard ConnectionMonitor.shared.isApiReachable else {
+            ToastAlertMessageDisplay.main.display(message: "Network unreachable.")
+            completion?(.failure(AppError.networkError))
+            return
+        }
+
+        guard let since = staleIds.first else {
+            ToastAlertMessageDisplay.main.display(message: "No stale entries left to update")
+            completion?(.failure(AppError.emptyResult))
+            return
+        }
+        refreshInBackground(since: Int(since == 0 ? 0 : since - 1)) { result in
+            switch result {
+            case let .success(users):
+                self.unregisterStale(users: users)
+//                print_r(array: users)
+                print_r(array: self.staleIds)
+                ToastAlertMessageDisplay.main.display(message: "\(self.staleIds.count) stale entries left to update")
+                completion?(.success(users))
+            case let .failure(error):
+                print(error)
                 completion?(.failure(error))
+            }
+        }
+    }
+
+    private func refreshInBackground(since: Int, completion: @escaping ((Result<[User], Error>)->Void)) {
+        guard !isFetchInProgress else {
+            return
+        }
+        self.isFetchInProgress = true
+        
+        let privateMOC = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+//        let privateMOC = CoreDataService.privateMOC
+        let context = CoreDataService.persistentContainer.viewContext
+        privateMOC.parent = context
+        
+        self.apiService.fetchUsers(since: since) { (result: Result<[GithubUser], Error>) in
+            self.isFetchInProgress = false
+            switch result {
+            case let .success(githubUsers):
+                privateMOC.performAndWait {
+                    let users: [User] = githubUsers.map { githubUser in
+                        let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
+                        fetchRequest.entity = NSEntityDescription.entity(forEntityName: String.init(describing: User.self), in: context)
+                        let predicate = NSPredicate( format: "\(#keyPath(User.id)) == \(githubUser.id)" )
+                        fetchRequest.predicate = predicate
+                        var fetchedUsers: [User]?
+                        context.performAndWait {
+                            do {
+                                fetchedUsers = try fetchRequest.execute()
+                            } catch {
+                                preconditionFailure()
+                            }
+                        }
+                        if let existingUser = fetchedUsers?.first {
+                            existingUser.merge(with: githubUser, moc: context)
+                            return existingUser
+                        }
+                        
+                        var user: User!
+                        user = User(from: githubUser, moc: privateMOC)
+                        return user
+                    }
+                    
+                    do { // TODO: transfer to sync method
+                        if privateMOC.hasChanges {
+                            try privateMOC.save()
+                        }
+                        context.performAndWait {
+                            do {
+                                if context.hasChanges {
+                                    try context.save()
+                                }
+                            } catch {
+                                fatalError("Failed to save context: \(error)")
+                            }
+                        }
+                    } catch {
+                        completion(.failure(error))
+                        fatalError("Failed to save context: \(error)")
+                    }
+                    completion(.success(users))
+                    
+                }
+            case let .failure(error):
+                completion(.failure(error))
             }
         }
     }
@@ -386,5 +511,15 @@ class UsersViewModel {
             return .failure(AppError.imageCreationError)
         }
         return .success((image, .network))
+    }
+}
+extension Array where Element: Equatable {
+    var unique: [Element] {
+        var uniqueValues: [Element] = []
+        forEach { item in
+            guard !uniqueValues.contains(item) else { return }
+            uniqueValues.append(item)
+        }
+        return uniqueValues
     }
 }

@@ -11,6 +11,7 @@ import CoreData
 
 class CoreDataService {
     
+    public static let privateMOC = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
     public static let shared = CoreDataService()
     
     internal static let persistentContainerName = getConfig().xcPersisentContainerName

@@ -7,6 +7,7 @@ import Foundation
 
 enum AppError: Error {
     case networkError
+    case fetchInProgress
     case appConfigLoadError
     case documentsDirectoryNotFound
     case missingImageUrl
