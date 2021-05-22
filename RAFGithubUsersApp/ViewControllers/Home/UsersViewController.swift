@@ -222,13 +222,12 @@ class UsersViewController: UITableViewController {
                 
                 UIView.setAnimationsEnabled(true)
                 
-                self.tableView?.reloadRows(at: indexPathsToReload, with: .fade)
                 //                self.tableView?.reloadRows(at: [IndexPath(row: 29, section: 0)], with: .none)
                 //                self.tableView?.reloadSections(IndexSet(integer: 0), with: .fade)
-                    let contentOffset = self.tableView.contentOffset
-                    self.tableView.reloadData()
-                    self.tableView.layoutIfNeeded()
-                    self.tableView.setContentOffset(contentOffset, animated: false)
+////                    self.tableView.reloadData()
+                self.tableView?.reloadRows(at: indexPathsToReload, with: .fade)
+//                self.tableView.layoutIfNeeded()
+//                self.tableView.setContentOffset(contentOffset, animated: false)
             }
         }
         self.viewModel.bind(availability: onDataAvailable)
@@ -271,11 +270,22 @@ class UsersViewController: UITableViewController {
         //        navigationItem.leftBarButtonItem = leftBarItem
         self.navigationItem.searchController = search
         self.title = "Browse Users".localized()
-        let leftBarItem = UIBarButtonItem(title: "Refresh Stale".localized(), style: .plain, target: self, action: #selector(self.refreshStale))
+        let leftBarItem = UIBarButtonItem(title: "Refresh Stale".localized(), style: .plain, target: self, action: #selector(self.refreshStaleOnDemand))
         self.navigationItem.leftBarButtonItem = leftBarItem
     }
     
-    @objc func refreshStale() {
+    func refreshStaleOnScroll() {
+        self.viewModel.refreshStale { result in
+            DispatchQueue.main.async {
+                let contentOffset = self.tableView.contentOffset
+                self.tableView.reloadData()
+                self.tableView.layoutIfNeeded()
+                self.tableView.setContentOffset(contentOffset, animated: false)
+            }
+        }
+    }
+
+    @objc func refreshStaleOnDemand() {
         self.viewModel.refreshStale { result in
 //            switch result {
 //            case let .success(_):
@@ -291,17 +301,17 @@ class UsersViewController: UITableViewController {
 //                    return cell.indexPath
 //                }
 //                self.tableView.reloadRows(at: paths, with: .none)
-                let contentOffset = self.tableView.contentOffset
 //                self.tableView.reloadData()
 //                self.tableView.layoutIfNeeded()
 //                let paths: [IndexPath] = self.tableView.visibleCells.map {
 //                    let cell = $0 as! UserTableViewCellBase
 //                    return cell.indexPath
 //                }
-                                self.tableView.reloadData()
-//                self.tableView.reloadRows(at: paths, with: .none)
+                let contentOffset = self.tableView.contentOffset
+                self.tableView.reloadData()
                 self.tableView.layoutIfNeeded()
                 self.tableView.setContentOffset(contentOffset, animated: false)
+                //                self.tableView.reloadRows(at: paths, with: .none)
 //                self.tableView.estimatedRowHeight = 1000
 //                self.tableView.estimatedSectionFooterHeight = 100.0
 //                self.tableView.estimatedSectionHeaderHeight = 500.0
@@ -423,35 +433,28 @@ class UsersViewController: UITableViewController {
 
         if let cell = cell as? UserTableViewCellBase {
             if self.viewModel.staleIds.contains(cell.user.id) {
-                self.viewModel.refreshStale() { _ in
-                    DispatchQueue.main.async {
-                        let contentOffset = self.tableView.contentOffset
-                        self.tableView.reloadData()
-                        self.tableView.layoutIfNeeded()
-                        self.tableView.setContentOffset(contentOffset, animated: false)
-                    }
-                }
+                self.refreshStaleOnScroll()
             }
         }
-
-//        self.viewModel.fetchImage(for: element) { result in
-//            guard let photoIndex = self.viewModel.users.firstIndex(of: element),
-//                case let .success(image) = result else {
-//                    return
-//            }
-//            if let cell = self.tableView.cellForRow(at: IndexPath(item: photoIndex, section: 0)) as? StandardTableViewCell {
-//                DispatchQueue.main.async {
-//                    cell.update(displaying: image)
-//                }
-//                return
-//            }
-//            if let cell = self.tableView.cellForRow(at: IndexPath(item: photoIndex, section: 0)) as? AlternativeTableViewCell {
-//                DispatchQueue.main.async {
-//                    cell.update(displaying: image)
-//                }
-//                return
-//            }
-//        }
+        
+        self.viewModel.fetchImage(for: element) { result in
+            guard let photoIndex = self.viewModel.users.firstIndex(of: element),
+                case let .success(image) = result else {
+                    return
+            }
+            if let cell = self.tableView.cellForRow(at: IndexPath(item: photoIndex, section: 0)) as? StandardTableViewCell {
+                DispatchQueue.main.async {
+                    cell.update(displaying: image)
+                }
+                return
+            }
+            if let cell = self.tableView.cellForRow(at: IndexPath(item: photoIndex, section: 0)) as? AlternativeTableViewCell {
+                DispatchQueue.main.async {
+                    cell.update(displaying: image)
+                }
+                return
+            }
+        }
         
     }
     

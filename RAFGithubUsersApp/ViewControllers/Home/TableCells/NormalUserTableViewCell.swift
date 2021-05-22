@@ -35,13 +35,13 @@ extension NormalUserTableViewCell: UserTableViewCell {
                     UIView.transition(with: self.imgViewChar, duration: 0.25, options: .transitionCrossDissolve, animations: {
                         self.imgViewChar.image = image
                     }, completion: { _ in
-                        self.spinner.stopAnimating()
+//                        self.spinner.stopAnimating()
                     })
                 }
             case .cache:
                 OperationQueue.main.addOperation {
-                    self.imgViewChar.image = image
-                    self.spinner.stopAnimating()
+                        self.imgViewChar.image = image
+//                    self.spinner.stopAnimating()
                 }
             }
             return
