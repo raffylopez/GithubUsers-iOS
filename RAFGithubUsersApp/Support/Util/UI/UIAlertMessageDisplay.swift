@@ -16,6 +16,12 @@ protocol UIAlertMessageDisplay {
 class ToastAlertMessageDisplay: UIAlertMessageDisplay {
     static let main = ToastAlertMessageDisplay()
     static let appView = UIApplication.shared.windows.first?.rootViewController?.view
+    func displayTop(message: String) {
+        OperationQueue.main.addOperation {
+            Self.appView?.hideAllToasts()
+            Self.appView?.makeToast(message, position: .top)
+        }
+    }
     func display(message: String) {
         OperationQueue.main.addOperation {
             Self.appView?.hideAllToasts()

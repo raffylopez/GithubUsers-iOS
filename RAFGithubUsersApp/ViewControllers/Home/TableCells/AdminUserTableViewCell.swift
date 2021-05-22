@@ -20,10 +20,7 @@ class AdminUserTableViewCell: UserTableViewCellBase {
         super.init(coder: coder)
     }
     
-}
-
-extension AdminUserTableViewCell: UserTableViewCell {
-    func update(displaying image: (UIImage, ImageSource)?) {
+    override func update(displaying image: (UIImage, ImageSource)?) {
         if let imageResultSet = image {
             let image = imageResultSet.0
             let imageSource = imageResultSet.1
@@ -42,5 +39,4 @@ extension AdminUserTableViewCell: UserTableViewCell {
             return
         }
     }
-    
 }

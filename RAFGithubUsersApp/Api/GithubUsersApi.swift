@@ -44,21 +44,18 @@ class GithubUsersApi {
             }).resume()
     }
     
-
     func fetchUsers(since: Int = 0, completion: ((Result<[GithubUser], Error>) -> Void)? = nil) {
         DispatchQueue.global().async {
-            let dispatchGroup = DispatchGroup()
-            if self.confQueuedNetworkRequests {
-                dispatchGroup.enter()
-            }
+            ConcurrencyUtils.singleUserRequestSemaphore.wait()
             var uri = URLComponents(string: self.usersListUri)
             uri?.queryItems = [
                 URLQueryItem(name: "access_token", value: getConfig().githubAccessToken),
                 URLQueryItem(name: "since", value: "\(since)")
             ]
-            
+            print("Fetching list of users from \(uri!.url!.absoluteString)...")
             let task = URLSession.shared.githubUsersTask(with: uri!.url!, completionHandler: { (githubUsers, _, error) in
-                if self.confQueuedNetworkRequests { dispatchGroup.leave() }
+                print("Done fetching user list.")
+                ConcurrencyUtils.singleUserRequestSemaphore.signal()
                 if let error = error {
                     completion?(.failure(error))
                     return
@@ -74,7 +71,11 @@ class GithubUsersApi {
                 completion?(.failure(AppError.emptyResult))
             })
             task.resume()
-            if self.confQueuedNetworkRequests { dispatchGroup.wait() }
         }
     }
+}
+
+class ConcurrencyUtils {
+    static let singleImageRequestSemaphore = DispatchSemaphore(value: 1)
+    static let singleUserRequestSemaphore = DispatchSemaphore(value: 1)
 }

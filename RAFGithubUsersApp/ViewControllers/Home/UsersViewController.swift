@@ -16,11 +16,9 @@ class UsersViewController: UITableViewController {
         super.init(nibName: nil, bundle: nil)
     }
     
-    /* Storyboard not supported*/
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) not supported")
+        fatalError("\(#function) not supported by \(String(describing:Self.self))")
     }
-    
 
     fileprivate func startSplashAnimation() {
         let icon: SKSplashIcon = SKSplashIcon(image: UIImage(named: "github_splash_dark")!)
@@ -158,7 +156,7 @@ class UsersViewController: UITableViewController {
         for user in self.viewModel.users {
             guard self.viewModel.imageStore.image(forKey: "\(user.id)") == nil else  { continue }
             if (i+1) % 4 == 0 {
-                self.viewModel.fetchImage(for: user) { result in
+                self.viewModel.fetchImage(for: user, queued: true) { result in
                     if case let .success(img) = result, let inverted = img.0.invertImageColors() {
                         self.viewModel.imageStore.setImage(forKey: "\(user.id)", image: inverted)
                     }
@@ -192,7 +190,7 @@ class UsersViewController: UITableViewController {
                 ToastAlertMessageDisplay.main.hideToastActivity()
                 
                 /* RECALICTRANT */
-                if self.viewModel.currentStartIndex <= 30 { /* User performed a refresh/first load */
+                if self.viewModel.totalDisplayCount <= 30 { /* User performed a refresh/first load */
                     self.tableView.alpha = 0
                     self.tableView.alpha = 1
                     UIView.transition(with: self.tableView,
@@ -209,13 +207,11 @@ class UsersViewController: UITableViewController {
                     return
                 }
 
-                let startIndex = self.viewModel.currentStartIndex - 30
+                let startIndex = self.viewModel.totalDisplayCount - 30
                 let endIndex = startIndex + 30
                 let newIndexPathsToInsert: [IndexPath] = (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
                 let indexPathsToReload = self.visibleIndexPathsToReload(intersecting: newIndexPathsToInsert)
-                
-//                print("STATS To reload(new): \(newIndexPathsToInsert.count), since: \(self.viewModel.since), currentCount: \(self.viewModel.currentCount), lastBatchCount: \(self.viewModel.lastBatchCount), start: \(newIndexPathsToInsert[0].row), end: end: \(newIndexPathsToInsert[newIndexPathsToInsert.count-1].row) ")
-                
+
                 /* Ensure slide animations are disabled on row insertion (slide animation used by default on insert) */
                 UIView.setAnimationsEnabled(false)
                 self.tableView?.beginUpdates()
@@ -276,18 +272,36 @@ class UsersViewController: UITableViewController {
         self.navigationItem.leftBarButtonItem = leftBarItem
     }
     
-    func refreshStaleOnScroll(completion: @escaping ()->Void) {
+    func refreshStaleOnScroll(imageFetchCompletion: (((UIImage, ImageSource))->Void)? = nil, completion: @escaping ()->Void) {
         self.viewModel.refreshStale { result in
-            DispatchQueue.main.async {
-                let startIndex = self.viewModel.currentStartIndex - 30
-                let endIndex = startIndex + 30
-                let newIndexPathsToInsert: [IndexPath] = (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
-                let indexPathsToReload = self.visibleIndexPathsToReload(intersecting: newIndexPathsToInsert)
-                self.tableView?.beginUpdates()
-                self.tableView?.reloadRows(at: indexPathsToReload, with: .fade)
-                self.tableView?.endUpdates()
+            switch result {
+            case let .success(users):
+                DispatchQueue.main.async {
+                    let startIndex = self.viewModel.totalDisplayCount - 30
+                    let endIndex = startIndex + 30
+                    let newIndexPathsToInsert: [IndexPath] = (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
+                    let indexPathsToReload = self.visibleIndexPathsToReload(intersecting: newIndexPathsToInsert)
+                    self.tableView?.beginUpdates()
+                    self.tableView?.reloadRows(at: indexPathsToReload, with: .fade)
+                    self.tableView?.endUpdates()
+                }
+//                users.forEach { user in
+//                    self.viewModel.fetchImage(for: user, reload: true, queued: true) { result in
+//                        switch result {
+//                        case let .success(res):
+////                            break
+//                            imageFetchCompletion?(res)
+//                        case let .failure(error):
+//                            print(error.localizedDescription)
+//                        }
+//
+//                    }
+//                }
+                completion()
+            case .failure:
                 completion()
             }
+
         }
     }
 
@@ -362,7 +376,8 @@ class UsersViewController: UITableViewController {
     
     private func clearData() {
         self.viewModel.clearData()
-        self.tableView.reloadData() // TOD
+        self.viewModel.imageStore.removeAllImages()
+        self.tableView.reloadData() // TODO
     }
     
     // MARK: - Selector targets
@@ -401,51 +416,46 @@ class UsersViewController: UITableViewController {
     }
 
     var isRefreshing = false
-    
+
     // MARK: - UITableViewDelegate methods
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         guard !self.viewModel.users.isEmpty && self.viewModel.users.count - 1 >= indexPath.row else {
             return
         }
-//        guard !self.search.isActive else {
-//            return
-//        }
+
         let element = self.viewModel.users[indexPath.row]
         
-        if isLoadingLastCell(for: indexPath) && !self.search.isActive {
-            fetchMoreTableDataDisplayingResults()
-        }
-
-        if let cell = cell as? UserTableViewCellBase {
-            if !isRefreshing && self.viewModel.staleIds.contains(cell.user.id) {
+        if !self.search.isActive {
+            if isLoadingLastCell(for: indexPath) {
+                fetchMoreTableDataDisplayingResults()
+            }
+            if let cell = cell as? UserTableViewCellBase, !isRefreshing, self.viewModel.staleIds.contains(cell.user.id) {
                 isRefreshing = true
-                ToastAlertMessageDisplay.main.hideAllToasts()
-                ToastAlertMessageDisplay.main.stickyToast(message: "Updating...")
-                self.refreshStaleOnScroll {
+                self.refreshStaleOnScroll(completion: {
                     self.isRefreshing = false
-                }
+                })
             }
-        }
-        
-        self.viewModel.fetchImage(for: element) { result in
-            guard let photoIndex = self.viewModel.users.firstIndex(of: element),
-                case let .success(image) = result else {
+                self.viewModel.fetchImage(for: element, queued: true) { result in
+                guard let photoIndex = self.viewModel.users.firstIndex(of: element),
+                    case let .success(image) = result else {
+                        return
+                }
+                if let cell = self.tableView.cellForRow(at: IndexPath(item: photoIndex, section: 0)) as? StandardTableViewCell {
+                    DispatchQueue.main.async {
+                        cell.update(displaying: image)
+                    }
                     return
-            }
-            if let cell = self.tableView.cellForRow(at: IndexPath(item: photoIndex, section: 0)) as? StandardTableViewCell {
-                DispatchQueue.main.async {
-                    cell.update(displaying: image)
                 }
-                return
-            }
-            if let cell = self.tableView.cellForRow(at: IndexPath(item: photoIndex, section: 0)) as? AlternativeTableViewCell {
-                DispatchQueue.main.async {
-                    cell.update(displaying: image)
+                if let cell = self.tableView.cellForRow(at: IndexPath(item: photoIndex, section: 0)) as? AlternativeTableViewCell {
+                    DispatchQueue.main.async {
+                        cell.update(displaying: image)
+                    }
+                    return
                 }
-                return
             }
         }
         
+
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

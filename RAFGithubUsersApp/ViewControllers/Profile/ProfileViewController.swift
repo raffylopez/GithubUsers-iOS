@@ -122,8 +122,15 @@ class ProfileViewController: UIViewController {
             } catch {
                 preconditionFailure("Unable to save note! \(error)")
             }
-            ToastAlertMessageDisplay.main.display(message: "Note deleted.".localized())
             delegate.didSaveNote(at: self.viewModel.cell.indexPath)
+            
+            let message = "Note deleted.".localized()
+            if UIApplication.shared.isKeyboardPresented {
+                ToastAlertMessageDisplay.main.displayTop(message: message)
+                return
+            }
+            ToastAlertMessageDisplay.main.display(message: message)
+            return
         }
     }
     
@@ -143,8 +150,15 @@ class ProfileViewController: UIViewController {
             } catch {
                 preconditionFailure("Unable to save note! \(error)")
             }
-            ToastAlertMessageDisplay.main.display(message: "Note saved.".localized())
             delegate.didSaveNote(at: self.viewModel.cell.indexPath)
+            
+            let message = "Note saved.".localized()
+            if UIApplication.shared.isKeyboardPresented {
+                ToastAlertMessageDisplay.main.displayTop(message: message)
+                return
+            }
+            ToastAlertMessageDisplay.main.display(message: message)
+            return
         }
     }
     
@@ -266,4 +280,14 @@ extension ProfileViewController: ViewModelDelegate {
         print("\(#function)")
     }
     
+}
+
+extension UIApplication {
+    var isKeyboardPresented: Bool {
+        if let keyboardWindowClass = NSClassFromString("UIRemoteKeyboardWindow"), self.windows.contains(where: { $0.isKind(of: keyboardWindowClass) }) {
+            return true
+        } else {
+            return false
+        }
+    }
 }

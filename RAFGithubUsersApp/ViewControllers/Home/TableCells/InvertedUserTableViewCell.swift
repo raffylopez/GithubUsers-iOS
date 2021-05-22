@@ -21,7 +21,21 @@ class InvertedUserTableViewCell: UserTableViewCellBase {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
-    
+    override func update(displaying image: (UIImage, ImageSource)?) {
+        if let imageResultSet = image {
+            
+            let image = imageResultSet.0
+            let imageSource = imageResultSet.1
+            
+            if let invertedImage = image.invertImageColors() {
+                self.imgViewChar.image = invertedImage
+                self.spinner.stopAnimating()
+            }
+            
+            return
+        }
+    }
+
 }
 
 extension InvertedUserTableViewCell: UserTableViewCell {
@@ -42,37 +56,4 @@ extension InvertedUserTableViewCell: UserTableViewCell {
         }
     }
     
-    func update(displaying image: (UIImage, ImageSource)?) {
-        if let imageResultSet = image {
-            
-            let image = imageResultSet.0
-            let imageSource = imageResultSet.1
-            
-            if let invertedImage = image.invertImageColors() {
-                self.imgViewChar.image = invertedImage
-                self.spinner.stopAnimating()
-            }
-            
-//            switch imageSource {
-//            case .network:
-//                OperationQueue.main.addOperation {
-////                    if self.store.image(forKey: "\(self.user.id)") != nil {
-////                        self.imgViewChar.image = image
-////                }
-//                    if let invertedImage = image.invertImageColors() {
-//                        self.imgViewChar.image = invertedImage
-//                        self.store.setImage(forKey: "\(self.user.id)", image: invertedImage)
-//                        self.spinner.stopAnimating()
-//                    }
-//                }
-//                return
-//            case .cache:
-//                OperationQueue.main.addOperation {
-//                    self.imgViewChar.image = image
-//                    self.spinner.stopAnimating()
-//                }
-//            }
-            return
-        }
-    }
 }

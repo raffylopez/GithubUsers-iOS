@@ -23,10 +23,14 @@ class UsersViewModel {
     var currentPage: Int = 0
     var lastBatchCount: Int = 0 {
         didSet {
-            totalDisplayCount += lastBatchCount
+            print("STATS v_lastBatchCount: \(lastBatchCount)")
         }
     }
-    var totalDisplayCount: Int = 0
+    var totalDisplayCount: Int = 0 {
+        didSet {
+            print("STATS v_totalDisplayCount: \(totalDisplayCount)")
+        }
+    }
 
     var currentCount: Int {
         return users.count
@@ -61,6 +65,16 @@ class UsersViewModel {
     }
     let userInfoProvider: UserInfoProvider = CoreDataService.shared
 
+//    lazy var needsMoreData: Bool = {
+//        return self.usersDatabaseService.getUserCount() == self.users.count
+//    }()
+    
+    var needsMoreData: Bool {
+        if let lastUser = users.last {
+            return lastUser.id == since
+        }
+        return true
+    }
     private(set) var users: [User]! = [] {
         didSet {
             usersMain = oldValue
@@ -134,8 +148,8 @@ class UsersViewModel {
         }
     }
     
+    
     func loadOfflineData(completion: (()->Void)? = nil) {
-        print("STATS totalDisplayCount: \(self.totalDisplayCount)")
         let userCount = self.usersDatabaseService.getUserCount()
         print("STATS userCount: \(userCount)")
         
@@ -162,7 +176,7 @@ class UsersViewModel {
                 if let user = combinedUsers.last {
                     self.since = Int(user.id)
                 }
-                self.currentStartIndex = combinedUsers.count
+//                self.currentStartIndex = combinedUsers.count
                 completion?()
             case let .failure(error):
                 completion?()
@@ -178,22 +192,24 @@ class UsersViewModel {
      Public-facing routine to be accessed by viewcontroller. Wraps around processRequest.
      */
     public func updateUsers(completion: (()->Void)? = nil) {
-        guard !confSimulateOffline else {
+        if let lastUser = self.users.last {
+            self.since = Int(lastUser.id)
+        }
+            
+        let needsToFetch = usersDatabaseService.getUserCount() == self.users.count || usersDatabaseService.getUserCount() == 0
+        guard needsToFetch && ConnectionMonitor.shared.isApiReachable else {
             loadOfflineData(completion: completion)
             return
         }
-        guard ConnectionMonitor.shared.isApiReachable else {
-            loadOfflineData(completion: completion)
-            return
-        }
-        processUserRequest { result in
+        
+        refreshInBackground(since: self.since) { result in
             switch result {
             case let .success(users):
                 self.unregisterStale(users: users)
                 if let user = users.last {
                     self.since = Int(user.id)
                 }
-                self.lastBatchCount = users.count
+                self.totalDisplayCount += users.count
 //                print_r(array: users) // DEBUG
                 self.loadUsersFromDisk(count: self.totalDisplayCount)
                 completion?()
@@ -230,7 +246,6 @@ class UsersViewModel {
         self.onDataAvailable = availability
     }
 
-    var currentStartIndex = 0
     /**
      Fetch data from coredata, and set it to users attribute, triggering
      view controller closure.
@@ -370,11 +385,12 @@ class UsersViewModel {
             }
         }
     }
-
+    
+    /* Does not add new records into db */
     public func refreshStale(completion: ((Result<[User], Error>)->Void)? = nil) {
         guard ConnectionMonitor.shared.isApiReachable else {
 //            ToastAlertMessageDisplay.main.display(message: "Network unreachable.")
-//            completion?(.failure(AppError.networkError))
+            completion?(.failure(AppError.networkError))
             return
         }
 
@@ -383,13 +399,13 @@ class UsersViewModel {
             completion?(.failure(AppError.emptyResult))
             return
         }
+        
         refreshInBackground(since: Int(since == 0 ? 0 : since - 1)) { result in
             switch result {
             case let .success(users):
                 self.unregisterStale(users: users)
 //                print_r(array: users)
-                print_r(array: self.staleIds)
-                
+//                print_r(array: self.staleIds)
                 ToastAlertMessageDisplay.main.display(message: "\(self.staleIds.count) stale entries left to update")
                 completion?(.success(users))
             case let .failure(error):
@@ -399,14 +415,14 @@ class UsersViewModel {
         }
     }
 
-    private func refreshInBackground(since: Int, completion: @escaping ((Result<[User], Error>)->Void)) {
+    private func refreshInBackground(since: Int, completion: @escaping ((Result<[User], Error>)->Void), queued: Bool = true) {
         guard !isFetchInProgress else {
             return
         }
+        
         self.isFetchInProgress = true
         
         let privateMOC = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-//        let privateMOC = CoreDataService.privateMOC
         let context = CoreDataService.persistentContainer.viewContext
         privateMOC.parent = context
         
@@ -421,13 +437,11 @@ class UsersViewModel {
                         let predicate = NSPredicate( format: "\(#keyPath(User.id)) == \(githubUser.id)" )
                         fetchRequest.predicate = predicate
                         var fetchedUsers: [User]?
-//                        context.performAndWait {
-                            do {
-                                fetchedUsers = try fetchRequest.execute()
-                            } catch {
-                                preconditionFailure()
-                            }
-//                        }
+                        do {
+                            fetchedUsers = try fetchRequest.execute()
+                        } catch {
+                            preconditionFailure()
+                        }
                         if let existingUser = fetchedUsers?.first {
                             existingUser.merge(with: githubUser, moc: privateMOC)
                             return existingUser
@@ -468,40 +482,43 @@ class UsersViewModel {
      Fetches photo media (based on avatar url). Call is asynchronous or synchronous,but the latter
      leads to less than optimal performance.
          */
-    func fetchImage(for user: User, completion: @escaping (Result<(UIImage, ImageSource), Error>) -> Void, synchronous: Bool = false) {
+    func fetchImage(for user: User, reload: Bool = false, queued: Bool = true, completion: @escaping (Result<(UIImage, ImageSource), Error>) -> Void) {
         guard let urlString = user.urlAvatar, !urlString.isEmpty else {
             completion(.failure(AppError.missingImageUrl))
             return
         }
         let imageUrl = URL(string: urlString)!
-
+        
         let key = "\(user.id)"
-        if let image = imageStore.image(forKey: key) {
-            DispatchQueue.main.async {
-                completion(.success((image, .cache)))
+        if !reload {
+            if let image = imageStore.image(forKey: key) {
+                DispatchQueue.main.async {
+                    completion(.success((image, .cache)))
+                }
+                return
             }
-            return
         }
 
         let request = URLRequest(url: imageUrl)
-        let group = DispatchGroup()
-        if (synchronous) { group.enter() }
-        
-        let task = session.dataTask(with: request) { data, _, error in
-            let result = self.processImageRequest(data: data, error: error)
-            // Save to cache
-            if case let .success(image) = result {
-                self.imageStore.setImage(forKey: key, image: image.0)
-            }
 
-            if (synchronous) { group.leave() }
-            
-            OperationQueue.main.addOperation {
-                completion(result)
+        DispatchQueue.global().async {
+            ConcurrencyUtils.singleImageRequestSemaphore.wait()
+            print("Downloading and caching image from " + imageUrl.absoluteString + "...")
+            let task = self.session.dataTask(with: request) { data, _, error in
+                let result = self.processImageRequest(data: data, error: error)
+                // Save to cache
+                if case let .success(image) = result {
+                    self.imageStore.setImage(forKey: key, image: image.0)
+                }
+                
+                OperationQueue.main.addOperation {
+                    print("Done")
+                    completion(result)
+                    ConcurrencyUtils.singleImageRequestSemaphore.signal()
+                }
             }
+            task.resume()
         }
-        task.resume()
-        if (synchronous) { group.wait() }
     }
     
     /**

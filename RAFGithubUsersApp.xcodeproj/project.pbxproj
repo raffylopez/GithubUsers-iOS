@@ -122,8 +122,6 @@
 		E1510C6E264C478100E59C35 /* UserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
 		E1510C70264C4A9800E59C35 /* UserTableViewCellBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableViewCellBase.swift; sourceTree = "<group>"; };
 		E1510C74264C4D7A00E59C35 /* UserListTableViewCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListTableViewCellDelegate.swift; sourceTree = "<group>"; };
-		E1510C79264C6A0F00E59C35 /* StubUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubUserTableViewCell.swift; sourceTree = "<group>"; };
-		E1510C7B264C6A7A00E59C35 /* NoteUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteUserTableViewCell.swift; sourceTree = "<group>"; };
 		E1510C7F264C9B9200E59C35 /* AdminUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminUserTableViewCell.swift; sourceTree = "<group>"; };
 		E1510C83264CF45100E59C35 /* SkeletonView.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SkeletonView.framework; path = Carthage/Build/iOS/SkeletonView.framework; sourceTree = "<group>"; };
 		E160EBB9264A6D44002820EC /* GithubApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GithubApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -140,7 +138,6 @@
 		E160EBD8264A6D47002820EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E160EBE2264A7592002820EC /* ViewControllersFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllersFactory.swift; sourceTree = "<group>"; };
 		E160EBE4264A76FF002820EC /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
-		E1674C9B26580F2100FAF245 /* ProfileViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewDelegate.swift; sourceTree = "<group>"; };
 		E1674C9C26580F3A00FAF245 /* UsersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersViewModel.swift; sourceTree = "<group>"; };
 		E1880BE4264E8BEA0026D6DC /* ViewModelDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelDelegate.swift; sourceTree = "<group>"; };
 		E189A155264ACC2A00CBD45A /* UserDataModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataModelTest.swift; sourceTree = "<group>"; };
@@ -154,7 +151,6 @@
 		E189A182264AE77800CBD45A /* fakeuserslist.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = fakeuserslist.json; sourceTree = "<group>"; };
 		E189A184264AE7A000CBD45A /* GithubApiMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GithubApiMock.swift; sourceTree = "<group>"; };
 		E189A186264AE9AC00CBD45A /* MockApiTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockApiTests.swift; sourceTree = "<group>"; };
-		E189A18C264AF8F900CBD45A /* UsersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersViewModel.swift; sourceTree = "<group>"; };
 		E189A18E264AF96300CBD45A /* ImageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStore.swift; sourceTree = "<group>"; };
 		E189A190264AFA4700CBD45A /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		E1A5B351265454680069655B /* UIAlertMessageDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIAlertMessageDisplay.swift; sourceTree = "<group>"; };
@@ -209,17 +205,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		E124377B2656ACAD004C4DCA /* Archive */ = {
-			isa = PBXGroup;
-			children = (
-				E1510C7B264C6A7A00E59C35 /* NoteUserTableViewCell.swift */,
-				E1510C79264C6A0F00E59C35 /* StubUserTableViewCell.swift */,
-				E1674C9B26580F2100FAF245 /* ProfileViewDelegate.swift */,
-				E189A18C264AF8F900CBD45A /* UsersViewModel.swift */,
-			);
-			path = Archive;
-			sourceTree = "<group>";
-		};
 		E146CC26264D877600C3FA51 /* FFBadgedBarButtonItem */ = {
 			isa = PBXGroup;
 			children = (
@@ -262,7 +247,6 @@
 		E1510C7E264C710F00E59C35 /* TableCells */ = {
 			isa = PBXGroup;
 			children = (
-				E124377B2656ACAD004C4DCA /* Archive */,
 				E1510C78264C4E0000E59C35 /* Base Types */,
 				E1D04A7D264BB57F00C4E5FD /* NormalUserTableViewCell.swift */,
 				E12437792656AC15004C4DCA /* NoteNormalUserTableViewCell.swift */,
