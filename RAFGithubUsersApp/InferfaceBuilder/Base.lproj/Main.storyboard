@@ -372,6 +372,7 @@
                         <outlet property="lblNoteIcon" destination="nzX-2z-jVa" id="fCR-dl-uZy"/>
                         <outlet property="lblNoteTag" destination="EtB-ok-OIz" id="X0L-x3-glJ"/>
                         <outlet property="nameTopContraint" destination="GKw-sM-oXU" id="CNM-ZH-Xv7"/>
+                        <outlet property="scrollView" destination="IfO-mm-Bb9" id="kji-sS-o0h"/>
                         <outlet property="tvNote" destination="AqR-WK-wyC" id="z2C-EE-gvQ"/>
                     </connections>
                 </viewController>

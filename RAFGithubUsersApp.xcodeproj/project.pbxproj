@@ -112,7 +112,6 @@
 		E146CC2C264D887400C3FA51 /* ConnectionMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionMonitor.swift; sourceTree = "<group>"; };
 		E146CC2E264D8FEC00C3FA51 /* Reachability.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Reachability.framework; path = Carthage/Build/iOS/Reachability.framework; sourceTree = "<group>"; };
 		E146CC34264D937600C3FA51 /* GithubApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GithubApp.entitlements; sourceTree = "<group>"; };
-		E146CC35264D937600C3FA51 /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
 		E146CC37264DD4B000C3FA51 /* ScheduledTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduledTask.swift; sourceTree = "<group>"; };
 		E1510C64264C10A500E59C35 /* RAFGithubUsersApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RAFGithubUsersApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		E1510C65264C10A600E59C35 /* FFBadgedBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFBadgedBarButtonItem.m; sourceTree = "<group>"; };
@@ -281,7 +280,6 @@
 			isa = PBXGroup;
 			children = (
 				E1A5B353265461FD0069655B /* FontAwesome.framework */,
-				E146CC35264D937600C3FA51 /* ExternalAccessory.framework */,
 				E146CC2E264D8FEC00C3FA51 /* Reachability.framework */,
 				E1510C83264CF45100E59C35 /* SkeletonView.framework */,
 			);
@@ -292,6 +290,7 @@
 			isa = PBXGroup;
 			children = (
 				E160EBC2264A6D44002820EC /* Main.storyboard */,
+				E160EBCA264A6D46002820EC /* LaunchScreen.storyboard */,
 			);
 			path = InferfaceBuilder;
 			sourceTree = "<group>";
@@ -331,7 +330,6 @@
 				E160EBBC264A6D44002820EC /* AppDelegate.swift */,
 				E160EBBE264A6D44002820EC /* SceneDelegate.swift */,
 				E160EBC8264A6D46002820EC /* Assets.xcassets */,
-				E160EBCA264A6D46002820EC /* LaunchScreen.storyboard */,
 				E160EBCD264A6D46002820EC /* Info.plist */,
 			);
 			path = RAFGithubUsersApp;

@@ -9,7 +9,11 @@
 import UIKit
 import SkeletonView
 
-class UserTableViewCellBase: UITableViewCell {
+protocol UserCell: UITableViewCell {
+    func updateCell()
+}
+
+class UserTableViewCellBase: UITableViewCell, UserCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.selectionStyle = .none
@@ -25,6 +29,7 @@ class UserTableViewCellBase: UITableViewCell {
         self.lblName.text = user.login ?? ""
         self.lblSeries.text = user.urlHtml
     }
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
@@ -47,7 +52,7 @@ class UserTableViewCellBase: UITableViewCell {
     
     internal var imgViewChar: UIImageView! = {
         let imgCharacter = UIImageView()
-        imgCharacter.backgroundColor = .systemBackground
+        imgCharacter.backgroundColor = .systemGray5
         imgCharacter.isUserInteractionEnabled = true
         imgCharacter.contentMode = .scaleAspectFit
         return imgCharacter }()
@@ -88,7 +93,7 @@ class UserTableViewCellBase: UITableViewCell {
         spinner.centerYAnchor.constraint(equalTo: imgCharacter.centerYAnchor).isActive = true
         spinner.centerXAnchor.constraint(equalTo: imgCharacter.centerXAnchor).isActive = true
         
-        spinner.startAnimating()
+//        spinner.startAnimating()
     }
     
     internal func setupLayout() {
@@ -116,9 +121,9 @@ extension UserTableViewCellBase {
         delegate?.didTouchCellPanel(cell: self)
     }
     override func prepareForReuse() {
-        imgViewChar.backgroundColor = .systemBackground
+        imgViewChar.backgroundColor = .systemGray5
         imgViewChar.image = nil
-        spinner.startAnimating()
+//        spinner.startAnimating()
     }
     
     fileprivate func makeImageVisible(img: UIImage) {

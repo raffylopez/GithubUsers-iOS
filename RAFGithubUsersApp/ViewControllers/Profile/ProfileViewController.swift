@@ -15,6 +15,7 @@ class ProfileViewController: UIViewController {
     @IBOutlet var boxBlue: UIView!
     @IBOutlet var imgUser: UIImageView!
     
+    @IBOutlet var scrollView: UIScrollView!
     @IBOutlet var lblName: UILabel!
     @IBOutlet var lblLogin: UILabel!
     @IBOutlet var lblBio: UILabel!
@@ -173,10 +174,49 @@ class ProfileViewController: UIViewController {
         self.viewModel.fetchUserDetails(for: self.viewModel.user, onRetryError: nil) { _ in
             ToastAlertMessageDisplay.main.hideToastActivity()
         }
+        registerForKeyboardNotifications()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+    }
+
+    func registerForKeyboardNotifications() {
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardAppear(_:)), name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardDisappear(_:)), name: UIResponder.keyboardDidHideNotification, object: nil)
+    }
+    
+    @objc func onKeyboardAppear(_ notification: NSNotification) {
+        let info = notification.userInfo!
+        let rect: CGRect = info[UIResponder.keyboardFrameBeginUserInfoKey] as! CGRect
+        let kbSize = rect.size
+        let kbHeight = kbSize.height - (self.btnSave.frame.height * 2)
+
+        let insets = UIEdgeInsets(top: 0, left: 0, bottom: kbHeight, right: 0)
+        scrollView.contentInset = insets
+        scrollView.scrollIndicatorInsets = insets
+        
+        var aRect = self.view.frame;
+        aRect.size.height -= kbHeight;
+        
+        let activeField: UITextView? = [tvNote].first { $0.isFirstResponder }
+        if let activeField = activeField {
+            if !aRect.contains(activeField.frame.origin) {
+                let scrollPoint = CGPoint(x: 0, y: activeField.frame.origin.y-kbHeight)
+                scrollView.setContentOffset(scrollPoint, animated: true)
+            }
+        }
+    }
+    
+    @objc func onKeyboardDisappear(_ notification: NSNotification) {
+        scrollView.contentInset = UIEdgeInsets.zero
+        scrollView.scrollIndicatorInsets = UIEdgeInsets.zero
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardDidHideNotification, object: nil)
     }
 }
 

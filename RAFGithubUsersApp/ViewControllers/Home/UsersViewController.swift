@@ -108,10 +108,10 @@ class UsersViewController: UITableViewController {
      Generic method that uses reflection to obtain a table view cell subtype instance,
      with dequeue identifier based on reflected type
      */
-    private func buildCell<T>(associatedUser: User, _ type: T.Type, cellForRowAt indexPath: IndexPath) -> T where T:UserTableViewCellBase {
+    private func cellInstance<T>(user: User, _ type: T.Type, cellForRowAt indexPath: IndexPath) -> T where T:UserTableViewCellBase {
         let cell  = tableView.dequeueReusableCell(withIdentifier: String(describing: T.self), for: indexPath)
         if let cell = cell as? T {
-            cell.user = associatedUser
+            cell.user = user
             cell.indexPath = indexPath
             cell.delegate = self
             cell.owningController = self
@@ -401,6 +401,7 @@ class UsersViewController: UITableViewController {
     }
 
     var isRefreshing = false
+    
     // MARK: - UITableViewDelegate methods
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         guard !self.viewModel.users.isEmpty && self.viewModel.users.count - 1 >= indexPath.row else {
@@ -491,21 +492,21 @@ extension UsersViewController {
         }
         
         let user = viewModel.users[indexPath.row]
-        var cell: UserTableViewCellBase!
+        var cell: UserCell!
 
         let hasNote = user.userInfo != nil && user.userInfo?.note != nil && user.userInfo?.note != ""
         
         if (multiple(of: 4, indexPath.row + 1) && confImageInversionOnFourthRows) {
             cell = hasNote ?
-                buildCell(associatedUser: user, AlternativeNotedTableViewCell.self, cellForRowAt: indexPath) :
-                buildCell(associatedUser: user, AlternativeTableViewCell.self, cellForRowAt: indexPath)
+                cellInstance(user: user, AlternativeNotedTableViewCell.self, cellForRowAt: indexPath) :
+                cellInstance(user: user, AlternativeTableViewCell.self, cellForRowAt: indexPath)
             cell.tag = indexPath.row
             cell.updateCell()
             return cell
         }
         cell = hasNote ?
-            buildCell(associatedUser: user, StandardNotedTableViewCell.self, cellForRowAt: indexPath) :
-            buildCell(associatedUser: user, StandardTableViewCell.self, cellForRowAt: indexPath)
+            cellInstance(user: user, StandardNotedTableViewCell.self, cellForRowAt: indexPath) :
+            cellInstance(user: user, StandardTableViewCell.self, cellForRowAt: indexPath)
         cell.tag = indexPath.row
         cell.updateCell()
 
