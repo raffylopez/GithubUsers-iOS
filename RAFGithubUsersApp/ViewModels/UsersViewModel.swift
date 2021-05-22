@@ -163,7 +163,7 @@ class UsersViewModel {
                     self.since = Int(user.id)
                 }
                 ToastAlertMessageDisplay.main.hideAllToasts()
-                ToastAlertMessageDisplay.main.display(message: "Working offline")
+                ToastAlertMessageDisplay.main.stickyToast(message: "Working offline")
                 completion?()
             case let .failure(error):
                 completion?()
@@ -173,15 +173,18 @@ class UsersViewModel {
 
     }
     
-    
+    var confSimulateOffline = true
     /* MARK: - Interface */
     /**
      Public-facing routine to be accessed by viewcontroller. Wraps around processRequest.
      */
     public func updateUsers(completion: (()->Void)? = nil) {
+        guard !confSimulateOffline else {
+            loadOfflineData(completion: completion)
+            return
+        }
         guard ConnectionMonitor.shared.isApiReachable else {
             loadOfflineData(completion: completion)
-            completion?()
             return
         }
         processUserRequest { result in

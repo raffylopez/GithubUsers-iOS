@@ -52,14 +52,14 @@ class UsersViewController: UITableViewController {
     
     var lastConnectionState: ConnectionState = .reachable
     // MARK: Configure table cell types
-    typealias StandardTableViewCell = NormalUserTableViewCell
-    typealias StandardNotedTableViewCell = NoteNormalUserTableViewCell
-    typealias AlternativeTableViewCell = InvertedUserTableViewCell
-    typealias AlternativeNotedTableViewCell = NoteInvertedUserTableViewCell
-//    typealias StandardTableViewCell = DebugUserTableViewCell
-//    typealias StandardNotedTableViewCell = DebugUserTableViewCell
-//    typealias AlternativeTableViewCell = DebugUserTableViewCell
-//    typealias AlternativeNotedTableViewCell = DebugUserTableViewCell
+//    typealias StandardTableViewCell = NormalUserTableViewCell
+//    typealias StandardNotedTableViewCell = NoteNormalUserTableViewCell
+//    typealias AlternativeTableViewCell = InvertedUserTableViewCell
+//    typealias AlternativeNotedTableViewCell = NoteInvertedUserTableViewCell
+    typealias StandardTableViewCell = DebugUserTableViewCell
+    typealias StandardNotedTableViewCell = DebugUserTableViewCell
+    typealias AlternativeTableViewCell = DebugUserTableViewCell
+    typealias AlternativeNotedTableViewCell = DebugUserTableViewCell
     
     typealias DummyTableViewCell = DebugUserTableViewCell
 
@@ -312,13 +312,15 @@ class UsersViewController: UITableViewController {
         setupNavbar()
         self.refreshControl = UIRefreshControl()
         self.refreshControl?.addTarget(self, action: #selector(refreshPulled), for: .valueChanged)
+
     }
-    
+
     // MARK: - ViewController methods
     override func loadView() {
         super.loadView()
         setupTableView()
         self.view.backgroundColor = UIColor.systemBackground
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -332,6 +334,27 @@ class UsersViewController: UITableViewController {
         super.viewDidAppear(animated)
     }
     
+    lazy var statusBar: UIView = {
+        let statusBar = UIView()
+        if let nav = self.navigationController {
+            UIHelper.initializeView(view: statusBar, parent: nav.view)
+            statusBar.backgroundColor = .black
+            statusBar.heightAnchor.constraint(equalToConstant: 20).isActive = true
+            statusBar.widthAnchor.constraint(equalTo: nav.view.widthAnchor, multiplier: 1).isActive = true
+            statusBar.bottomAnchor.constraint(equalTo: nav.view.bottomAnchor).isActive = true
+            statusBar.leadingAnchor.constraint(equalTo: nav.view.leadingAnchor).isActive = true
+            
+            var label = UILabel()
+            label.text = "No network"
+            label.textColor = .white
+            label.sizeToFit()
+            UIHelper.initializeView(view: label, parent: statusBar)
+            label.centerYAnchor.constraint(equalTo: statusBar.centerYAnchor).isActive = true
+            label.leadingAnchor.constraint(equalTo: statusBar.leadingAnchor, constant: 28).isActive = true
+        }
+
+        return statusBar
+    }()
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -342,12 +365,11 @@ class UsersViewController: UITableViewController {
         setupHandlers()
         setupReachability()
         self.fetchMoreTableDataDisplayingResults()
-
     }
     
     private func clearData() {
         self.viewModel.clearData()
-        self.tableView.reloadData() // TODO
+        self.tableView.reloadData() // TOD
     }
     
     // MARK: - Selector targets
@@ -399,20 +421,38 @@ class UsersViewController: UITableViewController {
             fetchMoreTableDataDisplayingResults()
         }
 
-        viewModel.fetchImage(for: element) { result in
-            guard let photoIndex = self.viewModel.users.firstIndex(of: element),
-                case let .success(image) = result else {
-                    return
-            }
-            if let cell = self.tableView.cellForRow(at: IndexPath(item: photoIndex, section: 0)) as? StandardTableViewCell {
-                cell.update(displaying: image)
-                return
-            }
-            if let cell = self.tableView.cellForRow(at: IndexPath(item: photoIndex, section: 0)) as? AlternativeTableViewCell {
-                cell.update(displaying: image)
-                return
+        if let cell = cell as? UserTableViewCellBase {
+            if self.viewModel.staleIds.contains(cell.user.id) {
+                self.viewModel.refreshStale() { _ in
+                    DispatchQueue.main.async {
+                        let contentOffset = self.tableView.contentOffset
+                        self.tableView.reloadData()
+                        self.tableView.layoutIfNeeded()
+                        self.tableView.setContentOffset(contentOffset, animated: false)
+                    }
+                }
             }
         }
+
+//        self.viewModel.fetchImage(for: element) { result in
+//            guard let photoIndex = self.viewModel.users.firstIndex(of: element),
+//                case let .success(image) = result else {
+//                    return
+//            }
+//            if let cell = self.tableView.cellForRow(at: IndexPath(item: photoIndex, section: 0)) as? StandardTableViewCell {
+//                DispatchQueue.main.async {
+//                    cell.update(displaying: image)
+//                }
+//                return
+//            }
+//            if let cell = self.tableView.cellForRow(at: IndexPath(item: photoIndex, section: 0)) as? AlternativeTableViewCell {
+//                DispatchQueue.main.async {
+//                    cell.update(displaying: image)
+//                }
+//                return
+//            }
+//        }
+        
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
