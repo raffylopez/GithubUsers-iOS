@@ -202,7 +202,7 @@ class UsersViewModel {
             return
         }
         
-        refreshInBackground(since: self.since) { result in
+        fetchUsers(since: self.since) { result in
             switch result {
             case let .success(users):
                 self.unregisterStale(users: users)
@@ -290,83 +290,6 @@ class UsersViewModel {
      }
     }
     
-    /**
-     Fetches users from off the network, and writes users into datastore. Uses background context
-     for write queries. Reads are performed by main view context.
-
-     Additional calls to this method are terminated at onset, while a fetch is already in progress.
-     
-     Returns a result containing network-fetched users ONLY, which are a merge
-     of network-based objects and old database objects. The count is based on the
-     size of the batch received.
-     */
-    func processUserRequest(completion: @escaping ((Result<[User], Error>)->Void)) {
-        guard !isFetchInProgress else {
-            completion(.failure(AppError.fetchInProgress))
-            return
-        }
-        self.isFetchInProgress = true
-        
-        let privateMOC = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-//        let privateMOC = CoreDataService.privateMOC
-        let context = CoreDataService.persistentContainer.viewContext
-        privateMOC.parent = context
-        
-        self.apiService.fetchUsers(since: self.since) { (result: Result<[GithubUser], Error>) in
-            self.isFetchInProgress = false
-            switch result {
-            case let .success(githubUsers):
-                self.currentPage += 1
-                privateMOC.performAndWait {
-                    let users: [User] = githubUsers.map { githubUser in
-                        let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
-                        fetchRequest.entity = NSEntityDescription.entity(forEntityName: String.init(describing: User.self), in: context)
-                        let predicate = NSPredicate( format: "\(#keyPath(User.id)) == \(githubUser.id)" )
-                        fetchRequest.predicate = predicate
-                        var fetchedUsers: [User]?
-//                        context.performAndWait {
-                            do {
-                                fetchedUsers = try fetchRequest.execute()
-                            } catch {
-                                preconditionFailure()
-                            }
-//                        }
-                        if let existingUser = fetchedUsers?.first {
-                            existingUser.merge(with: githubUser, moc: privateMOC)
-                            return existingUser
-                        }
-                        
-                        var user: User!
-                        user = User(from: githubUser, moc: privateMOC)
-                        return user
-                    }
-                    
-                    do { // TODO: transfer to sync method
-                        if privateMOC.hasChanges {
-                            try privateMOC.save()
-                        }
-                        context.performAndWait {
-                            do {
-                                if context.hasChanges {
-                                    try context.save()
-                                }
-                            } catch {
-                                fatalError("Failed to save context: \(error)")
-                            }
-                        }
-                    } catch {
-                        completion(.failure(error))
-                        fatalError("Failed to save context: \(error)")
-                    }
-                    completion(.success(users))
-                    
-                }
-            case let .failure(error):
-                completion(.failure(error))
-            }
-        }
-    }
-    
     // MARK: - Stale data classification
     
     var staleIds:[Int64] = []
@@ -400,12 +323,10 @@ class UsersViewModel {
             return
         }
         
-        refreshInBackground(since: Int(since == 0 ? 0 : since - 1)) { result in
+        fetchUsers(since: Int(since == 0 ? 0 : since - 1)) { result in
             switch result {
             case let .success(users):
                 self.unregisterStale(users: users)
-//                print_r(array: users)
-//                print_r(array: self.staleIds)
                 ToastAlertMessageDisplay.main.display(message: "\(self.staleIds.count) stale entries left to update")
                 completion?(.success(users))
             case let .failure(error):
@@ -415,7 +336,17 @@ class UsersViewModel {
         }
     }
 
-    private func refreshInBackground(since: Int, completion: @escaping ((Result<[User], Error>)->Void), queued: Bool = true) {
+    /**
+     Fetches users from off the network, and writes users into datastore. Uses background context
+     for write queries. Reads are performed by main view context.
+     
+     Additional calls to this method are terminated at onset, while a fetch is already in progress.
+     
+     Returns a result containing network-fetched users ONLY, which are a merge
+     of network-based objects and old database objects. The count is based on the
+     size of the batch received.
+     */
+    private func fetchUsers(since: Int, completion: @escaping ((Result<[User], Error>)->Void), queued: Bool = true) {
         guard !isFetchInProgress else {
             return
         }
