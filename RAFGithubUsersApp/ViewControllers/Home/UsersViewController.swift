@@ -54,9 +54,9 @@ class UsersViewController: UITableViewController {
 //    typealias AlternativeTableViewCell = InvertedUserTableViewCell
 //    typealias AlternativeNotedTableViewCell = NoteInvertedUserTableViewCell
     typealias StandardTableViewCell = DebugUserTableViewCell
-    typealias StandardNotedTableViewCell = DebugUserTableViewCell
+    typealias StandardNotedTableViewCell = DebugNotedUserTableViewCell
     typealias AlternativeTableViewCell = DebugUserTableViewCell
-    typealias AlternativeNotedTableViewCell = DebugUserTableViewCell
+    typealias AlternativeNotedTableViewCell = DebugNotedUserTableViewCell
 
     // MARK: - Properties and attributes
     var viewModel: UsersViewModel!
@@ -136,11 +136,11 @@ class UsersViewController: UITableViewController {
         }
     }
     
-    private func multiple(of multiple: Int, _ value: Int, includingFirst: Bool = false) -> Bool {
+    private func multiple(of number: Int, _ value: Int, includingFirst: Bool = false) -> Bool {
         if includingFirst {
-            return value % multiple == 0
+            return value % number == 0
         }
-        return value % multiple == 0 && value != 0
+        return value % number == 0 && value != 0
     }
     
     private func performInvertedImagesPrefetching() {
@@ -149,9 +149,9 @@ class UsersViewController: UITableViewController {
         }
         
         var i: Int = 0
-        for user in self.viewModel.users {
+        for user in self.targetSource {
             guard self.viewModel.imageStore.image(forKey: "\(user.id)") == nil else  { continue }
-            if (i+1) % 4 == 0 {
+            if multiple(of: 4, i + 1) {
                 self.viewModel.fetchImage(for: user, queued: true) { result in
                     if case let .success(img) = result, let inverted = img.0.invertImageColors() {
                         self.viewModel.imageStore.setImage(forKey: "\(user.id)", image: inverted)
@@ -164,28 +164,25 @@ class UsersViewController: UITableViewController {
     }
     
 
-    // zxcv
-    private func setupHandlers() {
-
+    
+    private func setupViewModel() {
         self.viewModel.delegate = self
+        
+        /* Callback handler for when data is available in current datasource */
         let onDataAvailable = {
-            guard !self.viewModel.users.isEmpty && !self.search.isActive else {
+//            guard self.viewModel.lastDataSource != .parkedFromSearch else {
 //                self.tableView.reloadData()
+//                return
+//            }
+            guard !self.targetSource.isEmpty, !self.search.isActive else {
+                self.tableView.reloadData()
                 return
             }
-            print("STATS TOTAL USERS DATASOURCE COUNT (onDataAvailable): \(self.viewModel.users.count)" )
-            print("STATS UserCount: \(self.viewModel.users.count)")
-            
-//            self.viewModel.currentPage = 1 /* DEBUG: FORCE*/
 
-//            if let users = self.viewModel.users, let first = users.first {
-//                print(first)
-//             }  // DEBUG
-
+            /* Partial tableView refreshing */
             OperationQueue.main.addOperation {
                 ToastAlertMessageDisplay.main.hideToastActivity()
                 
-                /* RECALICTRANT */
                 if self.viewModel.totalDisplayCount <= 30 { /* User performed a refresh/first load */
                     self.tableView.alpha = 0
                     self.tableView.alpha = 1
@@ -208,26 +205,22 @@ class UsersViewController: UITableViewController {
                 let newIndexPathsToInsert: [IndexPath] = (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
                 let indexPathsToReload = self.visibleIndexPathsToReload(intersecting: newIndexPathsToInsert)
 
-                /* Ensure slide animations are disabled on row insertion (slide animation used by default on insert) */
-                UIView.setAnimationsEnabled(false)
-                self.tableView?.beginUpdates()
-                self.tableView?.insertRows(at: newIndexPathsToInsert, with: .none)
-                self.tableView?.endUpdates()
+                /**/
+                if self.viewModel.lastDataSource != .parkedFromSearch {
+                    /* Ensure slide animations are disabled on row insertion (slide animation used by default on insert) */
+                    UIView.setAnimationsEnabled(false)
+                    self.tableView?.beginUpdates()
+                    self.tableView?.insertRows(at: newIndexPathsToInsert, with: .none)
+                    self.tableView?.endUpdates()
+                }
                 
+                self.viewModel.lastDataSource = .unspecified
                 UIView.setAnimationsEnabled(true)
                 
-                //                self.tableView?.reloadRows(at: [IndexPath(row: 29, section: 0)], with: .none)
-                //                self.tableView?.reloadSections(IndexSet(integer: 0), with: .fade)
-////                    self.tableView.reloadData()
                 self.tableView?.reloadRows(at: indexPathsToReload, with: .fade)
-//                self.tableView.layoutIfNeeded()
-//                self.tableView.setContentOffset(contentOffset, animated: false)
             }
         }
         self.viewModel.bind(availability: onDataAvailable)
-        
-        // if network is available, freshen datastore objects
-        
     }
 
     let titleLabel = UILabel()
@@ -337,7 +330,7 @@ class UsersViewController: UITableViewController {
         
         startSplashAnimation()
         self.view.backgroundColor = .systemBackground
-        setupHandlers()
+        setupViewModel()
         setupReachability()
         self.fetchMoreTableDataDisplayingResults()
     }
@@ -381,20 +374,22 @@ class UsersViewController: UITableViewController {
      to have cancelsTouchesInView set to false
      */
     @objc func dismissKeyboard() {
+        if self.search.isActive { return }
         search.dismiss(animated: true, completion: nil)
     }
 
     var isRefreshing = false
 
+    var targetSource:[User] { return search.isActive ? self.viewModel.filteredUsers : self.viewModel.users }
+    
     // MARK: - UITableViewDelegate methods
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        guard !self.viewModel.users.isEmpty && self.viewModel.users.count - 1 >= indexPath.row else {
+        guard !self.targetSource.isEmpty && self.targetSource.count - 1 >= indexPath.row else {
             return
         }
-
-        let element = self.viewModel.users[indexPath.row]
+        let element = targetSource[indexPath.row]
         
-        if !self.search.isActive {
+        if !search.isActive {
             if isLoadingLastCell(for: indexPath) {
                 fetchMoreTableDataDisplayingResults()
             }
@@ -404,30 +399,30 @@ class UsersViewController: UITableViewController {
                     self.isRefreshing = false
                 })
             }
-                self.viewModel.fetchImage(for: element, queued: true) { result in
-                guard let photoIndex = self.viewModel.users.firstIndex(of: element),
-                    case let .success(image) = result else {
-                        return
-                }
-                if let cell = self.tableView.cellForRow(at: IndexPath(item: photoIndex, section: 0)) as? StandardTableViewCell {
-                    DispatchQueue.main.async {
-                        cell.update(displaying: image)
-                    }
+        }
+        self.viewModel.fetchImage(for: element, queued: true) { result in
+            guard let photoIndex = self.targetSource.firstIndex(of: element),
+                case let .success(image) = result else {
                     return
+            }
+            if let cell = self.tableView.cellForRow(at: IndexPath(item: photoIndex, section: 0)) as? StandardTableViewCell {
+                DispatchQueue.main.async {
+                    cell.update(displaying: image)
                 }
-                if let cell = self.tableView.cellForRow(at: IndexPath(item: photoIndex, section: 0)) as? AlternativeTableViewCell {
-                    DispatchQueue.main.async {
-                        cell.update(displaying: image)
-                    }
-                    return
+                return
+            }
+            if let cell = self.tableView.cellForRow(at: IndexPath(item: photoIndex, section: 0)) as? AlternativeTableViewCell {
+                DispatchQueue.main.async {
+                    cell.update(displaying: image)
                 }
+                return
             }
         }
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if viewModel.users.count > 0 {
-        return viewModel.users.count
+        if self.targetSource.count > 0 {
+        return self.targetSource.count
         }
         return 1
     }
@@ -442,9 +437,9 @@ class UsersViewController: UITableViewController {
     }
     
     private func calculateIndexPathsToInsert(from newUsers: Int, offset: Int = 0) -> [IndexPath] {
-        let startIndex = (self.viewModel.users.count - newUsers) + offset
+        let startIndex = (self.targetSource.count - newUsers) + offset
         let endIndex = (startIndex + newUsers)
-        print("STATS vmuc:\(self.viewModel.users.count), n:\(newUsers)")
+        print("STATS vmuc:\(self.targetSource.count), n:\(newUsers)")
         print("STATS STARTINDEX: \(startIndex), ENDINDEX: \(endIndex)")
 //        if self.viewModel.currentPage == 1 {
 //            return ((startIndex)..<(endIndex-1)).map { IndexPath(row: $0, section: 0) }
@@ -455,7 +450,7 @@ class UsersViewController: UITableViewController {
     }
 
     func isLoadingLastCell(for indexPath: IndexPath) -> Bool {
-        return indexPath.row + 1 >= self.viewModel.users.count
+        return indexPath.row + 1 >= self.targetSource.count
     }
 }
 
@@ -463,12 +458,12 @@ class UsersViewController: UITableViewController {
 // MARK: • UITableViewDatasource methods
 extension UsersViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard !self.viewModel.users.isEmpty && self.viewModel.users.count - 1 >= indexPath.row else {
+        guard !self.targetSource.isEmpty && self.targetSource.count - 1 >= indexPath.row else {
 //            self.tableView.reloadData()
             return UITableViewCell()
         }
         
-        let user = viewModel.users[indexPath.row]
+        let user = self.targetSource[indexPath.row]
         var cell: UserCell!
 
         let hasNote = user.userInfo != nil && user.userInfo?.note != nil && user.userInfo?.note != ""
@@ -512,6 +507,7 @@ extension UsersViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         // TODO
 //        self.viewModel.clearUsers()
+        self.viewModel.lastDataSource = .parkedFromSearch
         guard let text = searchController.searchBar.text else {
             return
         }

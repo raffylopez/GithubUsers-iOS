@@ -10,6 +10,13 @@ import Foundation
 import UIKit
 import CoreData
 
+enum LastDataSource {
+    case network
+    case offline
+    case parkedFromSearch
+    case unspecified
+}
+
 class UsersViewModel {
     /* MARK: - Properties */
     var delegate: ViewModelDelegate? = nil
@@ -31,7 +38,12 @@ class UsersViewModel {
             print("STATS v_totalDisplayCount: \(totalDisplayCount)")
         }
     }
-
+    var lastDataSource: LastDataSource = .unspecified {
+        didSet {
+            print("STATS v_lastDataSource: \(lastDataSource)")
+        }
+    }
+    
     var currentCount: Int {
         return users.count
     }
@@ -77,14 +89,23 @@ class UsersViewModel {
     }
     private(set) var users: [User]! = [] {
         didSet {
-            usersMain = oldValue
             if users.count > 0 {
                 self.onDataAvailable()
                 delegate?.onDataAvailable()
             }
         }
     }
-    
+
+    private(set) var filteredUsers: [User]! = [] {
+        didSet {
+            if filteredUsers.count > 0 {
+                self.onDataAvailable()
+                delegate?.onDataAvailable()
+            }
+        }
+    }
+
+
     /* MARK: - Debug */
 
 
@@ -104,21 +125,8 @@ class UsersViewModel {
 //        self.users.removeAll(keepingCapacity: false)
 //    }
     
-    var usersMain: [User]? = []
-    var filteredUsers: [User]? = []
-    
     public func clearUsers() {
-        usersMain = self.users
-//        self.users.removeAll(keepingCapacity: false)
         self.users = []
-    }
-    private func switchToMain() {
-        filteredUsers = self.users
-        self.users = usersMain
-    }
-    private func switchToFiltered() {
-        usersMain = self.users
-        self.users = filteredUsers
     }
 
     public func searchUsers(for term: String) {
@@ -128,7 +136,7 @@ class UsersViewModel {
                 case let .success(users):
 //                    self.filteredUsers = users
 //                    self.switchToFiltered()
-                    self.users = users
+                    self.filteredUsers = users
                     break
                 case .failure:
                     break
@@ -139,7 +147,7 @@ class UsersViewModel {
         self.usersDatabaseService.filterUsers(with: term) { result in
             switch result {
             case let .success(users):
-                self.users = users
+                self.filteredUsers = users
                 break
             case .failure:
                 break
@@ -168,6 +176,7 @@ class UsersViewModel {
         }
         
         self.loadUsersFromDisk(count: self.totalDisplayCount) { result in
+            self.lastDataSource = .offline
             switch result {
             case let .success(combinedUsers):
                 let start = combinedUsers.count - self.confOfflineIncrements
@@ -358,6 +367,7 @@ class UsersViewModel {
         privateMOC.parent = context
         
         self.apiService.fetchUsers(since: since) { (result: Result<[GithubUser], Error>) in
+            self.lastDataSource = .network
             self.isFetchInProgress = false
             switch result {
             case let .success(githubUsers):

@@ -81,19 +81,6 @@ class ProfileViewModel {
         let onTaskSuccess = { (githubuserInfo: GithubUserInfo) in
             self.isFetchInProgress = false
 
-//            if let userInfo = self.user.userInfo, let login = userInfo.login {
-//                print (login)
-//            } else {
-//                print("userinfo doesn't exist!")
-//            }
-//            if let id = githubuserInfo.id, let userInfo = self.databaseService.getUserInfo(with: id) {
-//                managedUserInfo = userInfo
-//            } else {
-                // Create new
-//            if self.us
-//                managedUserInfo = self.databaseService.translate(from: githubuserInfo)
-//                managedUserInfo.user = self.user
-//            }
             self.user.userInfo?.set(from: githubuserInfo, moc: CoreDataService.shared.context)
 
             do {
