@@ -320,6 +320,7 @@ class UsersViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        ToastAlertMessageDisplay.main.hideAllToasts()
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationItem.largeTitleDisplayMode = .always
     }
@@ -577,9 +578,13 @@ extension UsersViewController: ViewModelDelegate {
 
 extension UsersViewController: ProfileViewDelegate {
     func didSaveNote(at indexPath: IndexPath) {
-        self.tableView.reloadRows(at: [indexPath], with: .none)
+        DispatchQueue.main.async {
+            self.tableView.reloadRows(at: [indexPath], with: .none)
+        }
     }
     func didSeeProfile(at indexPath: IndexPath) {
-        self.tableView.reloadRows(at: [indexPath], with: .none)
+        DispatchQueue.main.async {
+            self.tableView.reloadRows(at: [indexPath], with: .none)
+        }
     }
 }

@@ -21,7 +21,7 @@ class ProfileViewModel {
         imageStore = ImageStore()
     }
     
-    var delegate: ViewModelDelegate? = nil
+    var delegate: ViewModelDelegate?
     let cell: UserTableViewCellBase
     let user: User
 
@@ -51,13 +51,6 @@ class ProfileViewModel {
         return URLSession(configuration: config)
     }()
     
-    private(set) var userInfo: UserInfo! = nil {
-        didSet {
-            self.onDataAvailable()
-            delegate?.onDataAvailable()
-        }
-    }
-
     /**
      Binds closure to model describing what to perform when data becomes available
      */
@@ -72,7 +65,7 @@ class ProfileViewModel {
         }
         
         if let userInfo = self.user.userInfo, userInfo.seen {
-            self.userInfo = self.user.userInfo
+            delegate?.onDataAvailable()
             completion?(.success(self.user.userInfo!))
             return
         }
@@ -84,20 +77,6 @@ class ProfileViewModel {
         }
 
         isFetchInProgress = true
-        
-        let onTaskSuccess = { (githubuserInfo: GithubUserInfo) in
-            self.isFetchInProgress = false
-
-            self.user.userInfo?.set(from: githubuserInfo, moc: CoreDataService.shared.context)
-            self.userInfo.seen = true
-            do {
-                try self.databaseService.save()
-            } catch {
-                completion?(.failure(error))
-            }
-            self.userInfo = self.user.userInfo
-            completion?(.success(self.userInfo))
-        }
         
         self.apiService.fetchUserDetails(username: login) { result in
             switch result {
@@ -111,8 +90,7 @@ class ProfileViewModel {
                 } catch {
                     completion?(.failure(error))
                 }
-                self.userInfo = self.user.userInfo
-                completion?(.success(self.userInfo))
+                self.delegate?.onDataAvailable()
             case let .failure(error):
                 self.isFetchInProgress = false
                 completion?(.failure(error))

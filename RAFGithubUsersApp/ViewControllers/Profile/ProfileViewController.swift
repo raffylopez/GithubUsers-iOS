@@ -114,7 +114,7 @@ class ProfileViewController: UIViewController {
     
     @objc func btnClearPressed() {
         self.tvNote.text = ""
-        if let userInfo = self.viewModel.userInfo {
+        if let userInfo = self.viewModel.user.userInfo {
             userInfo.note = self.tvNote.text
             userInfo.user = self.viewModel.user
             do {
@@ -142,7 +142,7 @@ class ProfileViewController: UIViewController {
 //        btnSave.setTitleColor(hcolor, for: .focused)
 //        btnSave.setTitleColor(hcolor, for: .highlighted)
 //        btnSave.setTitleColor(hcolor, for: .selected)
-        if let userInfo = self.viewModel.userInfo {
+        if let userInfo = self.viewModel.user.userInfo {
             userInfo.note = self.tvNote.text
             userInfo.user = self.viewModel.user
             do {
@@ -181,12 +181,10 @@ class ProfileViewController: UIViewController {
         setupLayout()
         self.viewModel.delegate = self
         self.viewModel.bind {
-            print(self.viewModel.userInfo ?? "NO_USER_INFO")
+            print(self.viewModel.user.userInfo ?? "NO_USER_INFO")
         }
 
-        ToastAlertMessageDisplay.main.makeToastActivity()
         self.viewModel.fetchUserDetails(for: self.viewModel.user, onRetryError: nil) { _ in
-            ToastAlertMessageDisplay.main.hideToastActivity()
         }
         registerForKeyboardNotifications()
     }
@@ -236,32 +234,35 @@ class ProfileViewController: UIViewController {
 
 extension ProfileViewController: ViewModelDelegate {
     func onDataAvailable() {
-        let presented = self.viewModel.userInfo.presented
-        OperationQueue.main.addOperation {
-            self.lblName.text = presented.name
-            if presented.name.isEmpty {
-                self.nameTopContraint.constant = 9
-            }
-            self.lblLogin.text = presented.login
-            self.lblBio.text = presented.bio
-            if presented.bio.isEmpty {
-                self.bioTopConstraint.constant = 0
-            }
-            self.lblCompany.text = presented.company
-            self.lblBlog.text = presented.blog
-            self.lblLocation.text = presented.location
-            self.lblEmail.text = presented.email
-            self.lblHireability.text = presented.hireability
-            let lblFollowText = "\(presented.followers) followers • \(presented.following) following"
-            self.lblFollow.attributedText = NSAttributedString(string: lblFollowText)
-            UIHelper.configureAttributedLabelWithIcon(label: self.lblFollow, icon: .userFriends, style: .solid, prepend: true)
-            self.tvNote.text = presented.note
-            self.hideSkeletons()
-            self.viewModel.fetchImage(for: self.viewModel.user) { result in
-                OperationQueue.main.addOperation {
-                    if case let .success(img) = result {
-                        self.imgUser.image = img.0
-                        self.boxBlue.hideSkeleton()
+        if let userInfo = self.viewModel.user.userInfo {
+            let presented = userInfo.presented
+            delegate.didSeeProfile(at: self.viewModel.cell.indexPath)
+            OperationQueue.main.addOperation {
+                self.lblName.text = presented.name
+                if presented.name.isEmpty {
+                    self.nameTopContraint.constant = 9
+                }
+                self.lblLogin.text = presented.login
+                self.lblBio.text = presented.bio
+                if presented.bio.isEmpty {
+                    self.bioTopConstraint.constant = 0
+                }
+                self.lblCompany.text = presented.company
+                self.lblBlog.text = presented.blog
+                self.lblLocation.text = presented.location
+                self.lblEmail.text = presented.email
+                self.lblHireability.text = presented.hireability
+                let lblFollowText = "\(presented.followers) followers • \(presented.following) following"
+                self.lblFollow.attributedText = NSAttributedString(string: lblFollowText)
+                UIHelper.configureAttributedLabelWithIcon(label: self.lblFollow, icon: .userFriends, style: .solid, prepend: true)
+                self.tvNote.text = presented.note
+                self.hideSkeletons()
+                self.viewModel.fetchImage(for: self.viewModel.user) { result in
+                    OperationQueue.main.addOperation {
+                        if case let .success(img) = result {
+                            self.imgUser.image = img.0
+                            self.boxBlue.hideSkeleton()
+                        }
                     }
                 }
             }

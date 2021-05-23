@@ -27,7 +27,6 @@ class UserTableViewCellBase: UITableViewCell, UserCell {
 
     internal func updateCell() {
         self.lblName.text = user.login ?? ""
-        self.lblName.textColor = self.user.userInfo != nil && self.user.userInfo!.seen ? .systemGray : .label
         self.lblSeries.text = user.urlHtml
     }
     
@@ -115,6 +114,7 @@ class UserTableViewCellBase: UITableViewCell, UserCell {
     }
     
     internal func update(displaying image: (UIImage, ImageSource)?) {
+        self.lblName.textColor = self.user.userInfo != nil && self.user.userInfo!.seen ? .systemGray : .label
         if let imageResultSet = image {
             let image = imageResultSet.0
             let imageSource = imageResultSet.1
