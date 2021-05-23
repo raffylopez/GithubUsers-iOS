@@ -9,7 +9,6 @@
 import Foundation
 import Reachability
 
-
 protocol ReachabilityDelegate {
     func onLostConnection()
     func onRegainConnection()
@@ -50,29 +49,22 @@ class ConnectionMonitor {
      Workaround against Reachability library not sending a notification
      when reconnected, whilst using the simulator
      */
-    func checkNetworkSignal() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(10)) {
+    func checkNetworkSignal(start: DispatchTime) {
+        DispatchQueue.main.asyncAfter(deadline: start) {
             if let reachability = try? Reachability(hostname: self.confReachabilityIp),
             reachability.connection == .unavailable {
                 self.delegate?.onLostConnection()
             } else {
                 self.delegate?.onRegainConnection()
             }
-
-            self.checkNetworkSignal()
+            self.checkNetworkSignal(start: .now() + .seconds(5))
         }
     }
     
     @objc func reachabilityChanged(note: Notification) {
         let reachability = note.object as! Reachability
         switch reachability.connection {
-        case .cellular:
-            print("Network available via Cellular Data.")
-            UIApplication.shared.windows.first?.rootViewController?.view.makeToast("Cellular")
-            break
-        case .wifi:
-            print("Network available via WiFi.")
-            UIApplication.shared.windows.first?.rootViewController?.view.makeToast("Wifi")
+        case .cellular, .wifi:
             break
         case .unavailable, .none:
             UIApplication.shared.windows.first?.rootViewController?.view.makeToast("Connection to Internet lost")

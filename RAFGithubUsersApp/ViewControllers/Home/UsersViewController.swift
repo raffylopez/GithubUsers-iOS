@@ -8,8 +8,46 @@
 
 import UIKit
 
+enum AppConnectionState {
+    case networkReachable
+    case networkUnreachable
+}
 
 class UsersViewController: UITableViewController {
+    var statusBarBottomConstraint: NSLayoutConstraint? = nil
+
+    var appConnectionState: AppConnectionState = ConnectionMonitor.shared.isApiReachable ? .networkReachable : .networkUnreachable {
+        didSet {
+            switch appConnectionState {
+            case .networkReachable:
+                if let nav = self.navigationController {
+                    nav.view.layoutIfNeeded()
+                    label.text = "Connected!".localized()
+                    let darkGreenColor = UIColor.init(red: 35/255, green: 134/255, blue: 53/255, alpha: 1.0)
+                    UIView.animate(withDuration: 0.75, animations: {
+                        self.statusBar.backgroundColor = darkGreenColor
+                    }, completion: { _ in
+                        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                            UIView.animate(withDuration: 0.3) {
+                                self.statusBarBottomConstraint?.constant = 40
+                                nav.view.layoutIfNeeded()
+                            }
+                        }
+                    })
+                }
+            case .networkUnreachable:
+                if let nav = self.navigationController {
+                    nav.view.layoutIfNeeded()
+                    label.text = "No Network".localized()
+                    self.statusBar.backgroundColor = .red
+                    UIView.animate(withDuration: 0.3) {
+                        self.statusBarBottomConstraint?.constant = 0
+                        nav.view.layoutIfNeeded()
+                    }
+                }
+            }
+        }
+    }
     
     init(viewModel: UsersViewModel) {
         self.viewModel = viewModel
@@ -44,11 +82,10 @@ class UsersViewController: UITableViewController {
     let confImageInversionOnFourthRows: Bool = true
     
     private func setupReachability() {
-//        ConnectionMonitor.shared.delegate = self
-//        ConnectionMonitor.shared.checkNetworkSignal()
+        ConnectionMonitor.shared.delegate = self
+        ConnectionMonitor.shared.checkNetworkSignal(start: .now())
     }
     
-    var lastConnectionState: ConnectionState = .reachable
     // MARK: Configure table cell types
 //    typealias StandardTableViewCell = NormalUserTableViewCell
 //    typealias StandardNotedTableViewCell = NoteNormalUserTableViewCell
@@ -234,6 +271,7 @@ class UsersViewController: UITableViewController {
         
     }
 
+    let titleLabel = UILabel()
     private func setupNavbar() {
         let imgSize = CGFloat(24)
 //        let imgHeight = CGFloat(imgSize)
@@ -248,7 +286,7 @@ class UsersViewController: UITableViewController {
         label.text = "".localized()
         label.sizeToFit()
         UIHelper.initializeView(view: label, parent: container)
-        label.centerXAnchor.constraint(equalTo: container.centerXAnchor, constant: (imgSize + spacing)/2).isActive = true
+        label.centerXAnchor.constraint(equalTo: container.centerXAnchor, constant: (imgSize + spacing) / 2).isActive = true
         label.centerYAnchor.constraint(equalTo: container.centerYAnchor).isActive = true
         
 //        UIHelper.initializeView(view: imageView, parent: container)
@@ -258,10 +296,14 @@ class UsersViewController: UITableViewController {
 //        imageView.heightAnchor.constraint(equalToConstant: imgSize).isActive = true
         
 //        self.navigationItem.titleView = container
-        let titleLabel = UILabel()
         titleLabel.font = UIFont.fontAwesome(ofSize: 20, style: .brands)
         titleLabel.text = String.fontAwesomeIcon(name: .github)
+        
+        let tapNavIcon = UITapGestureRecognizer(target: self, action: #selector(tableViewScrollToTop))
+        tapNavIcon.cancelsTouchesInView = false
         self.navigationItem.titleView = titleLabel
+        self.navigationItem.titleView?.isUserInteractionEnabled = true
+        self.navigationItem.titleView?.addGestureRecognizer(tapNavIcon)
         //        let bbi: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .bookmarks, target: self, action: #selector(tableViewScrollToTop))
         //        let leftBarItem: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(tableViewScrollToTop))
         //        let rightBarItem: UIBarButtonItem = UIBarButtonItem(image: img.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: nil)
@@ -306,6 +348,7 @@ class UsersViewController: UITableViewController {
     }
 
     @objc func refreshStaleOnDemand() {
+        appConnectionState = appConnectionState == .networkUnreachable ? .networkReachable : .networkUnreachable
         self.viewModel.refreshStale { result in
             DispatchQueue.main.async {
                 let contentOffset = self.tableView.contentOffset
@@ -327,7 +370,16 @@ class UsersViewController: UITableViewController {
         super.loadView()
         setupTableView()
         self.view.backgroundColor = UIColor.systemBackground
-        
+        if let nav = self.navigationController {
+            self.statusBar.widthAnchor.constraint(equalTo: nav.view.widthAnchor, multiplier: 1).isActive = true
+            self.statusBar.leadingAnchor.constraint(equalTo: nav.view.leadingAnchor).isActive = true
+            self.statusBar.trailingAnchor.constraint(equalTo: nav.view.trailingAnchor).isActive = true
+            self.statusBar.heightAnchor.constraint(equalToConstant: 40).isActive = true
+            self.statusBarBottomConstraint = NSLayoutConstraint(item: self.statusBar, attribute: .bottom, relatedBy: .equal, toItem: nav.view, attribute: .bottom, multiplier: 1, constant: 40)
+            self.statusBarBottomConstraint?.isActive = true
+            nav.view.layoutIfNeeded()
+        }
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -341,27 +393,25 @@ class UsersViewController: UITableViewController {
         super.viewDidAppear(animated)
     }
     
+    var label = UILabel()
+    
     lazy var statusBar: UIView = {
         let statusBar = UIView()
         if let nav = self.navigationController {
             UIHelper.initializeView(view: statusBar, parent: nav.view)
-            statusBar.backgroundColor = .black
-            statusBar.heightAnchor.constraint(equalToConstant: 20).isActive = true
-            statusBar.widthAnchor.constraint(equalTo: nav.view.widthAnchor, multiplier: 1).isActive = true
-            statusBar.bottomAnchor.constraint(equalTo: nav.view.bottomAnchor).isActive = true
-            statusBar.leadingAnchor.constraint(equalTo: nav.view.leadingAnchor).isActive = true
-            
-            var label = UILabel()
+            statusBar.backgroundColor = .red
+
             label.text = "No network"
             label.textColor = .white
             label.sizeToFit()
             UIHelper.initializeView(view: label, parent: statusBar)
             label.centerYAnchor.constraint(equalTo: statusBar.centerYAnchor).isActive = true
-            label.leadingAnchor.constraint(equalTo: statusBar.leadingAnchor, constant: 28).isActive = true
+            label.leadingAnchor.constraint(equalTo: statusBar.leadingAnchor, constant: 20).isActive = true
         }
 
         return statusBar
     }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -372,6 +422,8 @@ class UsersViewController: UITableViewController {
         setupHandlers()
         setupReachability()
         self.fetchMoreTableDataDisplayingResults()
+        self.statusBar.isHidden = false
+        
     }
     
     private func clearData() {
@@ -403,7 +455,8 @@ class UsersViewController: UITableViewController {
     }
 
     @objc func tableViewScrollToTop() {
-        self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
+        let animated = self.tableView.contentOffset.y <= (self.tableView.frame.height * 5)
+        self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: animated)
     }
     
     /**
@@ -454,8 +507,6 @@ class UsersViewController: UITableViewController {
                 }
             }
         }
-        
-
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -574,24 +625,13 @@ extension UsersViewController {
     }
 }
 
-enum ConnectionState {
-    case reachable
-    case unreachable
-}
-
 extension UsersViewController: ReachabilityDelegate {
     func onLostConnection() {
-        lastConnectionState = .unreachable
-        makeToast(message: "You are browsing offline", duration: 1000.0)
-        
+        appConnectionState = .networkUnreachable
     }
     
     func onRegainConnection() {
-        if lastConnectionState == .unreachable {
-            ToastAlertMessageDisplay.main.hideToastActivity()
-            makeToast(message: "Connected", duration: 3.0)
-            lastConnectionState = .reachable
-        }
+        appConnectionState = .networkReachable
     }
     
     
