@@ -64,10 +64,13 @@ class UsersViewController: UITableViewController {
         let search = UISearchController(searchResultsController: nil)
         search.searchResultsUpdater = self
         search.obscuresBackgroundDuringPresentation = false
-        search.searchBar.placeholder = "Search (quote for exact match)"
+        search.searchBar.placeholder = "Search (\"quote\" for exact match)"
         search.searchBar.autocapitalizationType = .none
         search.searchBar.autocorrectionType = .no
         search.searchBar.sizeToFit()
+        search.searchBar.smartQuotesType = .no
+        search.searchBar.smartDashesType = .no
+        search.searchBar.smartInsertDeleteType = .no
         return search
     }()
     
