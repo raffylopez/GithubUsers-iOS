@@ -44,7 +44,7 @@ class UserTableViewCellBase: UITableViewCell, UserCell {
     var owningController: UIViewController? = nil
     weak var delegate: UserListTableViewCellDelegate?
     
-    var spinner: UIActivityIndicatorView! = {
+    var spinner: UIActivityIndicatorView? = {
         let spinner = UIActivityIndicatorView()
         spinner.hidesWhenStopped = true
         return spinner
@@ -88,11 +88,11 @@ class UserTableViewCellBase: UITableViewCell, UserCell {
         UIHelper.initializeView(view: lblName, parent: nil)
         UIHelper.initializeView(view: imgCharacter, parent: self)
         UIHelper.initializeView(view: stackView, parent: self)
-        UIHelper.initializeView(view: spinner, parent: self)
-        
-        spinner.centerYAnchor.constraint(equalTo: imgCharacter.centerYAnchor).isActive = true
-        spinner.centerXAnchor.constraint(equalTo: imgCharacter.centerXAnchor).isActive = true
-        
+        if let spinner = spinner {
+            UIHelper.initializeView(view: spinner, parent: self)
+            spinner.centerYAnchor.constraint(equalTo: imgCharacter.centerYAnchor).isActive = true
+            spinner.centerXAnchor.constraint(equalTo: imgCharacter.centerXAnchor).isActive = true
+        }
 //        spinner.startAnimating()
     }
     

@@ -39,7 +39,7 @@ class ConnectionMonitor {
             try self.reachability.startNotifier()
         }
         catch(let error) {
-//            print("Error occured while starting reachability notifications : \(error.localizedDescription)")
+            print("Error occured while starting reachability notifications : \(error.localizedDescription)")
         }
     }
     

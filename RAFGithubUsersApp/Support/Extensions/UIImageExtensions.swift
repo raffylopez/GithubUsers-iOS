@@ -9,6 +9,20 @@
 import Foundation
 
 extension UIImage {
+    func invertImageColorsAsync(completion: @escaping(UIImage?)->Void) {
+        let theImage = self
+        guard let filter = CIFilter(name: "CIColorInvert") else {
+            completion(nil)
+            return
+        }
+        filter.setValue(CIImage(image: theImage), forKey: kCIInputImageKey)
+        guard let outputImage = filter.outputImage else {
+            completion(nil)
+            return
+        }
+        let newImage = UIImage(ciImage: outputImage)
+        completion(newImage)
+    }
     func invertImageColors() -> UIImage? {
         let theImage = self
         guard let filter = CIFilter(name: "CIColorInvert") else { return nil }

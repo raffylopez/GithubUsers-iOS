@@ -8,31 +8,29 @@
 
 import UIKit
 
-extension UINavigationController {
 
-    func setStatusBar(backgroundColor: UIColor) {
-        let statusBarFrame: CGRect
-        if #available(iOS 13.0, *) {
-            statusBarFrame = view.window?.windowScene?.statusBarManager?.statusBarFrame ?? CGRect.zero
-        } else {
-            statusBarFrame = UIApplication.shared.statusBarFrame
-        }
-        let statusBarView = UIView(frame: statusBarFrame)
-        statusBarView.backgroundColor = backgroundColor
-        view.addSubview(statusBarView)
-    }
-
-}
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+    var navigationController: GithubUsersAppNavController!
 
+    var appConnectionState: AppConnectionState = ConnectionMonitor.shared.isApiReachable ? .networkReachable : .networkUnreachable {
+        didSet {
+            switch appConnectionState {
+            case .networkReachable:
+                navigationController.onNetworkReachable()
+            case .networkUnreachable:
+                navigationController.onNetworkUnreachable()
+            }
+        }
+    }
     var window: UIWindow?
 
+    
     private func setupViewControllers() {
         // constructor dependency injection
         let viewModel = UsersViewModel(apiService: GithubUsersApi(), databaseService: CoreDataService.shared)
         let top = ViewControllersFactory.instance(vcType: .usersList(viewModel))
-        let navController = UINavigationController(rootViewController: top)
-        navController.navigationBar.barStyle = .default
+        navigationController = GithubUsersAppNavController(rootViewController: top)
+        navigationController.navigationBar.barStyle = .default
         
 //        let icon: SKSplashIcon = SKSplashIcon(image: UIImage(named: "github_splash_dark")!)
 //        guard let splashView = SKSplashView(splashIcon: icon, animationType: .none)
@@ -42,7 +40,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //        navController.view.addSubview(splashView)
 //        splashView.startAnimation()
 
-        window?.rootViewController = navController
+        window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
     }
     

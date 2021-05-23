@@ -8,47 +8,9 @@
 
 import UIKit
 
-enum AppConnectionState {
-    case networkReachable
-    case networkUnreachable
-}
-
 class UsersViewController: UITableViewController {
-    var statusBarBottomConstraint: NSLayoutConstraint? = nil
+    let scene = UIApplication.shared.connectedScenes.first!.delegate as! SceneDelegate
 
-    var appConnectionState: AppConnectionState = ConnectionMonitor.shared.isApiReachable ? .networkReachable : .networkUnreachable {
-        didSet {
-            switch appConnectionState {
-            case .networkReachable:
-                if let nav = self.navigationController {
-                    nav.view.layoutIfNeeded()
-                    label.text = "Connected!".localized()
-                    let darkGreenColor = UIColor.init(red: 35/255, green: 134/255, blue: 53/255, alpha: 1.0)
-                    UIView.animate(withDuration: 0.75, animations: {
-                        self.statusBar.backgroundColor = darkGreenColor
-                    }, completion: { _ in
-                        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-                            UIView.animate(withDuration: 0.3) {
-                                self.statusBarBottomConstraint?.constant = 40
-                                nav.view.layoutIfNeeded()
-                            }
-                        }
-                    })
-                }
-            case .networkUnreachable:
-                if let nav = self.navigationController {
-                    nav.view.layoutIfNeeded()
-                    label.text = "No Network".localized()
-                    self.statusBar.backgroundColor = .red
-                    UIView.animate(withDuration: 0.3) {
-                        self.statusBarBottomConstraint?.constant = 0
-                        nav.view.layoutIfNeeded()
-                    }
-                }
-            }
-        }
-    }
-    
     init(viewModel: UsersViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -95,8 +57,6 @@ class UsersViewController: UITableViewController {
     typealias StandardNotedTableViewCell = DebugUserTableViewCell
     typealias AlternativeTableViewCell = DebugUserTableViewCell
     typealias AlternativeNotedTableViewCell = DebugUserTableViewCell
-    
-    typealias DummyTableViewCell = DebugUserTableViewCell
 
     // MARK: - Properties and attributes
     var viewModel: UsersViewModel!
@@ -136,7 +96,6 @@ class UsersViewController: UITableViewController {
         registerReuseId(StandardNotedTableViewCell.self)
         registerReuseId(AlternativeTableViewCell.self)
         registerReuseId(AlternativeNotedTableViewCell.self)
-        registerReuseId(DummyTableViewCell.self)
     }
     
     /**
@@ -317,7 +276,7 @@ class UsersViewController: UITableViewController {
     func refreshStaleOnScroll(imageFetchCompletion: (((UIImage, ImageSource))->Void)? = nil, completion: @escaping ()->Void) {
         self.viewModel.refreshStale { result in
             switch result {
-            case let .success(users):
+            case .success:
                 DispatchQueue.main.async {
                     let startIndex = self.viewModel.totalDisplayCount - 30
                     let endIndex = startIndex + 30
@@ -327,18 +286,6 @@ class UsersViewController: UITableViewController {
                     self.tableView?.reloadRows(at: indexPathsToReload, with: .fade)
                     self.tableView?.endUpdates()
                 }
-//                users.forEach { user in
-//                    self.viewModel.fetchImage(for: user, reload: true, queued: true) { result in
-//                        switch result {
-//                        case let .success(res):
-////                            break
-//                            imageFetchCompletion?(res)
-//                        case let .failure(error):
-//                            print(error.localizedDescription)
-//                        }
-//
-//                    }
-//                }
                 completion()
             case .failure:
                 completion()
@@ -348,7 +295,8 @@ class UsersViewController: UITableViewController {
     }
 
     @objc func refreshStaleOnDemand() {
-        appConnectionState = appConnectionState == .networkUnreachable ? .networkReachable : .networkUnreachable
+        scene.appConnectionState = scene.appConnectionState == .networkUnreachable ?
+            .networkReachable : .networkUnreachable
         self.viewModel.refreshStale { result in
             DispatchQueue.main.async {
                 let contentOffset = self.tableView.contentOffset
@@ -368,23 +316,14 @@ class UsersViewController: UITableViewController {
     // MARK: - ViewController methods
     override func loadView() {
         super.loadView()
+        setupViews()
         setupTableView()
         self.view.backgroundColor = UIColor.systemBackground
-        if let nav = self.navigationController {
-            self.statusBar.widthAnchor.constraint(equalTo: nav.view.widthAnchor, multiplier: 1).isActive = true
-            self.statusBar.leadingAnchor.constraint(equalTo: nav.view.leadingAnchor).isActive = true
-            self.statusBar.trailingAnchor.constraint(equalTo: nav.view.trailingAnchor).isActive = true
-            self.statusBar.heightAnchor.constraint(equalToConstant: 40).isActive = true
-            self.statusBarBottomConstraint = NSLayoutConstraint(item: self.statusBar, attribute: .bottom, relatedBy: .equal, toItem: nav.view, attribute: .bottom, multiplier: 1, constant: 40)
-            self.statusBarBottomConstraint?.isActive = true
-            nav.view.layoutIfNeeded()
-        }
 
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-//        navigationItem.title = "Browse Users".localized()
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationItem.largeTitleDisplayMode = .always
     }
@@ -393,37 +332,14 @@ class UsersViewController: UITableViewController {
         super.viewDidAppear(animated)
     }
     
-    var label = UILabel()
-    
-    lazy var statusBar: UIView = {
-        let statusBar = UIView()
-        if let nav = self.navigationController {
-            UIHelper.initializeView(view: statusBar, parent: nav.view)
-            statusBar.backgroundColor = .red
-
-            label.text = "No network"
-            label.textColor = .white
-            label.sizeToFit()
-            UIHelper.initializeView(view: label, parent: statusBar)
-            label.centerYAnchor.constraint(equalTo: statusBar.centerYAnchor).isActive = true
-            label.leadingAnchor.constraint(equalTo: statusBar.leadingAnchor, constant: 20).isActive = true
-        }
-
-        return statusBar
-    }()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        try? self.viewModel.usersDatabaseService.deleteAll() // DEBUG
         startSplashAnimation()
         self.view.backgroundColor = .systemBackground
-        setupViews()
         setupHandlers()
         setupReachability()
         self.fetchMoreTableDataDisplayingResults()
-        self.statusBar.isHidden = false
-        
     }
     
     private func clearData() {
@@ -627,15 +543,14 @@ extension UsersViewController {
 
 extension UsersViewController: ReachabilityDelegate {
     func onLostConnection() {
-        appConnectionState = .networkUnreachable
+        scene.appConnectionState = .networkUnreachable
     }
     
     func onRegainConnection() {
-        appConnectionState = .networkReachable
+        scene.appConnectionState = .networkReachable
     }
-    
-    
 }
+
 extension UsersViewController: ViewModelDelegate {
 
     func onRetryError(n: Int, nextAttemptInMilliseconds: Int, error: Error) {

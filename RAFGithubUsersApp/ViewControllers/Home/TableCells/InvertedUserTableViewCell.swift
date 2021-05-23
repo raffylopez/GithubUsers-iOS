@@ -21,18 +21,20 @@ class InvertedUserTableViewCell: UserTableViewCellBase {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
+    
+
     override func update(displaying image: (UIImage, ImageSource)?) {
+        DispatchQueue.global().async {
         if let imageResultSet = image {
-            
             let image = imageResultSet.0
-            let imageSource = imageResultSet.1
-            
-            if let invertedImage = image.invertImageColors() {
-                self.imgViewChar.image = invertedImage
-                self.spinner.stopAnimating()
+            image.invertImageColorsAsync { invertedImage in
+                DispatchQueue.main.async {
+                    self.imgViewChar.image = invertedImage
+                    self.spinner?.stopAnimating()
+                }
             }
-            
             return
+        }
         }
     }
 

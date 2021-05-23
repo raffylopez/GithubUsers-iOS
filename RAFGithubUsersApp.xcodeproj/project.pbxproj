@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E11B89B1265ABEBF009A38A1 /* GithubUsersAppNavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11B89B0265ABEBF009A38A1 /* GithubUsersAppNavController.swift */; };
+		E11B89B3265AE6D8009A38A1 /* AppConnectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11B89B2265AE6D7009A38A1 /* AppConnectionState.swift */; };
 		E12437782656A94A004C4DCA /* NoteInvertedUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12437772656A94A004C4DCA /* NoteInvertedUserTableViewCell.swift */; };
 		E124377A2656AC16004C4DCA /* NoteNormalUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12437792656AC15004C4DCA /* NoteNormalUserTableViewCell.swift */; };
 		E129A665264EB4130035A99B /* UserInfoPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E129A664264EB4130035A99B /* UserInfoPresenter.swift */; };
@@ -106,6 +108,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E11B89B0265ABEBF009A38A1 /* GithubUsersAppNavController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GithubUsersAppNavController.swift; sourceTree = "<group>"; };
+		E11B89B2265AE6D7009A38A1 /* AppConnectionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConnectionState.swift; sourceTree = "<group>"; };
 		E12437772656A94A004C4DCA /* NoteInvertedUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteInvertedUserTableViewCell.swift; sourceTree = "<group>"; };
 		E12437792656AC15004C4DCA /* NoteNormalUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteNormalUserTableViewCell.swift; sourceTree = "<group>"; };
 		E129A664264EB4130035A99B /* UserInfoPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoPresenter.swift; sourceTree = "<group>"; };
@@ -337,6 +341,7 @@
 			isa = PBXGroup;
 			children = (
 				E160EBE2264A7592002820EC /* ViewControllersFactory.swift */,
+				E11B89B0265ABEBF009A38A1 /* GithubUsersAppNavController.swift */,
 				E1D04A7C264BB56F00C4E5FD /* Home */,
 				E1510C7D264C70C300E59C35 /* Profile */,
 			);
@@ -477,6 +482,7 @@
 		E1A5B350265453630069655B /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				E11B89B2265AE6D7009A38A1 /* AppConnectionState.swift */,
 				E146CC2C264D887400C3FA51 /* ConnectionMonitor.swift */,
 			);
 			path = Network;
@@ -714,6 +720,7 @@
 				E160EBE5264A76FF002820EC /* ProfileViewController.swift in Sources */,
 				E1510C69264C428B00E59C35 /* UIImageExtensions.swift in Sources */,
 				E1510C80264C9B9300E59C35 /* AdminUserTableViewCell.swift in Sources */,
+				E11B89B1265ABEBF009A38A1 /* GithubUsersAppNavController.swift in Sources */,
 				E1E141482651AD3300C282FE /* User+CoreDataClass.swift in Sources */,
 				E189A17A264AE08300CBD45A /* GithubUsersApi.swift in Sources */,
 				E1E1414A265443EE00C282FE /* DebugUserTableViewCell.swift in Sources */,
@@ -726,6 +733,7 @@
 				E1510C75264C4D7A00E59C35 /* UserListTableViewCellDelegate.swift in Sources */,
 				E1510C71264C4A9800E59C35 /* UserTableViewCellBase.swift in Sources */,
 				E1880BE5264E8BEA0026D6DC /* ViewModelDelegate.swift in Sources */,
+				E11B89B3265AE6D8009A38A1 /* AppConnectionState.swift in Sources */,
 				E1F129B0265029D600EF34F8 /* CoreDataService.swift in Sources */,
 				E189A16D264ADD3000CBD45A /* Api.swift in Sources */,
 				E1F4479826505C680073B193 /* SKSplashView.m in Sources */,
