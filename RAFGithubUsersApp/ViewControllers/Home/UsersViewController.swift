@@ -579,4 +579,7 @@ extension UsersViewController: ProfileViewDelegate {
     func didSaveNote(at indexPath: IndexPath) {
         self.tableView.reloadRows(at: [indexPath], with: .none)
     }
+    func didSeeProfile(at indexPath: IndexPath) {
+        self.tableView.reloadRows(at: [indexPath], with: .none)
+    }
 }

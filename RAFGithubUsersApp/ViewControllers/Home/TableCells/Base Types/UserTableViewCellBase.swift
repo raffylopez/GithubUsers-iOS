@@ -27,6 +27,7 @@ class UserTableViewCellBase: UITableViewCell, UserCell {
 
     internal func updateCell() {
         self.lblName.text = user.login ?? ""
+        self.lblName.textColor = self.user.userInfo != nil && self.user.userInfo!.seen ? .systemGray : .label
         self.lblSeries.text = user.urlHtml
     }
     

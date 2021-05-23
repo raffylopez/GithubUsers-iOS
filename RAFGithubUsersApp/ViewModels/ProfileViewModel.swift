@@ -70,6 +70,13 @@ class ProfileViewModel {
         guard !isFetchInProgress else {
             return
         }
+        
+        if let userInfo = self.user.userInfo, userInfo.seen {
+            self.userInfo = self.user.userInfo
+            completion?(.success(self.user.userInfo!))
+            return
+        }
+
 
         guard let login = user.login else {
             completion?(.failure(AppError.emptyResult))
@@ -82,7 +89,7 @@ class ProfileViewModel {
             self.isFetchInProgress = false
 
             self.user.userInfo?.set(from: githubuserInfo, moc: CoreDataService.shared.context)
-
+            self.userInfo.seen = true
             do {
                 try self.databaseService.save()
             } catch {
@@ -92,15 +99,35 @@ class ProfileViewModel {
             completion?(.success(self.userInfo))
         }
         
-        let onTaskError: ((Int, Int, Error)->Void)? = { attemptCount, delayTillNext, error in
-            self.isFetchInProgress = false
-            completion?(.failure(error))
-            self.delegate?.onRetryError(n: attemptCount, nextAttemptInMilliseconds: delayTillNext, error: error)
+        self.apiService.fetchUserDetails(username: login) { result in
+            switch result {
+            case let .success(githubUserInfo):
+                self.isFetchInProgress = false
+                
+                self.user.userInfo?.set(from: githubUserInfo, moc: CoreDataService.shared.context)
+                self.user.userInfo?.seen = true
+                do {
+                    try self.databaseService.save()
+                } catch {
+                    completion?(.failure(error))
+                }
+                self.userInfo = self.user.userInfo
+                completion?(.success(self.userInfo))
+            case let .failure(error):
+                self.isFetchInProgress = false
+                completion?(.failure(error))
+            }
+
         }
-        
-        let queue = DispatchQueue(label: "serialized_queue", qos: .background)
-        let retryAttempts = 5
-        ScheduledTask(task: self.apiService.fetchUserDetails).retryWithBackoff(times: retryAttempts, taskParam: login, queue: queue, onTaskSuccess: onTaskSuccess, onTaskError: onTaskError)
+//        let onTaskError: ((Int, Int, Error)->Void)? = { attemptCount, delayTillNext, error in
+//            self.isFetchInProgress = false
+//            completion?(.failure(error))
+//            self.delegate?.onRetryError(n: attemptCount, nextAttemptInMilliseconds: delayTillNext, error: error)
+//        }
+//
+//        let queue = DispatchQueue(label: "serialized_queue", qos: .background)
+//        let retryAttempts = 5
+//        ScheduledTask(task: self.apiService.fetchUserDetails).retryWithBackoff(times: retryAttempts, taskParam: login, queue: queue, onTaskSuccess: onTaskSuccess, onTaskError: onTaskError)
         
     }
 
