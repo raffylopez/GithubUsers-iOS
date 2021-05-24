@@ -67,10 +67,10 @@ class ProfileViewController: UIViewController {
     }
     
     private func setupLayout() {
-        tvNote.layer.borderColor = UIColor.systemGray.cgColor
-        tvNote.layer.borderWidth = 0
+        tvNote.layer.borderWidth = 1
         tvNote.layer.cornerRadius = 5
-        tvNote.backgroundColor = UIColor.init(red: 239/255, green: 239/255, blue: 239/255, alpha: 1.0)
+        tvNote.layer.borderColor = UIColor.systemGray5.cgColor
+        tvNote.backgroundColor = .systemBackground
         
         boxBlue.layer.borderWidth = 3.0
         boxBlue.layer.masksToBounds = false
@@ -83,7 +83,7 @@ class ProfileViewController: UIViewController {
 
         btnClear.setTitleColor(.red, for: .selected)
         btnClear.layer.cornerRadius = 5
-        btnClear.layer.borderColor = UIColor.systemGray6.cgColor
+        btnClear.layer.borderColor = UIColor.systemGray5.cgColor
         btnClear.addTarget(self, action: #selector(btnClearPressed), for: .touchUpInside)
 
         btnClear.clipsToBounds = true
@@ -163,12 +163,9 @@ class ProfileViewController: UIViewController {
         setupNavbar()
         setupLayout()
         self.viewModel.delegate = self
-        self.viewModel.bind {
-            print(self.viewModel.user.userInfo ?? "NO_USER_INFO")
-        }
+        self.viewModel.bind { }
 
-        self.viewModel.fetchUserDetails(for: self.viewModel.user, onRetryError: nil) { _ in
-        }
+        self.viewModel.fetchUserDetails(for: self.viewModel.user, onRetryError: nil) { _ in }
         registerForKeyboardNotifications()
     }
     

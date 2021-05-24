@@ -53,11 +53,18 @@ class GithubUsersApi {
                 URLQueryItem(name: "since", value: "\(since)")
             ]
             print("Fetching list of users from \(uri!.url!.absoluteString)...")
-            let task = URLSession.shared.githubUsersTask(with: uri!.url!, completionHandler: { (githubUsers, status, error) in
+            let task = URLSession.shared.githubUsersTask(with: uri!.url!, completionHandler: { (githubUsers, response, error) in
                 print("Done fetching user list.")
                 ConcurrencyUtils.singleUserRequestSemaphore.signal()
                 if let error = error {
-                    completion?(.failure(error))
+                    completion?(.failure(AppError.httpTransportError(error)))
+                    return
+                }
+
+                let response = response as! HTTPURLResponse
+                let status = response.statusCode
+                guard (200...299).contains(status) else {
+                    completion?(.failure(AppError.httpServerSideError(status)))
                     return
                 }
                 if let githubUsers = githubUsers {

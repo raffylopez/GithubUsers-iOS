@@ -1,7 +1,4 @@
 //
-//  AmiiboElementsViewModel.swift
-//  RDLAmiiboApp
-//
 //  Created by Volare on 4/17/21.
 //  Copyright © 2021 Raf. All rights reserved.
 //
@@ -20,6 +17,7 @@ enum LastDataSource {
 class UsersViewModel {
     /* MARK: - Properties */
     var delegate: ViewModelDelegate? = nil
+    let maxRetryCountOnServerSideFail = 10_000
     
     typealias OnDataAvailable = ( () -> Void )
     var onDataAvailable: OnDataAvailable = {}
@@ -28,21 +26,9 @@ class UsersViewModel {
     
     var since: Int = 0
     var currentPage: Int = 0
-    var lastBatchCount: Int = 0 {
-        didSet {
-            print("STATS v_lastBatchCount: \(lastBatchCount)")
-        }
-    }
-    var totalDisplayCount: Int = 0 {
-        didSet {
-            print("STATS v_totalDisplayCount: \(totalDisplayCount)")
-        }
-    }
-    var lastDataSource: LastDataSource = .unspecified {
-        didSet {
-            print("STATS v_lastDataSource: \(lastDataSource)")
-        }
-    }
+    var lastBatchCount: Int = 0
+    var totalDisplayCount: Int = 0
+    var lastDataSource: LastDataSource = .unspecified
     
     var currentCount: Int {
         return users.count
@@ -55,7 +41,6 @@ class UsersViewModel {
     
     var isFetchInProgress: Bool = false {
         didSet {
-            print("Fetch in progress: \(isFetchInProgress)")
             if (isFetchInProgress) {
                 onFetchInProgress()
                 delegate?.onFetchInProgress()
@@ -104,10 +89,6 @@ class UsersViewModel {
             }
         }
     }
-
-
-    /* MARK: - Debug */
-
 
     /* MARK: - Inits */
     init(apiService: GithubUsersApi, databaseService: UsersProvider) {
@@ -159,8 +140,7 @@ class UsersViewModel {
     
     func loadOfflineData(completion: (()->Void)? = nil) {
         let userCount = self.usersDatabaseService.getUserCount()
-        print("STATS userCount: \(userCount)")
-        
+
         guard userCount > 0 else {
             completion?()
             return
@@ -204,13 +184,6 @@ class UsersViewModel {
         if let lastUser = self.users.last {
             self.since = Int(lastUser.id)
         }
-            
-        let needsToFetch = usersDatabaseService.getUserCount() == self.users.count || usersDatabaseService.getUserCount() == 0
-        guard needsToFetch && ConnectionMonitor.shared.isApiReachable else {
-            loadOfflineData(completion: completion)
-            return
-        }
-        
         fetchUsers(since: self.since) { result in
             switch result {
             case let .success(users):
@@ -219,7 +192,6 @@ class UsersViewModel {
                     self.since = Int(user.id)
                 }
                 self.totalDisplayCount += users.count
-//                print_r(array: users) // DEBUG
                 self.loadUsersFromDisk(count: self.totalDisplayCount)
                 completion?()
             case let .failure(error):  // INCLUDES NO INTERNET
@@ -240,13 +212,7 @@ class UsersViewModel {
     /* Freshen stored objects with new data from the network  */
     public func clearData() {
         resetState()
-//        clearDiskStore()
-//        imageStore.removeAllImages()
-//        self.users = []
-//        self.users.removeAll()
-        // TODO: Create clear event notif
     }
-    
 
     /**
      Binds closure to model describing what to perform when data becomes available
@@ -266,15 +232,13 @@ class UsersViewModel {
             switch result {
             case let .failure(error):
                 self.users.removeAll()
-                print("STATS read problem: \(error.localizedDescription)")
+                print("\(error.localizedDescription)")
                 completion?(.failure(error))
             case let .success(users):
                 if let user = users.last {
                     self.since = Int(user.id)
                 }
                 self.users = users
-                print("STATS TOTAL USERS TABLEDATASOURCE COUNT (UpdateDataSource): \(self.users.count)" )
-                print("STATS TOTAL USERS COREDATA COUNT: \(self.usersDatabaseService.getUserCount())" )
                 completion?(.success(users))
             }
         }
@@ -288,7 +252,6 @@ class UsersViewModel {
             mainContext.performAndWait {
              do {
                try mainContext.save()
-               print("Saved to main context")
              } catch {
                print("Could not synchonize data. \(error), \(error.localizedDescription)")
              }
@@ -327,7 +290,7 @@ class UsersViewModel {
         }
 
         guard let since = staleIds.first else {
-            ToastAlertMessageDisplay.main.display(message: "No stale entries left to update")
+//            print("No stale entries left to update")
             completion?(.failure(AppError.emptyResult))
             return
         }
@@ -336,10 +299,9 @@ class UsersViewModel {
             switch result {
             case let .success(users):
                 self.unregisterStale(users: users)
-                ToastAlertMessageDisplay.main.display(message: "\(self.staleIds.count) stale entries left to update")
+//                print("\(self.staleIds.count) stale entries left to update")
                 completion?(.success(users))
             case let .failure(error):
-                print(error)
                 completion?(.failure(error))
             }
         }
@@ -355,7 +317,7 @@ class UsersViewModel {
      of network-based objects and old database objects. The count is based on the
      size of the batch received.
      */
-    private func fetchUsers(since: Int, completion: @escaping ((Result<[User], Error>)->Void), queued: Bool = true) {
+    private func fetchUsers(since: Int, completion: @escaping ((Result<[User], Error>)->Void)) {
         guard !isFetchInProgress else {
             return
         }
@@ -415,6 +377,12 @@ class UsersViewModel {
                 }
             case let .failure(error):
                 print(error.localizedDescription)
+                switch error {
+                case AppError.httpServerSideError:
+                    ScheduledTask(task: self.fetchUsers).retryWithBackoff(times: self.maxRetryCountOnServerSideFail, taskParam: since)
+                default:
+                    completion(.failure(error))
+                }
                 
                 completion(.failure(error))
             }

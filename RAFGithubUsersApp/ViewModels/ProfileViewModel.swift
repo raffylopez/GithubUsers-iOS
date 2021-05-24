@@ -18,6 +18,7 @@ class ProfileViewModel {
         self.cell = cell
         self.user = cell.user
         self.databaseService = databaseService
+        self.userInfo = cell.user.userInfo
         imageStore = ImageStore()
     }
     
@@ -58,16 +59,19 @@ class ProfileViewModel {
         self.onDataAvailable = availability
     }
     
-    
+    var userInfo: UserInfo? {
+        didSet {
+            delegate?.onDataAvailable()
+        }
+    }
+
     func fetchUserDetails(for user: User, onRetryError: ((Int)->())? = nil, completion: ((Result<UserInfo, Error>)->Void)? = nil) {
         guard !isFetchInProgress else {
             return
         }
         
         if let userInfo = self.user.userInfo, userInfo.seen {
-            delegate?.onDataAvailable()
-            completion?(.success(self.user.userInfo!))
-            return
+            self.userInfo = userInfo
         }
 
 
@@ -78,21 +82,43 @@ class ProfileViewModel {
 
         isFetchInProgress = true
         
+        let privateMOC = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        let context = CoreDataService.persistentContainer.viewContext
+        privateMOC.parent = context
+        
         self.apiService.fetchUserDetails(username: login) { result in
+            self.isFetchInProgress = false
             switch result {
             case let .success(githubUserInfo):
-                self.isFetchInProgress = false
-                
-                self.user.userInfo?.set(from: githubUserInfo, moc: CoreDataService.shared.context)
-                self.user.userInfo?.seen = true
-                do {
-                    try self.databaseService.save()
-                } catch {
-                    completion?(.failure(error))
+                privateMOC.performAndWait {
+                    if let userInfo = self.user.userInfo {
+                        userInfo.set(from: githubUserInfo, moc: privateMOC)
+                        userInfo.seen = true
+                    } else {
+                        self.user.userInfo = UserInfo(from: githubUserInfo, moc: privateMOC)
+                    }
+
+                    do { // TODO: transfer to sync method
+                        if privateMOC.hasChanges {
+                            try privateMOC.save()
+                        }
+                        context.performAndWait {
+                            do {
+                                if context.hasChanges {
+                                    try context.save()
+                                }
+                            } catch {
+                                fatalError("Failed to save context: \(error)")
+                            }
+                        }
+                    } catch {
+                        completion?(.failure(error))
+                        fatalError("Failed to save context: \(error)")
+                    }
+                    self.userInfo = self.user.userInfo
+                    completion?(.success(self.user.userInfo!))
                 }
-                self.delegate?.onDataAvailable()
             case let .failure(error):
-                self.isFetchInProgress = false
                 completion?(.failure(error))
             }
 

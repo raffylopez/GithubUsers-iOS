@@ -183,7 +183,7 @@ class UsersViewController: UITableViewController {
             OperationQueue.main.addOperation {
                 ToastAlertMessageDisplay.main.hideToastActivity()
                 
-                if self.viewModel.totalDisplayCount <= 30 { /* User performed a refresh/first load */
+                if self.viewModel.totalDisplayCount <= self.viewModel.confOfflineIncrements {
                     self.tableView.alpha = 0
                     self.tableView.alpha = 1
                     UIView.transition(with: self.tableView,
@@ -200,8 +200,8 @@ class UsersViewController: UITableViewController {
                     return
                 }
 
-                let startIndex = self.viewModel.totalDisplayCount - 30
-                let endIndex = startIndex + 30
+                let startIndex = self.viewModel.totalDisplayCount - self.viewModel.confOfflineIncrements
+                let endIndex = startIndex + self.viewModel.confOfflineIncrements
                 let newIndexPathsToInsert: [IndexPath] = (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
                 let indexPathsToReload = self.visibleIndexPathsToReload(intersecting: newIndexPathsToInsert)
 
@@ -262,8 +262,8 @@ class UsersViewController: UITableViewController {
         //        navigationItem.leftBarButtonItem = leftBarItem
         self.navigationItem.searchController = search
         self.title = "Browse Users".localized()
-        let leftBarItem = UIBarButtonItem(title: "Refresh Stale".localized(), style: .plain, target: self, action: #selector(self.refreshStaleOnDemand))
-        self.navigationItem.leftBarButtonItem = leftBarItem
+//        let leftBarItem = UIBarButtonItem(title: "Refresh Stale".localized(), style: .plain, target: self, action: #selector(self.refreshStaleOnDemand))
+//        self.navigationItem.leftBarButtonItem = leftBarItem
     }
     
     func refreshStaleOnScroll(imageFetchCompletion: (((UIImage, ImageSource))->Void)? = nil, completion: @escaping ()->Void) {
@@ -271,8 +271,8 @@ class UsersViewController: UITableViewController {
             switch result {
             case .success:
                 DispatchQueue.main.async {
-                    let startIndex = self.viewModel.totalDisplayCount - 30
-                    let endIndex = startIndex + 30
+                    let startIndex = self.viewModel.totalDisplayCount - self.viewModel.confOfflineIncrements
+                    let endIndex = startIndex + self.viewModel.confOfflineIncrements
                     let newIndexPathsToInsert: [IndexPath] = (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
                     let indexPathsToReload = self.visibleIndexPathsToReload(intersecting: newIndexPathsToInsert)
                     self.tableView?.beginUpdates()
@@ -385,6 +385,12 @@ class UsersViewController: UITableViewController {
     }
 
     func fetchMoreTableDataDisplayingResults(completion: (()->Void)? = nil) {
+        
+        let needsToFetch = viewModel.usersDatabaseService.getUserCount() == self.viewModel.users.count || viewModel.usersDatabaseService.getUserCount() == 0
+        guard needsToFetch && ConnectionMonitor.shared.isApiReachable else {
+            self.viewModel.loadOfflineData(completion: completion)
+            return
+        }
         ToastAlertMessageDisplay.main.makeToastActivity()
         self.viewModel.updateUsers {
             ToastAlertMessageDisplay.main.hideToastActivity()
@@ -456,19 +462,6 @@ class UsersViewController: UITableViewController {
         return 100
     }
     
-    private func calculateIndexPathsToInsert(from newUsers: Int, offset: Int = 0) -> [IndexPath] {
-        let startIndex = (self.targetSource.count - newUsers) + offset
-        let endIndex = (startIndex + newUsers)
-        print("STATS vmuc:\(self.targetSource.count), n:\(newUsers)")
-        print("STATS STARTINDEX: \(startIndex), ENDINDEX: \(endIndex)")
-//        if self.viewModel.currentPage == 1 {
-//            return ((startIndex)..<(endIndex-1)).map { IndexPath(row: $0, section: 0) }
-//        }
-//        return ((startIndex < 0 ? startIndex : startIndex - 1)..<(endIndex-1)).map { IndexPath(row: $0, section: 0) }
-//        return (startIndex-1..<endIndex-1).map { IndexPath(row: $0, section: 0) }
-        return (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
-    }
-
     func isLoadingLastCell(for indexPath: IndexPath) -> Bool {
         return indexPath.row + 1 >= self.targetSource.count
     }
@@ -568,8 +561,8 @@ extension UsersViewController: ViewModelDelegate {
     
     func onDataAvailable() {
         DispatchQueue.main.async {
-            let rightBarItem = UIBarButtonItem(title: "Scroll to Top".localized(), style: .plain, target: self, action: #selector(self.tableViewScrollToTop))
-            self.navigationItem.rightBarButtonItem = rightBarItem
+//            let rightBarItem = UIBarButtonItem(title: "Scroll to Top".localized(), style: .plain, target: self, action: #selector(self.tableViewScrollToTop))
+//            self.navigationItem.rightBarButtonItem = rightBarItem
         }
     }
     
