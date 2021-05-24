@@ -9,4 +9,5 @@
 extension Notification.Name {
     public static let connectionDidBecomeUnreachable = NSNotification.Name("ConnectionDidBecomeUnreachable")
     public static let connectionDidBecomeReachable = NSNotification.Name("ConnectionDidBecomeReachable")
+    public static let serverDidError = NSNotification.Name("ServerDidError")
 }

@@ -361,7 +361,16 @@ class UsersViewModel {
                 print(error.localizedDescription)
                 switch error {
                 case AppError.httpServerSideError:
-                    ScheduledTask(task: self.fetchUsers).retryWithBackoff(times: self.maxRetryCountOnServerSideFail, taskParam: since)
+                    guard !ScheduleTracker.retryIsActive else { break }
+                    ScheduledTask(task: self.fetchUsers).retryWithBackoff(times: self.maxRetryCountOnServerSideFail, taskParam: since, onTaskSuccess: { _ in
+                        DispatchQueue.main.async {
+                            (UIApplication.shared.delegate as! AppDelegate).appConnectionState = .networkReachable
+                        }
+                    }, onTaskError: { _,_,_ in
+                        DispatchQueue.main.async {
+                            (UIApplication.shared.delegate as! AppDelegate).appConnectionState = .serverError
+                        }
+                    })
                 default:
                     completion(.failure(error))
                 }

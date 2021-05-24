@@ -38,6 +38,7 @@ class GithubUsersAppNavController: UINavigationController {
     private func setupObservers() {
         NotificationCenter.default.addObserver(self, selector:#selector(self.onNetworkReachable), name: NSNotification.Name.connectionDidBecomeReachable, object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(self.onNetworkUnreachable), name: NSNotification.Name.connectionDidBecomeUnreachable, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(self.onServerError), name: NSNotification.Name.serverDidError, object: nil)
     }
     
     override func viewDidLoad() {
@@ -56,6 +57,16 @@ class GithubUsersAppNavController: UINavigationController {
         self.view.layoutIfNeeded()
     }
     
+    @objc func onServerError() {
+        self.view.layoutIfNeeded()
+        label.text = "Server error".localized()
+        self.statusBar.backgroundColor = .red
+        UIView.animate(withDuration: 0.3) {
+            self.statusBarBottomConstraint?.constant = 0
+            self.view.layoutIfNeeded()
+        }
+    }
+
     @objc func onNetworkReachable() {
         self.view.layoutIfNeeded()
         self.label.text = "Connected!".localized()

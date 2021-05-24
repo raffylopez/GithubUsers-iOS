@@ -13,6 +13,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 NotificationCenter.default.post(name: .connectionDidBecomeReachable, object: nil)
             case .networkUnreachable:
                 NotificationCenter.default.post(name: .connectionDidBecomeUnreachable, object: nil)
+            case .serverError:
+                NotificationCenter.default.post(name: .serverDidError, object: nil)
             case .unknown:
                 break
             }

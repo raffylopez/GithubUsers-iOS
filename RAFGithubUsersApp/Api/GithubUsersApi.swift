@@ -27,9 +27,11 @@ class GithubUsersApi: UserApi {
             preconditionFailure("Can't construct urlcomponents")
         }
 
-        uri.queryItems = [
-            URLQueryItem(name: "access_token", value: getConfig().githubAccessToken)
-        ]
+        if getConfig().githubAccessToken != "" {
+            uri.queryItems = [
+                URLQueryItem(name: "access_token", value: getConfig().githubAccessToken)
+            ]
+        }
         
         URLSession.shared.githubUserInfoTask(with: URL(string: userInfoUri)!, completionHandler: { githubUserInfo, response, error in
             if let error = error {
@@ -49,9 +51,13 @@ class GithubUsersApi: UserApi {
             ConcurrencyUtils.singleUserRequestSemaphore.wait()
             var uri = URLComponents(string: self.usersListUri)
             uri?.queryItems = [
-                URLQueryItem(name: "access_token", value: getConfig().githubAccessToken),
                 URLQueryItem(name: "since", value: "\(since)")
             ]
+            
+            if getConfig().githubAccessToken != "" {
+                uri?.queryItems?.append(URLQueryItem(name: "access_token", value: getConfig().githubAccessToken))
+            }
+            
             if self.confDbgVerboseNetworkCalls {
                 print("Fetching list of users from \(uri!.url!.absoluteString)...")
             }
@@ -89,4 +95,5 @@ class GithubUsersApi: UserApi {
 class ConcurrencyUtils {
     static let singleImageRequestSemaphore = DispatchSemaphore(value: 1)
     static let singleUserRequestSemaphore = DispatchSemaphore(value: 1)
+    static let networkRetrySemaphore = DispatchSemaphore(value: 1)
 }

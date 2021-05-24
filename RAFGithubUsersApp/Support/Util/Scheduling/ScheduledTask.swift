@@ -11,19 +11,14 @@ import Reachability
 /**
  Task scheduler with supporting exponential backoffs
  */
+class ScheduleTracker {
+    public static var retryIsActive: Bool = false
+}
+
 class ScheduledTask<T, ResultType> {
-    typealias Task = (T, ((Result<ResultType,Error>)->Void)?) -> Void
     typealias TaskRequiredResult = (T, (@escaping (Result<ResultType,Error>)->Void)) -> Void
-    var task: Task!
     var taskRequiredResult: TaskRequiredResult!
-    
-    init(task: @escaping Task) {
-        self.task = task
-        self.taskRequiredResult = nil
-    }
-    
     init(task: @escaping TaskRequiredResult) {
-        self.task = nil
         self.taskRequiredResult = task
     }
 
@@ -39,8 +34,8 @@ class ScheduledTask<T, ResultType> {
         return min(delay + jitter, maxDelay)
     }
     
-    var retryCount: Int = 0;
-    
+    var tryIndex: Int = 1;
+
     /**
      Recursively retries task asynchronously with backoff.
      */
@@ -48,54 +43,27 @@ class ScheduledTask<T, ResultType> {
                           taskParam: T,
                           onTaskSuccess: ((ResultType)->Void)? = nil,
                           onTaskError: ((Int, Int, Error)->Void)? = nil) {
-        let delay = getExponentialDelay(for: retryCount)
+        let delay = getExponentialDelay(for: tryIndex)
         DispatchQueue.global().asyncAfter(
-        deadline: DispatchTime.now() + .milliseconds(delay)) {
-            self.task(taskParam) { result in
+        deadline: .now() + .milliseconds(delay)) {
+            self.taskRequiredResult(taskParam) { result in
                 switch result {
                 case let .success(users):
                     onTaskSuccess?(users)
                 case let .failure(error):
-                    self.retryCount += 1
-                    print("Error in try \(self.retryCount)...retrying in \(delay) milliseconds")
-                    
-                    onTaskError?(self.retryCount, delay, error)
-                    
+                    self.tryIndex += 1
+                    print("Error in try \(self.tryIndex)...retrying in \(delay) milliseconds")
                     if n > 0 {
-                        self.retryWithBackoff(times: n - self.retryCount, taskParam: taskParam, onTaskSuccess: onTaskSuccess, onTaskError: onTaskError)
+                        ScheduleTracker.retryIsActive = true
+                        self.retryWithBackoff(times: n - 1, taskParam: taskParam, onTaskSuccess: onTaskSuccess, onTaskError: onTaskError)
                         return
                     }
+                    onTaskError?(self.tryIndex, delay, error)
                 }
+                ScheduleTracker.retryIsActive = false
+                self.tryIndex = 1
             }
         }
-    }
-    /**
-     Recursively retries task asynchronously with backoff.
-     */
-    func retryWithBackoff(times n: Int,
-                          taskParam: T,
-                          queue: DispatchQueue,
-                          onTaskSuccess: ((ResultType)->Void)? = nil,
-                          onTaskError: ((Int, Int, Error)->Void)? = nil) {
-        let delay = getExponentialDelay(for: retryCount)
-        queue.asyncAfter(
-        deadline: DispatchTime.now() + .milliseconds(delay)) {
-            self.task(taskParam) { result in
-                switch result {
-                case let .success(users):
-                    onTaskSuccess?(users)
-                case let .failure(error):
-                    self.retryCount += 1
-                    print("Error in try \(self.retryCount)...retrying in \(delay) milliseconds")
-                    
-                    onTaskError?(self.retryCount, delay, error)
-                    
-                    if n > 0 {
-                        self.retryWithBackoff(times: n - self.retryCount, taskParam: taskParam, queue: queue, onTaskSuccess: onTaskSuccess, onTaskError: onTaskError)
-                        return
-                    }
-                }
-            }
-        }
+//        ConcurrencyUtils.networkRetrySemaphore.wait()
     }
 }
