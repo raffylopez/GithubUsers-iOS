@@ -354,7 +354,7 @@ class UsersViewModel {
                 switch error {
                 case AppError.httpServerSideError:
                     /** Retry with exponential backoff to avoid pommeling the backend */
-                    for i in 1..<retryCountOnServerSideFail {
+                    for i in 1..<self.retryCountOnServerSideFail {
                         /* print("Scheduling backed-off retries...\(i)") */
                         let delay = TimeInterval.getExponentialDelay(for: i)
                         let secs = Float(delay) / 1000.0

@@ -30,7 +30,7 @@ class ShimmerTableViewCell: UserTableViewCellBase {
         label.skeletonCornerRadius = 2.0
         label.showAnimatedGradientSkeleton()
     }
-
+    
     private func unskeletonize(label:  UILabel) {
         label.hideSkeleton()
     }

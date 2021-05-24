@@ -77,7 +77,7 @@ public class UserInfo: NSManagedObject {
         }
         try? moc.save()
     }
-
+    
     convenience init(moc: NSManagedObjectContext) {
         let entity = NSEntityDescription.entity(forEntityName: String.init(describing: Self.self), in: moc)
         self.init(entity: entity!, insertInto: moc)

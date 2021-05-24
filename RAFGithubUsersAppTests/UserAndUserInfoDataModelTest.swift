@@ -26,7 +26,7 @@ class UserAndUserInfoDataModelTest: XCTestCase {
         let result = try? context.fetch(fetchRequest)
         return result?.first
     }
-
+    
     // MARK: - Test setup
     override func setUp() {
         /* Setup an in-memory persistent store */
@@ -63,7 +63,7 @@ class UserAndUserInfoDataModelTest: XCTestCase {
             userInfo.name = "test_create_name"
             userInfo.email = "test_create@email.com"
         }
-
+        
         let user = User(entity: userEntity!, insertInto: context)
         context.performAndWait {
             user.id = 1000000
@@ -165,7 +165,7 @@ class UserAndUserInfoDataModelTest: XCTestCase {
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }
-
+        
         if let fetchedUser = try? fetchUserUsing(id: 1000000, context: context), let fetchUserInfo = fetchedUser.userInfo {
             XCTAssert(fetchedUser.id == 1000000)
             XCTAssert(fetchedUser.login == "test_update")
@@ -175,5 +175,5 @@ class UserAndUserInfoDataModelTest: XCTestCase {
         }
         XCTFail()
     }
-
+    
 }

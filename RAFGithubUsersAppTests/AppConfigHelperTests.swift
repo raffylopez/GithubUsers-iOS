@@ -10,14 +10,14 @@ import XCTest
 
 class AppConfigHelperTests: XCTestCase {
     var appConfig: AppConfig?
-
+    
     override func setUpWithError() throws {
         appConfig = getConfig()
     }
-
+    
     override func tearDownWithError() throws {
     }
-
+    
     func testConfigValid() throws {
         if let appConfig = appConfig {
             XCTAssert(!appConfig.githubUsersListUri.isEmpty)
@@ -26,5 +26,5 @@ class AppConfigHelperTests: XCTestCase {
         }
         XCTFail()
     }
-
+    
 }

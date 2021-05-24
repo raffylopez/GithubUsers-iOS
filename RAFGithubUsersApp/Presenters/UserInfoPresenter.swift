@@ -20,7 +20,7 @@ class UserInfoPresenter {
     init(_ userInfo: UserInfo) {
         self.userInfo = userInfo
     }
-
+    
     var name: String { return self.userInfo.name ?? "" }
     var login: String { return self.userInfo.user?.login ?? "-" }
     var bio: String { return self.userInfo.bio ?? "" }
@@ -42,5 +42,5 @@ class UserInfoPresenter {
     var email: String { return self.userInfo.email ?? "-" }
     var hireability: String { return self.userInfo.isHireable ? "Hireable" : "Not currently hireable"  }
     var note: String { return self.userInfo.note ?? "" }
-
+    
 }

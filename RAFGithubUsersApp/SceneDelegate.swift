@@ -8,10 +8,10 @@
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-
+    
     var navigationController: GithubUsersAppNavController!
     var window: UIWindow?
-
+    
     private func setupViewControllers() {
         let viewModel = UsersViewModel(apiService: GithubUsersApi(), databaseService: CoreDataService.shared)
         let top = ViewControllersFactory.instance(vcType: .usersList(viewModel))
@@ -41,15 +41,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.windowScene = scene
         setupViewControllers()
     }
-
+    
     func sceneDidDisconnect(_ scene: UIScene) { }
-
+    
     func sceneDidBecomeActive(_ scene: UIScene) { }
-
+    
     func sceneWillResignActive(_ scene: UIScene) { }
-
+    
     func sceneWillEnterForeground(_ scene: UIScene) { }
-
+    
     func sceneDidEnterBackground(_ scene: UIScene) {
         let context = CoreDataService.persistentContainer.viewContext
         if context.hasChanges {

@@ -73,7 +73,7 @@ class UserDataFromMockApiTests: XCTestCase {
                 XCTAssert(githubUser.login == "mojombo")
                 XCTAssert(githubUser.id == 1)
                 XCTAssert(githubUser.nodeID == "MDQ6VXNlcjE=")
-
+                
                 self.apiMock?.fetchUserDetails(username: githubUser.login) { (result) in
                     switch result {
                     case let .success(user):

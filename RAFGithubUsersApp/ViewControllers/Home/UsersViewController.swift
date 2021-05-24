@@ -26,12 +26,12 @@ class UsersViewController: UITableViewController {
     required init?(coder aDecoder: NSCoder) {
         fatalError("\(#function) not supported by \(String(describing:Self.self))")
     }
-
+    
     fileprivate func startSplashAnimation() {
         let icon: SKSplashIcon = SKSplashIcon(image: UIImage(named: "github_splash_dark")!)
         guard let splashView = SKSplashView(splashIcon: icon, animationType: .none),
             let navController = self.navigationController
-        else { return }
+            else { return }
         splashView.backgroundColor = .black
         splashView.animationDuration = 2.0
         navController.view.addSubview(splashView)
@@ -39,13 +39,13 @@ class UsersViewController: UITableViewController {
     }
     
     // MARK: - Configurables
-
-
+    
+    
     private func setupObservers() {
         NotificationCenter.default.addObserver(self, selector:#selector(self.onNetworkReachable), name: NSNotification.Name.connectionDidBecomeReachable, object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(self.onNetworkUnreachable), name: NSNotification.Name.connectionDidBecomeUnreachable, object: nil)
     }
-
+    
     // MARK: Configure table cell types
     typealias StandardTableViewCell = NormalUserTableViewCell
     typealias StandardNotedTableViewCell = NoteNormalUserTableViewCell
@@ -54,7 +54,7 @@ class UsersViewController: UITableViewController {
     
     typealias DbgStandardTableViewCell = DebugUserTableViewCell
     typealias DbgStandardNotedTableViewCell = DebugNotedUserTableViewCell
-
+    
     // MARK: - Properties and attributes
     var viewModel: UsersViewModel!
     lazy var search: UISearchController = {
@@ -76,13 +76,13 @@ class UsersViewController: UITableViewController {
         tap.cancelsTouchesInView = false
         return tap
     }()
-
+    
     lazy var tapButton: UITapGestureRecognizer = {
         let tap = UITapGestureRecognizer(target: self, action: #selector(tableViewScrollToTop))
         tap.cancelsTouchesInView = false
         return tap
     }()
-
+    
     // MARK: - Table cell registration
     /**
      Registers table cell types with reuse identifiers, used for dequeueing cells
@@ -90,7 +90,7 @@ class UsersViewController: UITableViewController {
     private func registerReuseId<T>(_ type: T.Type) where T: UserTableViewCellBase {
         self.tableView?.register(T.self, forCellReuseIdentifier: String(describing: T.self))
     }
-
+    
     private func registerTableCellTypes() {
         if confDbgDisplayDebugCells {
             registerReuseId(DbgStandardTableViewCell.self)
@@ -147,7 +147,7 @@ class UsersViewController: UITableViewController {
         
         return cell
     }
-
+    
     // MARK: - Setup
     private func setupTableView() {
         self.tableView.addGestureRecognizer(tap)
@@ -155,7 +155,7 @@ class UsersViewController: UITableViewController {
         self.tableView.prefetchDataSource = self
         registerTableCellTypes()
     }
-
+    
     /**
      Displays a toast message at the bottom.
      
@@ -176,7 +176,7 @@ class UsersViewController: UITableViewController {
         }
         return value % number == 0 && value != 0
     }
-
+    
     private func setupViewModel() {
         self.viewModel.delegate = self
         
@@ -186,7 +186,7 @@ class UsersViewController: UITableViewController {
                 self.tableView.reloadData()
                 return
             }
-
+            
             /* Partial tableView refreshing */
             OperationQueue.main.addOperation {
                 ToastAlertMessageDisplay.main.hideToastActivity()
@@ -205,12 +205,12 @@ class UsersViewController: UITableViewController {
                     self.refreshControl?.endRefreshing()
                     return
                 }
-
+                
                 let startIndex = self.viewModel.totalDisplayCount - self.viewModel.confOfflineIncrements
                 let endIndex = startIndex + self.viewModel.confOfflineIncrements
                 let newIndexPathsToInsert: [IndexPath] = (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
                 let indexPathsToReload = self.visibleIndexPathsToReload(intersecting: newIndexPathsToInsert)
-
+                
                 if self.viewModel.lastDataSource != .parkedFromSearch {
                     /* Ensure slide animations are disabled on row insertion (slide animation used by default on insert) */
                     UIView.setAnimationsEnabled(false)
@@ -227,7 +227,7 @@ class UsersViewController: UITableViewController {
         }
         self.viewModel.bind(availability: onDataAvailable)
     }
-
+    
     let titleLabel = UILabel()
     private func setupNavbar() {
         let imgSize = CGFloat(24)
@@ -251,8 +251,8 @@ class UsersViewController: UITableViewController {
         self.navigationItem.searchController = search
         self.title = "Browse Users".localized()
         /* DEBUG: Refresh stale items easy-access
-        let leftBarItem = UIBarButtonItem(title: "Refresh Stale".localized(), style: .plain, target: self, action: #selector(self.refreshStaleOnDemand))
-        self.navigationItem.leftBarButtonItem = leftBarItem */
+         let leftBarItem = UIBarButtonItem(title: "Refresh Stale".localized(), style: .plain, target: self, action: #selector(self.refreshStaleOnDemand))
+         self.navigationItem.leftBarButtonItem = leftBarItem */
     }
     
     func refreshStaleOnScroll(imageFetchCompletion: (((UIImage, ImageSource))->Void)? = nil, completion: @escaping ()->Void) {
@@ -272,24 +272,24 @@ class UsersViewController: UITableViewController {
             case .failure:
                 completion()
             }
-
+            
         }
     }
-
+    
     private func setupViews() {
         setupNavbar()
         self.refreshControl = UIRefreshControl()
         self.refreshControl?.addTarget(self, action: #selector(refreshPulled), for: .valueChanged)
-
+        
     }
-
+    
     // MARK: - ViewController methods
     override func loadView() {
         super.loadView()
         setupViews()
         setupTableView()
         self.view.backgroundColor = UIColor.systemBackground
-
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -357,7 +357,7 @@ class UsersViewController: UITableViewController {
             }
         }
     }
-
+    
     @objc func tableViewScrollToTop() {
         let animated = self.tableView.contentOffset.y <= (self.tableView.frame.height * 5)
         self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: animated)
@@ -372,7 +372,7 @@ class UsersViewController: UITableViewController {
         if self.search.isActive { return }
         search.dismiss(animated: true, completion: nil)
     }
-
+    
     func fetchMoreTableDataDisplayingResults(completion: (()->Void)? = nil) {
         
         let needsToFetch = viewModel.usersDatabaseService.getUserCount() == self.viewModel.users.count || viewModel.usersDatabaseService.getUserCount() == 0
@@ -386,7 +386,7 @@ class UsersViewController: UITableViewController {
         }
     }
     var isRefreshing = false
-
+    
     var targetSource:[User] { return search.isActive ? self.viewModel.filteredUsers : self.viewModel.users }
     
     // MARK: - UITableViewDelegate methods
@@ -423,7 +423,7 @@ class UsersViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if self.targetSource.count > 0 {
-        return self.targetSource.count
+            return self.targetSource.count
         }
         return 1
     }
@@ -451,13 +451,13 @@ extension UsersViewController {
         }
         
         let user = self.targetSource[indexPath.row]
-
+        
         let hasNote = user.userInfo != nil && user.userInfo?.note != nil && user.userInfo?.note != ""
         
         return confDbgDisplayDebugCells ?
             getCellDebug(user: user, cellForRowAt: indexPath, hasNote: hasNote, isInverted: multiple(of: 4, indexPath.row + 1)) :
             getCell(user: user, cellForRowAt: indexPath, hasNote: hasNote, isInverted: multiple(of: 4, indexPath.row + 1))
-
+        
     }
 }
 
@@ -490,9 +490,9 @@ extension UsersViewController: UISearchResultsUpdating {
 extension UsersViewController: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         /* TODO: Some future enhancement for look-ahead prefetching
-        if confPrefetchingEnabled && indexPaths.contains(where: isLoadingCell) {
-            fetchAdditionalTableData()
-        } */
+         if confPrefetchingEnabled && indexPaths.contains(where: isLoadingCell) {
+         fetchAdditionalTableData()
+         } */
     }
 }
 
@@ -509,9 +509,9 @@ extension UsersViewController {
 }
 
 extension UsersViewController: ViewModelDelegate {
-
+    
     func onRetryError(n: Int, nextAttemptInMilliseconds: Int, error: Error) {
-            self.makeToast(message: "Unable to load data (\(n)). Retrying in \(nextAttemptInMilliseconds/1000) secs", duration: 3.0)
+        self.makeToast(message: "Unable to load data (\(n)). Retrying in \(nextAttemptInMilliseconds/1000) secs", duration: 3.0)
         DispatchQueue.main.async {
             self.navigationItem.rightBarButtonItem = nil
         }
@@ -520,8 +520,8 @@ extension UsersViewController: ViewModelDelegate {
     func onDataAvailable() {
         DispatchQueue.main.async {
             /* NOTE: Supplanted by navtitle click-to-scroll-up
-            let rightBarItem = UIBarButtonItem(title: "Scroll to Top".localized(), style: .plain, target: self, action: #selector(self.tableViewScrollToTop))
-            self.navigationItem.rightBarButtonItem = rightBarItem */
+             let rightBarItem = UIBarButtonItem(title: "Scroll to Top".localized(), style: .plain, target: self, action: #selector(self.tableViewScrollToTop))
+             self.navigationItem.rightBarButtonItem = rightBarItem */
         }
     }
     

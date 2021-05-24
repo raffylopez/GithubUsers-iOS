@@ -15,7 +15,7 @@ class GithubUsersApi: UserApi {
     var confQueuedNetworkRequests: Bool = true
     var confDbgVerboseNetworkCalls = getConfig().dbgVerboseNetworkCalls
     let successStatusCodeRange = (200...299)
-
+    
     typealias T = GithubUser
     let usersListUri: String
     let userInfoUriPrefix: String
@@ -24,13 +24,13 @@ class GithubUsersApi: UserApi {
         userInfoUriPrefix = "\(getConfig().githubUserDetailsUriPrefix)"
         usersListUri = "\(getConfig().githubUsersListUri)"
     }
-
+    
     func fetchUserDetails(username: String, completion: ((Result<GithubUserInfo, Error>) -> Void)? = nil ) {
         let userInfoUri = "\(userInfoUriPrefix)\(username)"
         guard var uri = URLComponents(string: userInfoUri) else {
             preconditionFailure("Can't construct urlcomponents")
         }
-
+        
         if getConfig().githubAccessToken != "" {
             uri.queryItems = [
                 URLQueryItem(name: "access_token", value: getConfig().githubAccessToken)
@@ -47,7 +47,7 @@ class GithubUsersApi: UserApi {
                 return
             }
             completion?(.failure(AppError.emptyResultError))
-            }).resume()
+        }).resume()
     }
     
     func fetchUsers(since: Int = 0, completion: ((Result<[GithubUser], Error>) -> Void)? = nil) {
@@ -67,7 +67,7 @@ class GithubUsersApi: UserApi {
                     completion?(.failure(AppError.httpTransportError(error)))
                     return
                 }
-
+                
                 let response = response as! HTTPURLResponse
                 let status = response.statusCode
                 guard (self.successStatusCodeRange).contains(status) else {

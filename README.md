@@ -19,7 +19,7 @@ project is using any code dependency manager.
 
 - __[OK] Exponential backoff ​must be used ​​when trying to reload the data__
     
-    _Exponential backoff used for reloading stale data when HTTP server failure occurs. Transport errors are handled by periodic connectivity timer (async)_
+    _Exponential backoff used for reloading stale data when HTTP server failure occurs to avoid pommeling the backend. Transport errors are handled by periodic async connectivity timer_
 
 - __[OK] Any data fetch should utilize ​Result types.​__
 

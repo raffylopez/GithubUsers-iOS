@@ -21,5 +21,5 @@ class NormalUserTableViewCell: UserTableViewCellBase {
 }
 
 extension NormalUserTableViewCell: UserTableViewCell {
-
+    
 }

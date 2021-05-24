@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 import FontAwesome
- 
+
 // MARK: - UIHelper
 enum UIHelper {
     public static func initializeView<T>(view: T, parent: T?) where T: UIView {
@@ -21,7 +21,7 @@ enum UIHelper {
         let iconText = prepend ? "\(String.fontAwesomeIcon(name: icon)) \(labelText)": String.fontAwesomeIcon(name: icon)
         let fontFontAwesome = UIFont.fontAwesome(ofSize: fontSize, style: style)
         label.font = fontFontAwesome
-
+        
         DispatchQueue.main.async {
             label.text = iconText
         }

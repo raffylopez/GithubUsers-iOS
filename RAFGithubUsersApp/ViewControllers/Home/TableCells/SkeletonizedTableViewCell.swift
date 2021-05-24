@@ -26,7 +26,7 @@ class SkeletonizedTableViewCell: UserTableViewCellBase {
         super.updateWith(user: user)
         self.lblName.text = self.lblName.text ?? ""
     }
-
+    
     private func unskeletonize(view:  UIView) {
         view.backgroundColor = .systemBackground
     }
@@ -43,7 +43,7 @@ class SkeletonizedTableViewCell: UserTableViewCellBase {
         label.backgroundColor = .systemGray5
     }
     
-
+    
     override internal func setupViews() {
         guard let lblName = lblName,
             let lblSeries = lblSeries,
@@ -61,7 +61,7 @@ class SkeletonizedTableViewCell: UserTableViewCellBase {
 }
 
 extension ShimmerTableViewCell: UserTableViewCell {
-
+    
     func update(displaying image: (UIImage, ImageSource)?) {
         if let imageResultSet = image {
             let image = imageResultSet.0

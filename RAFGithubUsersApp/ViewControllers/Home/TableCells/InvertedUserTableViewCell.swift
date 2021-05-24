@@ -16,26 +16,26 @@ class InvertedUserTableViewCell: UserTableViewCellBase {
         setupViews()
         setupLayout()
     }
-
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
-
+    
     override func update(displaying image: (UIImage, ImageSource)?) {
         DispatchQueue.global().async {
-        if let imageResultSet = image {
-            let image = imageResultSet.0
-            image.invertImageColorsAsync { invertedImage in
-                DispatchQueue.main.async {
-                    self.imgViewChar.image = invertedImage
-                    self.spinner?.stopAnimating()
+            if let imageResultSet = image {
+                let image = imageResultSet.0
+                image.invertImageColorsAsync { invertedImage in
+                    DispatchQueue.main.async {
+                        self.imgViewChar.image = invertedImage
+                        self.spinner?.stopAnimating()
+                    }
                 }
+                return
             }
-            return
-        }
         }
     }
-
+    
 }
 
 extension InvertedUserTableViewCell: UserTableViewCell {

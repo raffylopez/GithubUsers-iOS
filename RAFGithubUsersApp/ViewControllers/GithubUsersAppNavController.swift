@@ -67,7 +67,7 @@ class GithubUsersAppNavController: UINavigationController {
             self.view.layoutIfNeeded()
         }
     }
-
+    
     @objc func onNetworkReachable() {
         self.view.layoutIfNeeded()
         self.label.text = "Connected!".localized()
@@ -85,13 +85,13 @@ class GithubUsersAppNavController: UINavigationController {
     }
     
     @objc func onNetworkUnreachable() {
+        self.view.layoutIfNeeded()
+        label.text = "No Network".localized()
+        self.statusBar.backgroundColor = .red
+        UIView.animate(withDuration: 0.3) {
+            self.statusBarBottomConstraint?.constant = 0
             self.view.layoutIfNeeded()
-            label.text = "No Network".localized()
-            self.statusBar.backgroundColor = .red
-            UIView.animate(withDuration: 0.3) {
-                self.statusBarBottomConstraint?.constant = 0
-                self.view.layoutIfNeeded()
-            }
+        }
     }
 }
 

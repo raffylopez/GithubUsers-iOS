@@ -13,7 +13,7 @@ class UserInfoDataModelTest: XCTestCase {
     var persistentContainer: NSPersistentContainer!
     var context: NSManagedObjectContext!
     var entityDescription: NSEntityDescription!
-
+    
     private func saveContext () {
     }
     
@@ -122,11 +122,11 @@ class UserInfoDataModelTest: XCTestCase {
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }
-
+        
         if let userInfo = try fetchUserInfoUsing(name: "test_update", context: context) {
             XCTAssert(userInfo.followers == 550)
             XCTAssert(userInfo.name == "test_update")
         }
     }
-
+    
 }

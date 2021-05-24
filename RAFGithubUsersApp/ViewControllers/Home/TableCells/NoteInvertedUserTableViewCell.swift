@@ -8,7 +8,7 @@
 import UIKit
 
 class NoteInvertedUserTableViewCell: InvertedUserTableViewCell {
-
+    
     let lblStickyNote = UILabel()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -17,7 +17,7 @@ class NoteInvertedUserTableViewCell: InvertedUserTableViewCell {
         setupViews()
         setupLayout()
     }
-
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }

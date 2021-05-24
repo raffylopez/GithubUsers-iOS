@@ -13,7 +13,7 @@ class UserPresenter {
     init(_ user: User) {
         self.user = user
     }
-
+    
     var login: String {
         return self.user.login ?? ""
     }

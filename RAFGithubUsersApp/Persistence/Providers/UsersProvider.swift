@@ -18,7 +18,7 @@ protocol UsersProvider {
 
 /* User service/data access object class */
 extension CoreDataService: UsersProvider {
-
+    
     func getUserCount() -> Int {
         let entityName = String(describing: User.self)
         let fetchRequest: NSFetchRequest<User> = NSFetchRequest(entityName: entityName)
@@ -34,7 +34,7 @@ extension CoreDataService: UsersProvider {
         }
         return count
     }
-
+    
     func filterUsers(with term: String, callback: @escaping (Result<[User], Error>) -> Void) {
         let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: #keyPath(User.id), ascending: true)
@@ -55,7 +55,7 @@ extension CoreDataService: UsersProvider {
             }
         }
     }
-
+    
     func getUser(id: Int) -> User? {
         let entityName = String(describing: User.self)
         let fetchRequest: NSFetchRequest<User> = NSFetchRequest(entityName: entityName)
@@ -85,7 +85,7 @@ extension CoreDataService: UsersProvider {
         }
         return managedUser
     }
-
+    
     func deleteAll() throws {
         let entityName = String(describing: User.self)
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: entityName)
@@ -94,7 +94,7 @@ extension CoreDataService: UsersProvider {
         let coordinator = Self.persistentContainer.persistentStoreCoordinator
         try coordinator.execute(deleteRequest, with: context)
     }
-
+    
     /* Get n users. If limit is nil, fetch all */
     func getUsers(limit: Int? = nil, callback: @escaping (Result<[User], Error>) -> Void) {
         let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
@@ -115,8 +115,8 @@ extension CoreDataService: UsersProvider {
     }
     
     func saveAll() throws {
-//        if context.hasChanges {
+        if context.hasChanges {
             try saveContext()
-//        }
+        }
     }
 }

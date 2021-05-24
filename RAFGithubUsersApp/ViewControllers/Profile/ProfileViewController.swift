@@ -49,7 +49,7 @@ class ProfileViewController: UIViewController {
     @IBOutlet var lblCompanyIcon: UILabel!
     var viewModel: ProfileViewModel!
     
-
+    
     private func showViewSkeletons() {
         let tags = [lblCompanyIcon, lblBlogIcon, lblEmailIcon, lblHirabilityIcon, lblNoteIcon, lblCompanyTag, lblBlogTag, lblLocationIcon, lblEmailTag, lblHireabilityTag, lblNoteTag]
         let values = [lblName, lblLogin, lblBio, lblFollow, lblCompany, lblBlog, lblLocation, lblEmail, lblHireability]
@@ -82,12 +82,12 @@ class ProfileViewController: UIViewController {
         
         btnSave.layer.cornerRadius = 5
         btnSave.addTarget(self, action: #selector(btnSavePressed), for: .touchUpInside)
-
+        
         btnClear.setTitleColor(.red, for: .selected)
         btnClear.layer.cornerRadius = 5
         btnClear.layer.borderColor = UIColor.systemGray5.cgColor
         btnClear.addTarget(self, action: #selector(btnClearPressed), for: .touchUpInside)
-
+        
         btnClear.clipsToBounds = true
         btnSave.clipsToBounds = true
         UIHelper.configureAttributedLabelWithIcon(label: self.lblCompanyIcon, icon: .building)
@@ -96,7 +96,7 @@ class ProfileViewController: UIViewController {
         UIHelper.configureAttributedLabelWithIcon(label: self.lblEmailIcon, icon: .envelope)
         UIHelper.configureAttributedLabelWithIcon(label: self.lblHirabilityIcon, icon: .briefcase, style: .solid)
         UIHelper.configureAttributedLabelWithIcon(label: self.lblNoteIcon, icon: .stickyNote)
-
+        
         showViewSkeletons()
     }
     
@@ -166,7 +166,7 @@ class ProfileViewController: UIViewController {
         setupLayout()
         self.viewModel.delegate = self
         self.viewModel.bind { }
-
+        
         self.viewModel.fetchUserDetails(for: self.viewModel.user, onRetryError: nil) { _ in }
         registerForKeyboardNotifications()
     }
@@ -174,7 +174,7 @@ class ProfileViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
-
+    
     func registerForKeyboardNotifications() {
         
         NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardAppear(_:)), name: UIResponder.keyboardDidShowNotification, object: nil)
@@ -186,7 +186,7 @@ class ProfileViewController: UIViewController {
         let rect: CGRect = info[UIResponder.keyboardFrameBeginUserInfoKey] as! CGRect
         let kbSize = rect.size
         let kbHeight = kbSize.height - (self.btnSave.frame.height * 2)
-
+        
         let insets = UIEdgeInsets(top: 0, left: 0, bottom: kbHeight, right: 0)
         scrollView.contentInset = insets
         scrollView.scrollIndicatorInsets = insets

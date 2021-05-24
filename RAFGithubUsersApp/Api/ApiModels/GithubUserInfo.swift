@@ -26,7 +26,7 @@ struct GithubUserInfo: Codable {
     let hireable: Bool?
     let publicRepos, publicGists, followers, following: Int?
     let createdAt, updatedAt: Date?
-
+    
     enum CodingKeys: String, CodingKey {
         case login, id
         case nodeID = "node_id"
@@ -65,13 +65,13 @@ extension URLSession {
                 return
             }
             do {
-            completionHandler(try newJSONDecoder().decode(T.self, from: data), response, nil)
+                completionHandler(try newJSONDecoder().decode(T.self, from: data), response, nil)
             } catch {
                 print("\(error)")
-                }
+            }
         }
     }
-
+    
     func githubUserInfoTask(with url: URL, completionHandler: @escaping (GithubUserInfo?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
         return self.codableTask(with: url, completionHandler: completionHandler)
     }

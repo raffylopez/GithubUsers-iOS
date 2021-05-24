@@ -19,7 +19,7 @@ class ImageStore {
         set { compressionQualityBacking = newValue }
     }
     private static var compressionQualityBacking: CGFloat = 0.5
-
+    
     let cache = NSCache<NSString, UIImage>()
     
     private func imageUrl(forKey key: String) -> URL {
@@ -28,7 +28,7 @@ class ImageStore {
         baseDir.appendPathComponent(key)
         return baseDir
     }
-
+    
     /**
      Retrieve image given a string key
      */
@@ -43,7 +43,7 @@ class ImageStore {
         }
         return persistentImg
     }
-
+    
     /**
      Persists image to cache and documment sandbox
      */
@@ -57,7 +57,7 @@ class ImageStore {
         }
     }
     
-
+    
     /**
      Deletes an image given a string key
      */

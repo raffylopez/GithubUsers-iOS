@@ -20,7 +20,7 @@ class ConnectionMonitor {
     let confApiIp: String = "http://api.github.com"
     
     var delegate: ReachabilityDelegate? = nil
-
+    
     static let shared = ConnectionMonitor()
     private var reachability : Reachability!
     
@@ -42,7 +42,7 @@ class ConnectionMonitor {
             print("Error occured while starting reachability notifications : \(error.localizedDescription)")
         }
     }
-
+    
     var lastConnectivityState: Reachability.Connection = .unavailable
     var intervalInSecs = 5
     

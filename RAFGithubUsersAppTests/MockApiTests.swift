@@ -13,11 +13,11 @@ class MockApiTests: XCTestCase {
     override func setUpWithError() throws {
         apiMock = GithubUsersAPIMock()
     }
-
+    
     override func tearDownWithError() throws {
         apiMock = nil
     }
-
+    
     func testApiMockFetchesResults() throws {
         apiMock?.fetchUsers(since: 0, completion: { (result) in
             switch result {
@@ -28,7 +28,7 @@ class MockApiTests: XCTestCase {
             }
         })
     }
-
+    
     func testApiMockFetchesResultsNotEmpty() throws {
         apiMock?.fetchUsers(since: 0, completion: { (result) in
             switch result {
@@ -50,8 +50,8 @@ class MockApiTests: XCTestCase {
                 let user = users.first!
                 XCTAssert(
                     user.login == "mojombo" &&
-                    user.id == 1 &&
-                    user.nodeID == "MDQ6VXNlcjE="
+                        user.id == 1 &&
+                        user.nodeID == "MDQ6VXNlcjE="
                 )
             }
         })
@@ -88,5 +88,5 @@ class MockApiTests: XCTestCase {
             }
         }
     }
-
+    
 }

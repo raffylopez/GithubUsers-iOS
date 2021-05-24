@@ -14,6 +14,7 @@ class DebugUserTableViewCell: NormalUserTableViewCell {
         setupViews()
         setupLayout()
     }
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }

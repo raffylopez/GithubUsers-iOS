@@ -21,7 +21,7 @@ struct GithubUser: Codable {
     let receivedEventsURL: String
     let type: String
     let siteAdmin: Bool
-
+    
     enum CodingKeys: String, CodingKey {
         case login, id
         case nodeID = "node_id"
@@ -49,18 +49,18 @@ extension GithubUser {
     init(data: Data) throws {
         self = try newJSONDecoder().decode(GithubUser.self, from: data)
     }
-
+    
     init(_ json: String, using encoding: String.Encoding = .utf8) throws {
         guard let data = json.data(using: encoding) else {
             throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
         }
         try self.init(data: data)
     }
-
+    
     init(fromURL url: URL) throws {
         try self.init(data: try Data(contentsOf: url))
     }
-
+    
     func with(
         login: String? = nil,
         id: Int? = nil,
@@ -102,11 +102,11 @@ extension GithubUser {
             siteAdmin: siteAdmin ?? self.siteAdmin
         )
     }
-
+    
     func jsonData() throws -> Data {
         return try newJSONEncoder().encode(self)
     }
-
+    
     func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
         return String(data: try self.jsonData(), encoding: encoding)
     }
@@ -123,22 +123,22 @@ extension Array where Element == GithubUsers.Element {
     init(data: Data) throws {
         self = try newJSONDecoder().decode(GithubUsers.self, from: data)
     }
-
+    
     init(_ json: String, using encoding: String.Encoding = .utf8) throws {
         guard let data = json.data(using: encoding) else {
             throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
         }
         try self.init(data: data)
     }
-
+    
     init(fromURL url: URL) throws {
         try self.init(data: try Data(contentsOf: url))
     }
-
+    
     func jsonData() throws -> Data {
         return try newJSONEncoder().encode(self)
     }
-
+    
     func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
         return String(data: try self.jsonData(), encoding: encoding)
     }
@@ -156,7 +156,7 @@ extension URLSession {
             completionHandler(try? newJSONDecoder().decode(T.self, from: data), response, nil)
         }
     }
-
+    
     func githubUsersTask(with url: URL, completionHandler: @escaping ([GithubUser]?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
         return self.codableTask(with: url, completionHandler: completionHandler)
     }

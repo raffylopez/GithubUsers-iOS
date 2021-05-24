@@ -23,7 +23,7 @@ class ProfileViewModel {
     var delegate: ViewModelDelegate?
     let cell: UserTableViewCellBase
     let user: User
-
+    
     typealias OnDataAvailable = ( () -> Void )
     var onDataAvailable: OnDataAvailable = {}
     var onFetchInProgress: (() -> Void) = {}
@@ -43,7 +43,7 @@ class ProfileViewModel {
             delegate?.onFetchDone()
         }
     }
-
+    
     private let session: URLSession! = {
         let config = URLSessionConfiguration.default
         return URLSession(configuration: config)
@@ -61,7 +61,7 @@ class ProfileViewModel {
             delegate?.onDataAvailable()
         }
     }
-
+    
     func fetchUserDetails(for user: User, onRetryError: ((Int)->())? = nil, completion: ((Result<UserInfo, Error>)->Void)? = nil) {
         guard !isFetchInProgress else {
             return
@@ -70,13 +70,13 @@ class ProfileViewModel {
         if let userInfo = self.user.userInfo, userInfo.seen {
             self.userInfo = userInfo
         }
-
-
+        
+        
         guard let login = user.login else {
             completion?(.failure(AppError.emptyResultError))
             return
         }
-
+        
         isFetchInProgress = true
         
         let privateMOC = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
@@ -94,7 +94,7 @@ class ProfileViewModel {
                     } else {
                         self.user.userInfo = UserInfo(from: githubUserInfo, moc: privateMOC)
                     }
-
+                    
                     do {
                         if privateMOC.hasChanges {
                             try privateMOC.save()
@@ -118,10 +118,10 @@ class ProfileViewModel {
             case let .failure(error):
                 completion?(.failure(error))
             }
-
+            
         }
     }
-
+    
     /**
      Fetches photo media (based on avatar url). Call is asynchronous. Can be set to synchronous fetching, but
      doing so leads to severe performance degradation.
@@ -160,7 +160,7 @@ class ProfileViewModel {
         task.resume()
         if (synchronous) { group.wait() }
     }
-
+    
     /**
      Performs Data to UIImage conversion
      */

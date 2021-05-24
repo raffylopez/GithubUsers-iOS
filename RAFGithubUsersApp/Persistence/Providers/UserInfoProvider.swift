@@ -31,7 +31,7 @@ extension CoreDataService: UserInfoProvider {
         }
         return nil
     }
-
+    
     func getUserInfo(with id: Int) -> UserInfo? {
         let entityName = String(describing: UserInfo.self)
         let fetchRequest: NSFetchRequest<UserInfo> = NSFetchRequest(entityName: entityName)
@@ -55,7 +55,7 @@ extension CoreDataService: UserInfoProvider {
         }
         return managedUserInfo
     }
-
+    
     func delete() throws {
         let entityName = String(describing: UserInfo.self)
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: entityName)
@@ -64,7 +64,7 @@ extension CoreDataService: UserInfoProvider {
         let coordinator = Self.persistentContainer.persistentStoreCoordinator
         try coordinator.execute(deleteRequest, with: context)
     }
-
+    
     func getAllUserInfo(callback: @escaping (Result<[UserInfo], Error>) -> Void) {
         let fetchRequest: NSFetchRequest<UserInfo> = UserInfo.fetchRequest()
         context.perform {

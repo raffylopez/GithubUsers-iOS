@@ -13,7 +13,7 @@ class UserDataModelTest: XCTestCase {
     var persistentContainer: NSPersistentContainer!
     var context: NSManagedObjectContext!
     var entityDescription: NSEntityDescription!
-
+    
     // MARK: - Utility methods
     private func fetchUserUsing(id: Int32, context: NSManagedObjectContext) throws -> User?  {
         let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
@@ -22,7 +22,7 @@ class UserDataModelTest: XCTestCase {
         let result = try? context.fetch(fetchRequest)
         return result?.first
     }
-
+    
     // MARK: - Test setup
     override func setUp() {
         /* Setup an in-memory persistent store */
@@ -123,7 +123,7 @@ class UserDataModelTest: XCTestCase {
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }
-
+        
         let user = try fetchUserUsing(id:1000000, context: context)
         XCTAssertNotNil(user)
         
@@ -133,5 +133,5 @@ class UserDataModelTest: XCTestCase {
         }
         
     }
-
+    
 }

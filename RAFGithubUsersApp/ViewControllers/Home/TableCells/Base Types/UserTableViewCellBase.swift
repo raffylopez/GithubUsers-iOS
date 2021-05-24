@@ -16,7 +16,7 @@ class UserTableViewCellBase: UITableViewCell, UserCell {
         setupViews()
         setupLayout()
     }
-
+    
     internal func updateCell() {
         self.lblName.text = user.login ?? ""
         self.lblSeries.text = user.urlHtml
@@ -60,7 +60,7 @@ class UserTableViewCellBase: UITableViewCell, UserCell {
         let graylvl: CGFloat = 100
         lblSeries.textColor = UIColor(red: graylvl/255, green: graylvl/255, blue: graylvl/255, alpha: 1)
         return lblSeries }()
-
+    
     internal lazy var stackView: UIStackView? = {
         let stackView = UIStackView()
         stackView.spacing = 8
@@ -75,7 +75,7 @@ class UserTableViewCellBase: UITableViewCell, UserCell {
         
         stackView.addArrangedSubview(lblName)
         stackView.addArrangedSubview(lblSeries)
-
+        
         UIHelper.initializeView(view: lblSeries, parent: nil)
         UIHelper.initializeView(view: lblName, parent: nil)
         UIHelper.initializeView(view: imgCharacter, parent: self)
@@ -126,7 +126,7 @@ class UserTableViewCellBase: UITableViewCell, UserCell {
             return
         }
     }
-
+    
 }
 
 // MARK: - Custom Methods
@@ -143,6 +143,6 @@ extension UserTableViewCellBase {
         self.imgViewChar.layer.opacity = 1
         self.imgViewChar.image = img
     }
-
+    
 }
 
