@@ -13,17 +13,31 @@ import CoreData
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    var appConnectionState: AppConnectionState = ConnectionMonitor.shared.isApiReachable ?
+        .networkReachable : .networkUnreachable {
+        didSet {
+            switch appConnectionState {
+            case .networkReachable:
+                NotificationCenter.default.post(name: .connectionDidBecomeReachable, object: nil)
+            case .networkUnreachable:
+                NotificationCenter.default.post(name: .connectionDidBecomeUnreachable, object: nil)
+            case .unknown:
+                break
+            }
+        }
+    }
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 //        do {
 //            try ConnectionMonitor.shared.observeReachability()
 //        } catch {
 //
 //        }
+        setupReachability()
         return true
     }
 
     // MARK: UISceneSession Lifecycle
-
+    
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
         // Called when a new scene session is being created.
         // Use this method to select a configuration to create the new scene with.
@@ -64,7 +78,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         })
         return container
     }()
-
+    
+    private func setupReachability() {
+        ConnectionMonitor.shared.delegate = self
+        ConnectionMonitor.shared.periodicConnectivityCheck(start: .now())
+    }
+    
     // MARK: - Core Data Saving support
 
     func saveContext () {
@@ -80,6 +99,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
+    
+}
 
+extension AppDelegate: ReachabilityDelegate {
+    func onLostConnection() {
+        self.appConnectionState = .networkUnreachable
+    }
+    
+    func onRegainConnection() {
+        self.appConnectionState = .networkReachable
+    }
 }
 

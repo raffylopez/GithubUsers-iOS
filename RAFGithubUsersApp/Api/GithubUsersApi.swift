@@ -53,7 +53,7 @@ class GithubUsersApi {
                 URLQueryItem(name: "since", value: "\(since)")
             ]
             print("Fetching list of users from \(uri!.url!.absoluteString)...")
-            let task = URLSession.shared.githubUsersTask(with: uri!.url!, completionHandler: { (githubUsers, _, error) in
+            let task = URLSession.shared.githubUsersTask(with: uri!.url!, completionHandler: { (githubUsers, status, error) in
                 print("Done fetching user list.")
                 ConcurrencyUtils.singleUserRequestSemaphore.signal()
                 if let error = error {

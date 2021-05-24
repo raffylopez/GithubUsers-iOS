@@ -9,8 +9,7 @@
 import UIKit
 
 class UsersViewController: UITableViewController {
-    let scene = UIApplication.shared.connectedScenes.first!.delegate as! SceneDelegate
-
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     init(viewModel: UsersViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -43,11 +42,11 @@ class UsersViewController: UITableViewController {
      */
     let confImageInversionOnFourthRows: Bool = true
     
-    private func setupReachability() {
-        ConnectionMonitor.shared.delegate = self
-        ConnectionMonitor.shared.checkNetworkSignal(start: .now())
+    private func setupObservers() {
+        NotificationCenter.default.addObserver(self, selector:#selector(self.onNetworkReachable), name: NSNotification.Name.connectionDidBecomeReachable, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(self.onNetworkUnreachable), name: NSNotification.Name.connectionDidBecomeUnreachable, object: nil)
     }
-    
+
     // MARK: Configure table cell types
 //    typealias StandardTableViewCell = NormalUserTableViewCell
 //    typealias StandardNotedTableViewCell = NoteNormalUserTableViewCell
@@ -165,9 +164,7 @@ class UsersViewController: UITableViewController {
             i += 1
         }
     }
-    
 
-    
     private func setupViewModel() {
         self.viewModel.delegate = self
         
@@ -290,18 +287,6 @@ class UsersViewController: UITableViewController {
         }
     }
 
-    @objc func refreshStaleOnDemand() {
-        scene.appConnectionState = scene.appConnectionState == .networkUnreachable ?
-            .networkReachable : .networkUnreachable
-        self.viewModel.refreshStale { result in
-            DispatchQueue.main.async {
-                let contentOffset = self.tableView.contentOffset
-                self.tableView.reloadData()
-                self.tableView.layoutIfNeeded()
-                self.tableView.setContentOffset(contentOffset, animated: false)
-            }
-        }
-    }
     private func setupViews() {
         setupNavbar()
         self.refreshControl = UIRefreshControl()
@@ -335,7 +320,7 @@ class UsersViewController: UITableViewController {
         startSplashAnimation()
         self.view.backgroundColor = .systemBackground
         setupViewModel()
-        setupReachability()
+        setupObservers()
         self.fetchMoreTableDataDisplayingResults()
     }
     
@@ -346,25 +331,42 @@ class UsersViewController: UITableViewController {
     }
     
     // MARK: - Selector targets
+    
+    @objc func onNetworkReachable() {
+        print("Refreshing stale entries...")
+        self.viewModel.refreshStale { result in
+            DispatchQueue.main.async {
+                let contentOffset = self.tableView.contentOffset
+                self.tableView.reloadData()
+                self.tableView.layoutIfNeeded()
+                self.tableView.setContentOffset(contentOffset, animated: false)
+            }
+        }
+    }
+    
+    @objc func onNetworkUnreachable() {
+    }
+    
     @objc private func refreshPulled() {
         self.refreshControl?.beginRefreshing()
         clearData()
         fetchMoreTableDataDisplayingResults()
     }
     
-    func fetchMoreTableDataDisplayingResults(completion: (()->Void)? = nil) {
-        ToastAlertMessageDisplay.main.makeToastActivity()
-        self.viewModel.updateUsers {
-            ToastAlertMessageDisplay.main.hideToastActivity()
+    @objc func statusBarToggle() {
+        appDelegate.appConnectionState = appDelegate.appConnectionState == .networkUnreachable ?
+            .networkReachable : .networkUnreachable
+    }
+    
+    @objc func refreshStaleOnDemand() {
+        self.viewModel.refreshStale { result in
+            DispatchQueue.main.async {
+                let contentOffset = self.tableView.contentOffset
+                self.tableView.reloadData()
+                self.tableView.layoutIfNeeded()
+                self.tableView.setContentOffset(contentOffset, animated: false)
+            }
         }
-//        self.viewModel.fetchUsers { result in
-//            DispatchQueue.main.async {
-//                self.refreshControl?.endRefreshing()
-//                if case let .failure(error) = result {
-//                    print(error) // TODO
-//                }
-//            }
-//        }
     }
 
     @objc func tableViewScrollToTop() {
@@ -382,6 +384,20 @@ class UsersViewController: UITableViewController {
         search.dismiss(animated: true, completion: nil)
     }
 
+    func fetchMoreTableDataDisplayingResults(completion: (()->Void)? = nil) {
+        ToastAlertMessageDisplay.main.makeToastActivity()
+        self.viewModel.updateUsers {
+            ToastAlertMessageDisplay.main.hideToastActivity()
+        }
+        //        self.viewModel.fetchUsers { result in
+        //            DispatchQueue.main.async {
+        //                self.refreshControl?.endRefreshing()
+        //                if case let .failure(error) = result {
+        //                    print(error) // TODO
+        //                }
+        //            }
+        //        }
+    }
     var isRefreshing = false
 
     var targetSource:[User] { return search.isActive ? self.viewModel.filteredUsers : self.viewModel.users }
@@ -538,16 +554,6 @@ extension UsersViewController {
         let indexPathsForVisibleRows = tableView.indexPathsForVisibleRows ?? []
         let indexPathsIntersection = Set(indexPathsForVisibleRows).intersection(indexPaths)
         return Array(indexPathsIntersection)
-    }
-}
-
-extension UsersViewController: ReachabilityDelegate {
-    func onLostConnection() {
-        scene.appConnectionState = .networkUnreachable
-    }
-    
-    func onRegainConnection() {
-        scene.appConnectionState = .networkReachable
     }
 }
 

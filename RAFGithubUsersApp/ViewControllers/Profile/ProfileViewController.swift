@@ -47,31 +47,17 @@ class ProfileViewController: UIViewController {
     @IBOutlet var lblCompanyIcon: UILabel!
     var viewModel: ProfileViewModel!
     
-    private func skeletonize(view:  UIView) {
-        view.isSkeletonable = true
-        view.skeletonCornerRadius = 2.0
-        view.showAnimatedGradientSkeleton()
-        view.startSkeletonAnimation()
-    }
-    
-    private func skeletonize(label: UILabel) {
-        label.numberOfLines = 0
-        label.isSkeletonable = true
-        label.skeletonCornerRadius = 2.0
-        label.skeletonPaddingInsets = UIEdgeInsets(top: 0, left: 0, bottom: label.frame.height, right: label.frame.width)
-        label.showAnimatedGradientSkeleton()
-    }
-    
-    private func showSkeletons() {
+
+    private func showViewSkeletons() {
         let tags = [lblCompanyIcon, lblBlogIcon, lblEmailIcon, lblHirabilityIcon, lblNoteIcon, lblCompanyTag, lblBlogTag, lblLocationIcon, lblEmailTag, lblHireabilityTag, lblNoteTag]
         let values = [lblName, lblLogin, lblBio, lblFollow, lblCompany, lblBlog, lblLocation, lblEmail, lblHireability]
         let views = [boxBlue, tvNote, btnSave, btnClear ]
-        tags.forEach { self.skeletonize(label: $0!) }
-        values.forEach { self.skeletonize(label: $0!) }
-        views.forEach { self.skeletonize(view: $0!) }
+        tags.forEach { SkelHelper.skeletonize(label: $0!) }
+        values.forEach { SkelHelper.skeletonize(label: $0!) }
+        views.forEach { SkelHelper.skeletonize(view: $0!) }
     }
     
-    private func hideSkeletons() {
+    private func hideViewSkeletons() {
         let tags = [lblCompanyIcon, lblBlogIcon, lblEmailIcon, lblHirabilityIcon, lblNoteIcon, lblCompanyTag, lblBlogTag, lblLocationIcon, lblEmailTag, lblHireabilityTag, lblNoteTag]
         let values = [lblName, lblLogin, lblBio, lblFollow, lblCompany, lblBlog, lblLocation, lblEmail, lblHireability]
         let views = [tvNote, btnSave, btnClear ]
@@ -109,7 +95,7 @@ class ProfileViewController: UIViewController {
         UIHelper.configureAttributedLabelWithIcon(label: self.lblHirabilityIcon, icon: .briefcase, style: .solid)
         UIHelper.configureAttributedLabelWithIcon(label: self.lblNoteIcon, icon: .stickyNote)
 
-        showSkeletons()
+        showViewSkeletons()
     }
     
     @objc func btnClearPressed() {
@@ -139,9 +125,6 @@ class ProfileViewController: UIViewController {
         btnSave.setBackgroundColor(hcolor, for: .focused)
         btnSave.setBackgroundColor(hcolor, for: .highlighted)
         btnSave.setBackgroundColor(hcolor, for: .selected)
-//        btnSave.setTitleColor(hcolor, for: .focused)
-//        btnSave.setTitleColor(hcolor, for: .highlighted)
-//        btnSave.setTitleColor(hcolor, for: .selected)
         if let userInfo = self.viewModel.user.userInfo {
             userInfo.note = self.tvNote.text
             userInfo.user = self.viewModel.user
@@ -256,7 +239,7 @@ extension ProfileViewController: ViewModelDelegate {
                 self.lblFollow.attributedText = NSAttributedString(string: lblFollowText)
                 UIHelper.configureAttributedLabelWithIcon(label: self.lblFollow, icon: .userFriends, style: .solid, prepend: true)
                 self.tvNote.text = presented.note
-                self.hideSkeletons()
+                self.hideViewSkeletons()
                 self.viewModel.fetchImage(for: self.viewModel.user) { result in
                     OperationQueue.main.addOperation {
                         if case let .success(img) = result {

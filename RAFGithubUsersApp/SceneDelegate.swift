@@ -8,43 +8,30 @@
 
 import UIKit
 
+extension Notification.Name {
+    public static let connectionDidBecomeUnreachable = NSNotification.Name("ConnectionDidBecomeUnreachable")
+    public static let connectionDidBecomeReachable = NSNotification.Name("ConnectionDidBecomeReachable")
+}
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+    /**
+     DEBUG ONLY: Delete core data stores on launch
+     */
+    let confClearsDataStoresOnAppLaunch: Bool = false
+    
     var navigationController: GithubUsersAppNavController!
-
-    var appConnectionState: AppConnectionState = ConnectionMonitor.shared.isApiReachable ? .networkReachable : .networkUnreachable {
-        didSet {
-            switch appConnectionState {
-            case .networkReachable:
-                navigationController.onNetworkReachable()
-            case .networkUnreachable:
-                navigationController.onNetworkUnreachable()
-            }
-        }
-    }
     var window: UIWindow?
 
-    
     private func setupViewControllers() {
-        // constructor dependency injection
         let viewModel = UsersViewModel(apiService: GithubUsersApi(), databaseService: CoreDataService.shared)
         let top = ViewControllersFactory.instance(vcType: .usersList(viewModel))
         navigationController = GithubUsersAppNavController(rootViewController: top)
         navigationController.navigationBar.barStyle = .default
         
-//        let icon: SKSplashIcon = SKSplashIcon(image: UIImage(named: "github_splash_dark")!)
-//        guard let splashView = SKSplashView(splashIcon: icon, animationType: .none)
-//            else { return }
-//        splashView.backgroundColor = .black
-//        splashView.animationDuration = 2.5
-//        navController.view.addSubview(splashView)
-//        splashView.startAnimation()
-
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
     }
     
-
     func dbgClearDataStoresOnAppLaunch() {
         let context = CoreDataService.persistentContainer.viewContext
         let usersDatabaseService = CoreDataService.shared
@@ -56,16 +43,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         } catch {
             fatalError("Can't delete coredata store")
         }
-        //        try? userInfoProvider.delete()
-        //        updateUsers() {
-        //            self.loadUsersFromDisk()
-        //        }
     }
+    
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.windowScene = scene
-//        dbgClearDataStoresOnAppLaunch() // DEBUG
+        if confClearsDataStoresOnAppLaunch {
+            dbgClearDataStoresOnAppLaunch() // DEBUG
+        }
         setupViewControllers()
     }
 

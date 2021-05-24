@@ -12,5 +12,6 @@ import Reachability
 enum AppConnectionState {
     case networkReachable
     case networkUnreachable
+    case unknown
 }
 

@@ -14,4 +14,6 @@ enum AppError: Error {
     case imageCreationError
     case emptyResult
     case generalError
+    case httpTransportError(Error)
+    case httpServerSideError(Int)
 }

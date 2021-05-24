@@ -366,7 +366,7 @@ class UsersViewModel {
         let context = CoreDataService.persistentContainer.viewContext
         privateMOC.parent = context
         
-        self.apiService.fetchUsers(since: since) { (result: Result<[GithubUser], Error>) in
+        self.apiService.fetchUsers(since: since) { result in
             self.lastDataSource = .network
             self.isFetchInProgress = false
             switch result {
@@ -414,6 +414,8 @@ class UsersViewModel {
                     
                 }
             case let .failure(error):
+                print(error.localizedDescription)
+                
                 completion(.failure(error))
             }
         }

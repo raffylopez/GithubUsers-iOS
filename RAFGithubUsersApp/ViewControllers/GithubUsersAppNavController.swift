@@ -36,6 +36,16 @@ class GithubUsersAppNavController: UINavigationController {
         return statusBar
     }()
     
+    private func setupObservers() {
+        NotificationCenter.default.addObserver(self, selector:#selector(self.onNetworkReachable), name: NSNotification.Name.connectionDidBecomeReachable, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(self.onNetworkUnreachable), name: NSNotification.Name.connectionDidBecomeUnreachable, object: nil)
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupObservers()
+    }
+    
     override func loadView() {
         super.loadView()
         self.statusBar.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 1).isActive = true
@@ -47,7 +57,7 @@ class GithubUsersAppNavController: UINavigationController {
         self.view.layoutIfNeeded()
     }
     
-    func onNetworkReachable() {
+    @objc func onNetworkReachable() {
         self.view.layoutIfNeeded()
         self.label.text = "Connected!".localized()
         let darkGreenColor = UIColor.init(red: 35/255, green: 134/255, blue: 53/255, alpha: 1.0)
@@ -63,7 +73,7 @@ class GithubUsersAppNavController: UINavigationController {
         })
     }
     
-    func onNetworkUnreachable() {
+    @objc func onNetworkUnreachable() {
             self.view.layoutIfNeeded()
             label.text = "No Network".localized()
             self.statusBar.backgroundColor = .red

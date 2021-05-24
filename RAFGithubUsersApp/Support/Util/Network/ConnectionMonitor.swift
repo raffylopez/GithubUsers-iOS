@@ -42,22 +42,31 @@ class ConnectionMonitor {
             print("Error occured while starting reachability notifications : \(error.localizedDescription)")
         }
     }
-    
+
+    var lastConnectivityState: Reachability.Connection = .unavailable
     /**
      Continuously check for network signal every n seconds.
      
      Workaround against Reachability library not sending a notification
      when reconnected, whilst using the simulator
      */
-    func checkNetworkSignal(start: DispatchTime) {
+    func periodicConnectivityCheck(start: DispatchTime) {
         DispatchQueue.main.asyncAfter(deadline: start) {
-            if let reachability = try? Reachability(hostname: self.confReachabilityIp),
-            reachability.connection == .unavailable {
-                self.delegate?.onLostConnection()
-            } else {
-                self.delegate?.onRegainConnection()
+            guard let reachability = try? Reachability(hostname: self.confReachabilityIp) else {
+                self.periodicConnectivityCheck(start: .now() + .seconds(5))
+                return
             }
-            self.checkNetworkSignal(start: .now() + .seconds(5))
+            switch reachability.connection {
+            case .unavailable:
+                self.delegate?.onLostConnection()
+                self.lastConnectivityState = .unavailable
+            case .cellular where self.lastConnectivityState == .unavailable, .wifi where self.lastConnectivityState == .unavailable:
+                self.lastConnectivityState = .wifi
+                self.delegate?.onRegainConnection()
+            default:
+                break
+            }
+            self.periodicConnectivityCheck(start: .now() + .seconds(5))
         }
     }
     
