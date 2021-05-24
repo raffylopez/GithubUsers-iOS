@@ -10,6 +10,7 @@ import Foundation
 class GithubUsersApi: UserApi {
     let confForcedFail: Bool = false
     var confQueuedNetworkRequests: Bool = true
+    var confDbgVerboseNetworkCalls = getConfig().dbgVerboseNetworkCalls
 
     typealias T = GithubUser
     let usersListUri: String
@@ -51,9 +52,13 @@ class GithubUsersApi: UserApi {
                 URLQueryItem(name: "access_token", value: getConfig().githubAccessToken),
                 URLQueryItem(name: "since", value: "\(since)")
             ]
-            print("Fetching list of users from \(uri!.url!.absoluteString)...")
+            if self.confDbgVerboseNetworkCalls {
+                print("Fetching list of users from \(uri!.url!.absoluteString)...")
+            }
             let task = URLSession.shared.githubUsersTask(with: uri!.url!, completionHandler: { (githubUsers, response, error) in
-                print("Done fetching user list.")
+                if self.confDbgVerboseNetworkCalls {
+                    print("Done fetching user list.")
+                }
                 ConcurrencyUtils.singleUserRequestSemaphore.signal()
                 if let error = error {
                     completion?(.failure(AppError.httpTransportError(error)))

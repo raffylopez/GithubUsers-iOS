@@ -8,6 +8,12 @@
 import UIKit
 
 class UsersViewController: UITableViewController {
+    let confDbgDisplayDebugCells: Bool = getConfig().dbgDisplayDebugCells
+    let confDisableImageInvert: Bool = getConfig().dbgDisableImageInvert
+    
+    /**
+     Cached images need to be reloaded after toggling this flag
+     */
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     init(viewModel: UsersViewModel) {
         self.viewModel = viewModel
@@ -30,17 +36,8 @@ class UsersViewController: UITableViewController {
     }
     
     // MARK: - Configurables
-    /**
-     Enables look-ahead prefetching for table cells for infinite-scroll implementation.
-     If false, tail-end fetching is used.
-     */
-    let confPrefetchingEnabled: Bool = false
-    
-    /**
-     Cached images need to be reloaded after toggling this flag
-     */
-    let confImageInversionOnFourthRows: Bool = true
-    
+
+
     private func setupObservers() {
         NotificationCenter.default.addObserver(self, selector:#selector(self.onNetworkReachable), name: NSNotification.Name.connectionDidBecomeReachable, object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(self.onNetworkUnreachable), name: NSNotification.Name.connectionDidBecomeUnreachable, object: nil)
@@ -52,12 +49,9 @@ class UsersViewController: UITableViewController {
     typealias AlternativeTableViewCell = InvertedUserTableViewCell
     typealias AlternativeNotedTableViewCell = NoteInvertedUserTableViewCell
     
-/*  Debug Variants
-    typealias StandardTableViewCell = DebugUserTableViewCell
-    typealias StandardNotedTableViewCell = DebugNotedUserTableViewCell
-    typealias AlternativeTableViewCell = DebugUserTableViewCell
-    typealias AlternativeNotedTableViewCell = DebugNotedUserTableViewCell
-*/
+    typealias DbgStandardTableViewCell = DebugUserTableViewCell
+    typealias DbgStandardNotedTableViewCell = DebugNotedUserTableViewCell
+
     // MARK: - Properties and attributes
     var viewModel: UsersViewModel!
     lazy var search: UISearchController = {
@@ -95,6 +89,11 @@ class UsersViewController: UITableViewController {
     }
 
     private func registerTableCellTypes() {
+        if confDbgDisplayDebugCells {
+            registerReuseId(DbgStandardTableViewCell.self)
+            registerReuseId(DbgStandardNotedTableViewCell.self)
+            return
+        }
         registerReuseId(StandardTableViewCell.self)
         registerReuseId(StandardNotedTableViewCell.self)
         registerReuseId(AlternativeTableViewCell.self)
@@ -115,6 +114,35 @@ class UsersViewController: UITableViewController {
             return cell
         }
         fatalError("Cannot dequeue to \(String(describing:T.self))")
+    }
+    
+    private func getCellDebug(user: User, cellForRowAt indexPath: IndexPath, hasNote: Bool, isInverted: Bool) -> UserCell {
+        var cell: UserCell!
+        cell = hasNote ?
+            cellInstance(user: user, DbgStandardNotedTableViewCell.self, cellForRowAt: indexPath) :
+            cellInstance(user: user, DbgStandardTableViewCell.self, cellForRowAt: indexPath)
+        cell.tag = indexPath.row
+        cell.updateCell()
+        return cell
+    }
+    
+    private func getCell(user: User, cellForRowAt indexPath: IndexPath, hasNote: Bool, isInverted: Bool) -> UserCell {
+        var cell: UserCell!
+        if (isInverted && !confDisableImageInvert) {
+            cell = hasNote ?
+                cellInstance(user: user, AlternativeNotedTableViewCell.self, cellForRowAt: indexPath) :
+                cellInstance(user: user, AlternativeTableViewCell.self, cellForRowAt: indexPath)
+            cell.tag = indexPath.row
+            cell.updateCell()
+            return cell
+        }
+        cell = hasNote ?
+            cellInstance(user: user, StandardNotedTableViewCell.self, cellForRowAt: indexPath) :
+            cellInstance(user: user, StandardTableViewCell.self, cellForRowAt: indexPath)
+        cell.tag = indexPath.row
+        cell.updateCell()
+        
+        return cell
     }
 
     // MARK: - Setup
@@ -144,26 +172,6 @@ class UsersViewController: UITableViewController {
             return value % number == 0
         }
         return value % number == 0 && value != 0
-    }
-    
-    private func performInvertedImagesPrefetching() {
-        guard confImageInversionOnFourthRows else {
-            return
-        }
-        
-        var i: Int = 0
-        for user in self.targetSource {
-            guard self.viewModel.imageStore.image(forKey: "\(user.id)") == nil else  { continue }
-            if multiple(of: 4, i + 1) {
-                self.viewModel.fetchImage(for: user, queued: true) { result in
-                    if case let .success(img) = result, let inverted = img.0.invertImageColors() {
-                        self.viewModel.imageStore.setImage(forKey: "\(user.id)", image: inverted)
-                    }
-                }
-            }
-            
-            i += 1
-        }
     }
 
     private func setupViewModel() {
@@ -401,13 +409,7 @@ class UsersViewController: UITableViewController {
                 case let .success(image) = result else {
                     return
             }
-            if let cell = self.tableView.cellForRow(at: IndexPath(item: photoIndex, section: 0)) as? StandardTableViewCell {
-                DispatchQueue.main.async {
-                    cell.update(displaying: image)
-                }
-                return
-            }
-            if let cell = self.tableView.cellForRow(at: IndexPath(item: photoIndex, section: 0)) as? AlternativeTableViewCell {
+            if let cell = self.tableView.cellForRow(at: IndexPath(item: photoIndex, section: 0)) as? UserTableViewCellBase {
                 DispatchQueue.main.async {
                     cell.update(displaying: image)
                 }
@@ -439,31 +441,20 @@ class UsersViewController: UITableViewController {
 
 // MARK: - Delegate Methods
 extension UsersViewController {
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard !self.targetSource.isEmpty && self.targetSource.count - 1 >= indexPath.row else {
             return UITableViewCell()
         }
         
         let user = self.targetSource[indexPath.row]
-        var cell: UserCell!
 
         let hasNote = user.userInfo != nil && user.userInfo?.note != nil && user.userInfo?.note != ""
         
-        if (multiple(of: 4, indexPath.row + 1) && confImageInversionOnFourthRows) {
-            cell = hasNote ?
-                cellInstance(user: user, AlternativeNotedTableViewCell.self, cellForRowAt: indexPath) :
-                cellInstance(user: user, AlternativeTableViewCell.self, cellForRowAt: indexPath)
-            cell.tag = indexPath.row
-            cell.updateCell()
-            return cell
-        }
-        cell = hasNote ?
-            cellInstance(user: user, StandardNotedTableViewCell.self, cellForRowAt: indexPath) :
-            cellInstance(user: user, StandardTableViewCell.self, cellForRowAt: indexPath)
-        cell.tag = indexPath.row
-        cell.updateCell()
+        return confDbgDisplayDebugCells ?
+            getCellDebug(user: user, cellForRowAt: indexPath, hasNote: hasNote, isInverted: multiple(of: 4, indexPath.row + 1)) :
+            getCell(user: user, cellForRowAt: indexPath, hasNote: hasNote, isInverted: multiple(of: 4, indexPath.row + 1))
 
-        return cell
     }
 }
 

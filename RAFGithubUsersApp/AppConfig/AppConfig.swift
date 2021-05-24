@@ -14,11 +14,17 @@ public struct AppConfig: Decodable {
         case githubUserDetailsUriPrefix = "URI_GITHUBAPI_USERDETAILS_PREFIX"
         case githubAccessToken = "URI_GITHUBAPI_ACCESS_TOKEN"
         case xcPersisentContainerName = "XC_PERSISTENT_CONTAINER_NAME"
+        case dbgVerboseNetworkCalls = "DBG_VERBOSE_NETWORK_CALLS"
+        case dbgDisplayDebugCells = "DBG_DISPLAY_DEBUGCELLS"
+        case dbgDisableImageInvert = "DBG_DISABLE_IMAGE_INVERT"
     }
     let githubUsersListUri: String
     let githubUserDetailsUriPrefix: String
     let xcPersisentContainerName: String
     let githubAccessToken: String
+    let dbgVerboseNetworkCalls: Bool
+    let dbgDisplayDebugCells: Bool
+    let dbgDisableImageInvert: Bool
 }
 
 public func getConfig() -> AppConfig {

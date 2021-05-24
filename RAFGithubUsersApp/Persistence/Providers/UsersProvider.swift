@@ -37,8 +37,8 @@ extension CoreDataService: UsersProvider {
     func filterUsers(with term: String, callback: @escaping (Result<[User], Error>) -> Void) {
         let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: #keyPath(User.id), ascending: true)
-        let comparator = term.isQuoted ? "==[c]" : "CONTAINS[c]"
-        let search = term.isQuoted ? term.stripQuotes() : term
+        let comparator = term.beginsAndEndsWithQuotes ? "==[c]" : "CONTAINS[c]"
+        let search = term.beginsAndEndsWithQuotes ? term.trimQuotes() : term
         let searchPredicate = NSPredicate(format: "\(#keyPath(User.login)) \(comparator) %@", search)
         
         fetchRequest.sortDescriptors = [sortDescriptor]

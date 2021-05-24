@@ -29,7 +29,6 @@ class UserDataFromMockApiTests: XCTestCase {
         return result?.first
     }
     
-
     // MARK: - Test setup
     override func setUp() {
         apiMock = GithubUsersAPIMock()
@@ -62,7 +61,7 @@ class UserDataFromMockApiTests: XCTestCase {
     }
     
     // MARK: - Test cases
-
+    
     func testUserCreateWithMockApi() throws {
         apiMock?.fetchUsers(since:0) { (result) in
             switch result {
@@ -79,37 +78,35 @@ class UserDataFromMockApiTests: XCTestCase {
                     switch result {
                     case let .success(user):
                         let user = User(from: githubUser,
-                              and: user,
-                              moc: self.context,
-                              userEntity: self.entityDescription, userInfoEntity: self.entityDescriptionUserInfo)
-                                do {
-                                    try self.context.save()
-                                } catch {
-                                    let nserror = error as NSError
-                                    fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-                                }
-                                XCTAssertNotNil(user)
+                                        and: user,
+                                        moc: self.context,
+                                        userEntity: self.entityDescription, userInfoEntity: self.entityDescriptionUserInfo)
+                        do {
+                            try self.context.save()
+                        } catch {
+                            let nserror = error as NSError
+                            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                        }
+                        XCTAssertNotNil(user)
+                        XCTAssert(user.id == 1)
+                        XCTAssert(user.login == "mojombo")
+                        XCTAssert(user.nodeId == "MDQ6VXNlcjE=")
+                        do {
+                            if let user = try self.fetchUserUsing(id: 1000000, context: self.context) {
                                 XCTAssert(user.id == 1)
                                 XCTAssert(user.login == "mojombo")
-                                XCTAssert(user.nodeId == "MDQ6VXNlcjE=")
-                                do {
-                                    if let user = try self.fetchUserUsing(id: 1000000, context: self.context) {
-                                        XCTAssert(user.id == 1)
-                                        XCTAssert(user.login == "mojombo")
-                                        XCTAssert(user.nodeId == "MDQ6VXNlcjE")
-                                        XCTAssert(user.userInfo!.name == "Tom Preston-Werner")
-                                    }
-                                } catch {
-                                    fatalError(error.localizedDescription)
-                                }
+                                XCTAssert(user.nodeId == "MDQ6VXNlcjE")
+                                XCTAssert(user.userInfo!.name == "Tom Preston-Werner")
+                            }
+                        } catch {
+                            fatalError(error.localizedDescription)
+                        }
                     case let .failure(error):
                         fatalError(error.localizedDescription)
                     }
-
                 }
-
             }
         }
     }
 }
-    
+

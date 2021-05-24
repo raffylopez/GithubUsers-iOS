@@ -26,7 +26,8 @@ class DebugUserTableViewCell: NormalUserTableViewCell {
         
         if controller.viewModel.staleIds.firstIndex(of: self.user.id) != nil  {
             self.lblSeries.text = "stale"
-            self.backgroundColor = .systemGray2
+            self.lblSeries.textColor = .systemBackground
+            self.backgroundColor = .pomegranate
         } else {
             self.backgroundColor = .systemBackground
             self.lblSeries.text = "updated"

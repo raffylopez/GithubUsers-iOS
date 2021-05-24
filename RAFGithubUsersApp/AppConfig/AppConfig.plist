@@ -10,5 +10,11 @@
 	<string>RAFGithubUsersApp</string>
 	<key>URI_GITHUBAPI_ACCESS_TOKEN</key>
 	<string>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</string>
+	<key>DBG_DISPLAY_DEBUGCELLS</key>
+	<false/>
+	<key>DBG_VERBOSE_NETWORK_CALLS</key>
+	<false/>
+	<key>DBG_DISABLE_IMAGE_INVERT</key>
+	<false/>
 </dict>
 </plist>

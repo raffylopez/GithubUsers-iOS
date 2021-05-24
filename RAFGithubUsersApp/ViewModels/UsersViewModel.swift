@@ -13,7 +13,8 @@ class UsersViewModel {
     /* MARK: - Properties */
     var delegate: ViewModelDelegate? = nil
     let maxRetryCountOnServerSideFail = 10_000
-    
+    var confDbgVerboseNetworkCalls = getConfig().dbgVerboseNetworkCalls
+
     typealias OnDataAvailable = ( () -> Void )
     var onDataAvailable: OnDataAvailable = {}
     var onFetchInProgress: (() -> Void) = {}
@@ -268,13 +269,11 @@ class UsersViewModel {
     /* Does not add new records into db */
     public func refreshStale(completion: ((Result<[User], Error>)->Void)? = nil) {
         guard ConnectionMonitor.shared.isApiReachable else {
-//            ToastAlertMessageDisplay.main.display(message: "Network unreachable.")
             completion?(.failure(AppError.networkError))
             return
         }
 
         guard let since = staleIds.first else {
-//            print("No stale entries left to update")
             completion?(.failure(AppError.emptyResult))
             return
         }
@@ -283,7 +282,6 @@ class UsersViewModel {
             switch result {
             case let .success(users):
                 self.unregisterStale(users: users)
-//                print("\(self.staleIds.count) stale entries left to update")
                 completion?(.success(users))
             case let .failure(error):
                 completion?(.failure(error))
@@ -398,7 +396,9 @@ class UsersViewModel {
 
         DispatchQueue.global().async {
             ConcurrencyUtils.singleImageRequestSemaphore.wait()
-            print("Downloading and caching image from " + imageUrl.absoluteString + "...")
+            if self.confDbgVerboseNetworkCalls {
+                print("Downloading and caching image from " + imageUrl.absoluteString + "...")
+            }
             let task = self.session.dataTask(with: request) { data, _, error in
                 let result = self.processImageRequest(data: data, error: error)
                 // Save to cache
@@ -407,7 +407,9 @@ class UsersViewModel {
                 }
                 
                 OperationQueue.main.addOperation {
-                    print("Done")
+                    if self.confDbgVerboseNetworkCalls {
+                        print("Done with image")
+                    }
                     completion(result)
                     ConcurrencyUtils.singleImageRequestSemaphore.signal()
                 }
