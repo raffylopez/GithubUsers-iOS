@@ -23,6 +23,7 @@ class ToastAlertMessageDisplay: UIAlertMessageDisplay {
     }
     func display(message: String) {
         OperationQueue.main.addOperation {
+            Self.appView?.hideToastActivity()
             Self.appView?.hideAllToasts()
             Self.appView?.makeToast(message)
         }

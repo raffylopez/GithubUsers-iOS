@@ -16,6 +16,7 @@ protocol UsersProvider {
     func filterUsers(with term: String, callback: @escaping (Result<[User], Error>) -> Void)
 }
 
+/* User service/data access object class */
 extension CoreDataService: UsersProvider {
 
     func getUserCount() -> Int {
@@ -54,7 +55,6 @@ extension CoreDataService: UsersProvider {
             }
         }
     }
-    
 
     func getUser(id: Int) -> User? {
         let entityName = String(describing: User.self)

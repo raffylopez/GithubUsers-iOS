@@ -5,6 +5,11 @@
 import Foundation
 import CoreData
 
+/**
+ Don't remove this file when regenerating the User entity class.
+ Overwrite the DataProperties file instead. This class is for maintaining
+ methods and initializers.
+ */
 @objc(UserInfo)
 public class UserInfo: NSManagedObject {
     lazy var presented: UserInfoPresenter = {

@@ -5,11 +5,12 @@
 import Foundation
 import CoreData
 
+/** CoreData stack, guarantees a singleton for its persistent container  */
 class CoreDataService {
     
-    public static let privateMOC = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
     public static let shared = CoreDataService()
-    
+    let context = persistentContainer.viewContext
+
     static var persistentContainer: NSPersistentContainer = {
             let container = NSPersistentContainer(name: getConfig().xcPersisentContainerName )
             container.loadPersistentStores(completionHandler: { (storeDescription, error) in
@@ -19,9 +20,7 @@ class CoreDataService {
             })
             return container
     }()
-    
-    let context = persistentContainer.viewContext
-    
+
     public func saveContext() throws {
         if context.hasChanges {
             try context.save()

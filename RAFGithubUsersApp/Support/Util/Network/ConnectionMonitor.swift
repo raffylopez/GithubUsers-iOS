@@ -44,6 +44,8 @@ class ConnectionMonitor {
     }
 
     var lastConnectivityState: Reachability.Connection = .unavailable
+    var intervalInSecs = 5
+    
     /**
      Continuously check for network signal every n seconds.
      
@@ -66,7 +68,7 @@ class ConnectionMonitor {
             default:
                 break
             }
-            self.periodicConnectivityCheck(start: .now() + .seconds(5))
+            self.periodicConnectivityCheck(start: .now() + .seconds(self.intervalInSecs))
         }
     }
     
@@ -85,9 +87,9 @@ class ConnectionMonitor {
         }
     }
 }
-enum LastDataSource {
+enum DataSource {
     case network
-    case offline
+    case local
     case parkedFromSearch
     case unspecified
 }

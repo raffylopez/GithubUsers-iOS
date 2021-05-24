@@ -5,6 +5,7 @@
 import Foundation
 import CoreData
 
+/* UserInfo service/data access object class */
 protocol UserInfoProvider {
     func translate(from apiUser: GithubUserInfo) -> UserInfo
     func getAllUserInfo(callback: @escaping (Result<[UserInfo], Error>) -> Void)

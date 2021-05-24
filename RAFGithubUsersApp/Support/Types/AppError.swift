@@ -8,14 +8,17 @@
 import Foundation
 
 enum AppError: Error {
-    case networkError
-    case fetchInProgress
+    case fetchInProgressError
     case appConfigLoadError
-    case documentsDirectoryNotFound
-    case missingImageUrl
+    case documentsDirectoryNotFoundError
+    case missingImageUrlError
     case imageCreationError
-    case emptyResult
+    case emptyResultError
     case generalError
+    case writeToDatastoreError(Error)
+    case readFromDataStoreError(Error)
     case httpTransportError(Error)
     case httpServerSideError(Int)
+    case networkUnreachable
+    case retriesExceededError(Error)
 }

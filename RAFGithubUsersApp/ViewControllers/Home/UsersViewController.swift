@@ -7,6 +7,9 @@
 
 import UIKit
 
+/**
+ Home view controller. Does not support XIBs.
+ */
 class UsersViewController: UITableViewController {
     let confDbgDisplayDebugCells: Bool = getConfig().dbgDisplayDebugCells
     let confDisableImageInvert: Bool = getConfig().dbgDisableImageInvert
@@ -464,9 +467,6 @@ extension UsersViewController: UserListTableViewCellDelegate {
     }
     
     func didTouchCellPanel(cell: UserTableViewCellBase) {
-        guard !self.viewModel.isFetchInProgress else {
-            return
-        }
         let viewModel = ProfileViewModel(cell: cell, apiService: GithubUsersApi(), databaseService: CoreDataService.shared)
         let profileViewController = ViewControllersFactory.instance(vcType: .userProfile(viewModel)) as! ProfileViewController
         profileViewController.delegate = self
@@ -489,7 +489,7 @@ extension UsersViewController: UISearchResultsUpdating {
 
 extension UsersViewController: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-        /* TODO: Future enhancement for look-ahead prefetching
+        /* TODO: Some future enhancement for look-ahead prefetching
         if confPrefetchingEnabled && indexPaths.contains(where: isLoadingCell) {
             fetchAdditionalTableData()
         } */

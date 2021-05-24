@@ -20,6 +20,9 @@ class StoryBoard {
     }()
 }
 
+/**
+ Factory class for convenietly instancing and assembling view controller classes
+ */
 class ViewControllersFactory {
     public static func instance(vcType: VcType) -> UIViewController {
         switch vcType {

@@ -7,10 +7,14 @@
 
 import Foundation
 
+/**
+ API class for user and user detail retrieval
+ */
 class GithubUsersApi: UserApi {
     let confForcedFail: Bool = false
     var confQueuedNetworkRequests: Bool = true
     var confDbgVerboseNetworkCalls = getConfig().dbgVerboseNetworkCalls
+    let successStatusCodeRange = (200...299)
 
     typealias T = GithubUser
     let usersListUri: String
@@ -42,7 +46,7 @@ class GithubUsersApi: UserApi {
                 completion?(.success(githubUserInfo))
                 return
             }
-            completion?(.failure(AppError.emptyResult))
+            completion?(.failure(AppError.emptyResultError))
             }).resume()
     }
     
@@ -50,20 +54,13 @@ class GithubUsersApi: UserApi {
         DispatchQueue.global().async {
             ConcurrencyUtils.singleUserRequestSemaphore.wait()
             var uri = URLComponents(string: self.usersListUri)
-            uri?.queryItems = [
-                URLQueryItem(name: "since", value: "\(since)")
-            ]
+            uri?.queryItems = [ URLQueryItem(name: "since", value: "\(since)") ]
             
-            if getConfig().githubAccessToken != "" {
-                uri?.queryItems?.append(URLQueryItem(name: "access_token", value: getConfig().githubAccessToken))
-            }
+            if getConfig().githubAccessToken != "" { uri?.queryItems?.append(URLQueryItem(name: "access_token", value: getConfig().githubAccessToken)) }
             
-            if self.confDbgVerboseNetworkCalls {
-                print("Fetching list of users from \(uri!.url!.absoluteString)...")
-            }
+            if self.confDbgVerboseNetworkCalls { print("Fetching list of users from \(uri!.url!.absoluteString)...") }
             let task = URLSession.shared.githubUsersTask(with: uri!.url!, completionHandler: { (githubUsers, response, error) in
-                if self.confDbgVerboseNetworkCalls {
-                    print("Done fetching user list.")
+                if self.confDbgVerboseNetworkCalls { print("Done fetching user list.")
                 }
                 ConcurrencyUtils.singleUserRequestSemaphore.signal()
                 if let error = error {
@@ -73,7 +70,7 @@ class GithubUsersApi: UserApi {
 
                 let response = response as! HTTPURLResponse
                 let status = response.statusCode
-                guard (200...299).contains(status) else {
+                guard (self.successStatusCodeRange).contains(status) else {
                     completion?(.failure(AppError.httpServerSideError(status)))
                     return
                 }
@@ -85,7 +82,7 @@ class GithubUsersApi: UserApi {
                     completion?(.success(githubUsers))
                     return
                 }
-                completion?(.failure(AppError.emptyResult))
+                completion?(.failure(AppError.emptyResultError))
             })
             task.resume()
         }

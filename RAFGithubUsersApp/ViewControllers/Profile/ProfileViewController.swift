@@ -9,6 +9,9 @@ import UIKit
 import SkeletonView
 import FontAwesome
 
+/**
+ User details view controller. Safe to augment with XIB.
+ */
 class ProfileViewController: UIViewController {
     var delegate: ProfileViewDelegate! = nil
     @IBOutlet var boxBlue: UIView!

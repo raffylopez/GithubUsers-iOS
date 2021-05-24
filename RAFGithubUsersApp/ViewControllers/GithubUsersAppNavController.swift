@@ -7,6 +7,7 @@
 
 import UIKit
 
+/* Main navigation view controller, with UI support for reachability monitor */
 class GithubUsersAppNavController: UINavigationController {
     
     override init(rootViewController: UIViewController) {

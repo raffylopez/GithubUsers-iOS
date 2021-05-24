@@ -7,6 +7,9 @@
 
 import Foundation
 
+/**
+ UIView handy extensions
+ */
 extension UIView {
     func resizeDimensions(height: CGFloat? = nil, width: CGFloat? = nil) {
         if let height = height {

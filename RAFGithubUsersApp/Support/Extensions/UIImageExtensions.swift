@@ -7,6 +7,7 @@
 
 import Foundation
 
+/** Support for image color inversion */
 extension UIImage {
     func invertImageColorsAsync(completion: @escaping(UIImage?)->Void) {
         let theImage = self

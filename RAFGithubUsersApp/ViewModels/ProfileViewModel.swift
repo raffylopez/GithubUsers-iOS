@@ -73,7 +73,7 @@ class ProfileViewModel {
 
 
         guard let login = user.login else {
-            completion?(.failure(AppError.emptyResult))
+            completion?(.failure(AppError.emptyResultError))
             return
         }
 
@@ -128,7 +128,7 @@ class ProfileViewModel {
      */
     func fetchImage(for user: User, completion: @escaping (Result<(UIImage, ImageSource), Error>) -> Void, synchronous: Bool = false) {
         guard let urlString = user.urlAvatar, !urlString.isEmpty else {
-            completion(.failure(AppError.missingImageUrl))
+            completion(.failure(AppError.missingImageUrlError))
             return
         }
         let imageUrl = URL(string: urlString)!

@@ -12,9 +12,9 @@ import CoreData
 class UsersViewModel {
     /* MARK: - Properties */
     var delegate: ViewModelDelegate? = nil
-    let maxRetryCountOnServerSideFail = 10_000
+    let retryCountOnServerSideFail = 10
     var confDbgVerboseNetworkCalls = getConfig().dbgVerboseNetworkCalls
-
+    
     typealias OnDataAvailable = ( () -> Void )
     var onDataAvailable: OnDataAvailable = {}
     var onFetchInProgress: (() -> Void) = {}
@@ -24,7 +24,7 @@ class UsersViewModel {
     var currentPage: Int = 0
     var lastBatchCount: Int = 0
     var totalDisplayCount: Int = 0
-    var lastDataSource: LastDataSource = .unspecified
+    var lastDataSource: DataSource = .unspecified
     
     var currentCount: Int {
         return users.count
@@ -37,6 +37,7 @@ class UsersViewModel {
     
     var isFetchInProgress: Bool = false {
         didSet {
+            print(isFetchInProgress)
             if (isFetchInProgress) {
                 onFetchInProgress()
                 delegate?.onFetchInProgress()
@@ -57,7 +58,7 @@ class UsersViewModel {
         })
     }
     let userInfoProvider: UserInfoProvider = CoreDataService.shared
-
+    
     var needsMoreData: Bool {
         if let lastUser = users.last {
             return lastUser.id == since
@@ -72,7 +73,7 @@ class UsersViewModel {
             }
         }
     }
-
+    
     private(set) var filteredUsers: [User]! = [] {
         didSet {
             if filteredUsers.count > 0 {
@@ -81,14 +82,14 @@ class UsersViewModel {
             }
         }
     }
-
+    
     /* MARK: - Inits */
     init(apiService: GithubUsersApi, databaseService: UsersProvider) {
         self.apiService = apiService
         self.usersDatabaseService = databaseService
         imageStore = ImageStore()
     }
- 
+    
     let confOfflineIncrements: Int = 30
     var runoff: Int {
         return usersDatabaseService.getUserCount() % confOfflineIncrements
@@ -97,7 +98,7 @@ class UsersViewModel {
     public func clearUsers() {
         self.users = []
     }
-
+    
     public func searchUsers(for term: String) {
         if term.isEmpty  {
             self.usersDatabaseService.getUsers (limit: nil){ result in
@@ -119,14 +120,14 @@ class UsersViewModel {
             case .failure:
                 break
             }
-
+            
         }
     }
     
     
     func loadOfflineData(completion: (()->Void)? = nil) {
         let userCount = self.usersDatabaseService.getUserCount()
-
+        
         guard userCount > 0 else {
             completion?()
             return
@@ -142,7 +143,7 @@ class UsersViewModel {
         }
         
         self.loadUsersFromDisk(count: self.totalDisplayCount) { result in
-            self.lastDataSource = .offline
+            self.lastDataSource = .local
             switch result {
             case let .success(combinedUsers):
                 let start = combinedUsers.count - self.confOfflineIncrements
@@ -157,7 +158,7 @@ class UsersViewModel {
                 print(error.localizedDescription)
             }
         }
-
+        
     }
     
     var confSimulateOffline = true
@@ -186,7 +187,7 @@ class UsersViewModel {
             }
         }
     }
-
+    
     private func resetState() {
         self.since = 0
         self.currentPage = 0
@@ -198,14 +199,14 @@ class UsersViewModel {
     public func clearData() {
         resetState()
     }
-
+    
     /**
      Binds closure to model describing what to perform when data becomes available
      */
     func bind(availability: @escaping OnDataAvailable) {
         self.onDataAvailable = availability
     }
-
+    
     /**
      Fetch data from coredata, and set it to users attribute, triggering
      view controller closure.
@@ -227,24 +228,6 @@ class UsersViewModel {
                 completion?(.success(users))
             }
         }
-    }
-    
-    private func synchronize(privateMOC: NSManagedObjectContext) {
-     do {
-       try privateMOC.save()
-         DispatchQueue.main.async {
-            let mainContext = CoreDataService.persistentContainer.viewContext
-            mainContext.performAndWait {
-             do {
-               try mainContext.save()
-             } catch {
-               print("Could not synchonize data. \(error), \(error.localizedDescription)")
-             }
-         }
-       }
-     } catch {
-       print("Could not synchonize data. \(error), \(error.localizedDescription)")
-     }
     }
     
     // MARK: - Stale data classification
@@ -269,12 +252,12 @@ class UsersViewModel {
     /* Does not add new records into db */
     public func refreshStale(completion: ((Result<[User], Error>)->Void)? = nil) {
         guard ConnectionMonitor.shared.isApiReachable else {
-            completion?(.failure(AppError.networkError))
+            completion?(.failure(AppError.httpTransportError(AppError.networkUnreachable)))
             return
         }
-
+        
         guard let since = staleIds.first else {
-            completion?(.failure(AppError.emptyResult))
+            completion?(.failure(AppError.emptyResultError))
             return
         }
         
@@ -284,11 +267,63 @@ class UsersViewModel {
                 self.unregisterStale(users: users)
                 completion?(.success(users))
             case let .failure(error):
+                print(error.localizedDescription)
                 completion?(.failure(error))
             }
         }
     }
-
+    
+    /**
+     Translate api instance to data model object, and persist to data storoe
+     */
+    func persist(apiUsers githubUsers: [GithubUser], persistCompletion: @escaping UserResult) {
+        
+        let privateMOC = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        let context = CoreDataService.persistentContainer.viewContext
+        privateMOC.parent = context
+        
+        privateMOC.performAndWait {
+            let users: [User] = githubUsers.map { githubUser in
+                let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
+                fetchRequest.entity = NSEntityDescription.entity(forEntityName: String.init(describing: User.self), in: context)
+                let predicate = NSPredicate( format: "\(#keyPath(User.id)) == \(githubUser.id)" )
+                fetchRequest.predicate = predicate
+                var fetchedUsers: [User]?
+                do {
+                    fetchedUsers = try fetchRequest.execute()
+                } catch {
+                    persistCompletion(.failure(AppError.writeToDatastoreError(error)))
+                }
+                if let existingUser = fetchedUsers?.first {
+                    existingUser.merge(with: githubUser, moc: privateMOC)
+                    return existingUser
+                }
+                
+                var user: User!
+                user = User(from: githubUser, moc: privateMOC)
+                return user
+            } // end githubUsers.map
+            
+            do {
+                if privateMOC.hasChanges {
+                    try privateMOC.save()
+                }
+                context.performAndWait {
+                    do {
+                        if context.hasChanges {
+                            try context.save()
+                        }
+                    } catch {
+                        persistCompletion(.failure(AppError.writeToDatastoreError(error)))
+                    }
+                } // end context.performAndWait
+            } catch {
+                persistCompletion(.failure(AppError.writeToDatastoreError(error)))
+            } // end do
+            persistCompletion(.success(users))
+        }
+    }
+    
     /**
      Fetches users from off the network, and writes users into datastore. Uses background context
      for write queries. Reads are performed by main view context.
@@ -299,94 +334,83 @@ class UsersViewModel {
      of network-based objects and old database objects. The count is based on the
      size of the batch received.
      */
-    private func fetchUsers(since: Int, completion: @escaping ((Result<[User], Error>)->Void)) {
+    typealias UserResult = ((Result<[User], Error>)->Void)
+    
+    private func fetchUsers(since: Int, completion: @escaping UserResult) {
         guard !isFetchInProgress else {
             return
         }
         
         self.isFetchInProgress = true
         
-        let privateMOC = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-        let context = CoreDataService.persistentContainer.viewContext
-        privateMOC.parent = context
-        
         self.apiService.fetchUsers(since: since) { result in
             self.lastDataSource = .network
-            self.isFetchInProgress = false
             switch result {
             case let .success(githubUsers):
-                privateMOC.performAndWait {
-                    let users: [User] = githubUsers.map { githubUser in
-                        let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
-                        fetchRequest.entity = NSEntityDescription.entity(forEntityName: String.init(describing: User.self), in: context)
-                        let predicate = NSPredicate( format: "\(#keyPath(User.id)) == \(githubUser.id)" )
-                        fetchRequest.predicate = predicate
-                        var fetchedUsers: [User]?
-                        do {
-                            fetchedUsers = try fetchRequest.execute()
-                        } catch {
-                            preconditionFailure()
-                        }
-                        if let existingUser = fetchedUsers?.first {
-                            existingUser.merge(with: githubUser, moc: privateMOC)
-                            return existingUser
-                        }
-                        
-                        var user: User!
-                        user = User(from: githubUser, moc: privateMOC)
-                        return user
-                    }
-                    
-                    do { 
-                        if privateMOC.hasChanges {
-                            try privateMOC.save()
-                        }
-                        context.performAndWait {
-                            do {
-                                if context.hasChanges {
-                                    try context.save()
-                                }
-                            } catch {
-                                fatalError("Failed to save context: \(error)")
-                            }
-                        }
-                    } catch {
-                        completion(.failure(error))
-                        fatalError("Failed to save context: \(error)")
-                    }
-                    completion(.success(users))
-                    
-                }
+                self.isFetchInProgress = false
+                self.persist(apiUsers: githubUsers, persistCompletion: completion)
             case let .failure(error):
                 print(error.localizedDescription)
                 switch error {
                 case AppError.httpServerSideError:
-                    guard !ScheduleTracker.retryIsActive else { break }
-                    ScheduledTask(task: self.fetchUsers).retryWithBackoff(times: self.maxRetryCountOnServerSideFail, taskParam: since, onTaskSuccess: { _ in
-                        DispatchQueue.main.async {
-                            (UIApplication.shared.delegate as! AppDelegate).appConnectionState = .networkReachable
+                    /** Retry with exponential backoff to avoid pommeling the backend */
+                    for i in 1..<retryCountOnServerSideFail {
+                        /* print("Scheduling backed-off retries...\(i)") */
+                        let delay = TimeInterval.getExponentialDelay(for: i)
+                        let secs = Float(delay) / 1000.0
+                        DispatchQueue.global().asyncAfter(deadline: .now() + .milliseconds(delay)) {
+                            ToastAlertMessageDisplay.main.display(message: "Unable to connect to the server, trying in \(secs) seconds ")
+                            self.retryFetchUsers(since: since) { result in
+                                switch result {
+                                case let .success(users):
+                                    self.isFetchInProgress = false
+                                    completion(.success(users))
+                                    break
+                                case let .failure(error):
+                                    print(error)
+                                    break
+                                }
+                            }
                         }
-                    }, onTaskError: { _,_,_ in
-                        DispatchQueue.main.async {
-                            (UIApplication.shared.delegate as! AppDelegate).appConnectionState = .serverError
-                        }
-                    })
+                    }
+                    completion(.failure(AppError.retriesExceededError(error)))
                 default:
-                    completion(.failure(error))
+                    self.isFetchInProgress = false
+                    completion(.failure(AppError.httpTransportError(error)))
                 }
-                
-                completion(.failure(error))
             }
         }
     }
-
+    
+    /** For exclusive use of failure handler of fetchUsers*/
+    private func retryFetchUsers(since: Int, completion: @escaping UserResult) {
+        self.apiService.fetchUsers(since: since) { result in
+            self.lastDataSource = .network
+            switch result {
+            case let .success(githubUsers):
+                self.isFetchInProgress = false
+                self.persist(apiUsers: githubUsers, persistCompletion: {
+                    if case let .failure(error) = $0 {
+                        completion(.failure(AppError.writeToDatastoreError(error))) // persistence error
+                    }
+                })
+            case let .failure(error):
+                print(error.localizedDescription)
+                // do not allow others to come into fetch users, isFetchInProgress should remain true
+                // send off another request, using dispatch async
+                // perform a recursion unwind, once successful
+                completion(.failure(error)) // connection error??
+            }
+        }
+    }
+    
     /**
      Fetches photo media (based on avatar url). Call is asynchronous or synchronous,but the latter
      leads to less than optimal performance.
-         */
+     */
     func fetchImage(for user: User, reload: Bool = false, queued: Bool = true, completion: @escaping (Result<(UIImage, ImageSource), Error>) -> Void) {
         guard let urlString = user.urlAvatar, !urlString.isEmpty else {
-            completion(.failure(AppError.missingImageUrl))
+            completion(.failure(AppError.missingImageUrlError))
             return
         }
         let imageUrl = URL(string: urlString)!
@@ -400,9 +424,9 @@ class UsersViewModel {
                 return
             }
         }
-
+        
         let request = URLRequest(url: imageUrl)
-
+        
         DispatchQueue.global().async {
             ConcurrencyUtils.singleImageRequestSemaphore.wait()
             if self.confDbgVerboseNetworkCalls {
