@@ -1,8 +1,7 @@
 //
-//  AmiiboCharacterListViewCell.swift
-//  RDLAmiiboApp
+//  NormalUserTableViewCell.swift
+//  RAF_GithubUsersApp
 //
-//  Created by Volare on 4/16/21.
 //  Copyright © 2021 Raf. All rights reserved.
 //
 
@@ -19,7 +18,6 @@ class NormalUserTableViewCell: UserTableViewCellBase {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
-
 }
 
 extension NormalUserTableViewCell: UserTableViewCell {

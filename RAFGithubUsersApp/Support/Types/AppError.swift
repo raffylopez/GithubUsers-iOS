@@ -1,5 +1,7 @@
 //
-//  Created by Volare on 4/17/21.
+//  AppError.swift
+//  RAF_GithubUsersApp
+//
 //  Copyright © 2021 Raf. All rights reserved.
 //
 

@@ -1,8 +1,7 @@
 //
-//  RAFGithubUsersAppTests.swift
-//  RAFGithubUsersAppTests
+//  MockApiTests.swift
+//  RAF_GithubUsersApp
 //
-//  Created by Volare on 5/11/21.
 //  Copyright © 2021 Raf. All rights reserved.
 //
 
@@ -16,10 +15,11 @@ class MockApiTests: XCTestCase {
     }
 
     override func tearDownWithError() throws {
+        apiMock = nil
     }
 
     func testApiMockFetchesResults() throws {
-        apiMock?.fetchResult(completion: { (result) in
+        apiMock?.fetchUsers(since: 0, completion: { (result) in
             switch result {
             case .failure:
                 XCTFail()
@@ -30,10 +30,10 @@ class MockApiTests: XCTestCase {
     }
 
     func testApiMockFetchesResultsNotEmpty() throws {
-        apiMock?.fetchResult(completion: { (result) in
+        apiMock?.fetchUsers(since: 0, completion: { (result) in
             switch result {
             case .failure:
-                XCTAssert(false)
+                XCTFail()
             case .success(let users):
                 XCTAssert(!users.isEmpty)
             }
@@ -41,10 +41,10 @@ class MockApiTests: XCTestCase {
     }
     
     func testApiMockFetchResultsCorrect() throws {
-        apiMock?.fetchResult(completion: { (result) in
+        apiMock?.fetchUsers(since:0, completion: { (result) in
             switch result {
             case .failure:
-                XCTAssert(false)
+                XCTFail()
             case .success(let users):
                 XCTAssert(users.count == 30)
                 let user = users.first!
@@ -57,10 +57,35 @@ class MockApiTests: XCTestCase {
         })
     }
     
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    func testUserInfoMockApi() throws {
+        apiMock?.fetchUsers(since:0) { (result) in
+            switch result {
+            case .failure:
+                XCTFail()
+            case .success(let users):
+                XCTAssert(users.count == 30)
+                let githubUser = users.first!
+                XCTAssert(githubUser.login == "mojombo")
+                XCTAssert(githubUser.id == 1)
+                XCTAssert(githubUser.nodeID == "MDQ6VXNlcjE=")
+                
+                self.apiMock?.fetchUserDetails(username: githubUser.login) { (result) in
+                    switch result {
+                    case let .success(userInfo):
+                        XCTAssertNotNil(userInfo)
+                        XCTAssert(userInfo.id == 1)
+                        XCTAssert(userInfo.login == "mojombo")
+                        XCTAssert(userInfo.nodeID == "MDQ6VXNlcjE=")
+                        XCTAssert(userInfo.name == "Tom Preston-Werner")
+                        break
+                    case let .failure(error):
+                        fatalError(error.localizedDescription)
+                        break
+                    }
+                    
+                }
+                
+            }
         }
     }
 

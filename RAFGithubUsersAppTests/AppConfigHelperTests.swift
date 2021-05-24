@@ -1,8 +1,7 @@
 //
-//  ConfigHelperTests.swift
-//  RAFGithubUsersAppTests
+//  AppConfigHelperTests.swift
+//  RAF_GithubUsersApp
 //
-//  Created by Volare on 5/11/21.
 //  Copyright © 2021 Raf. All rights reserved.
 //
 
@@ -25,8 +24,7 @@ class AppConfigHelperTests: XCTestCase {
             XCTAssert(!appConfig.githubUserDetailsUriPrefix.isEmpty)
             return
         }
-        XCTAssert(false)
-        
+        XCTFail()
     }
 
 }

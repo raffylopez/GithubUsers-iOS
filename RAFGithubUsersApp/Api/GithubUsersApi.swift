@@ -1,14 +1,13 @@
 //
-//  GithubUsersAPI.swift
-//  RAFGithubUsersApp
+//  GithubUsersApi.swift
+//  RAF_GithubUsersApp
 //
-//  Created by Volare on 5/11/21.
 //  Copyright © 2021 Raf. All rights reserved.
 //
 
 import Foundation
 
-class GithubUsersApi {
+class GithubUsersApi: UserApi {
     let confForcedFail: Bool = false
     var confQueuedNetworkRequests: Bool = true
 

@@ -1,15 +1,15 @@
 //
 //  ScheduledTask.swift
+//  RAF_GithubUsersApp
 //
 //  Created by Volare on 4/16/21.
-//  Copyright © 2021 Raf. All rights reserved.
 //
 
 import Foundation
 import Reachability
 
 /**
- Task scheduler for exponential backoff
+ Task scheduler with supporting exponential backoffs
  */
 class ScheduledTask<T, ResultType> {
     typealias Task = (T, ((Result<ResultType,Error>)->Void)?) -> Void
@@ -26,7 +26,6 @@ class ScheduledTask<T, ResultType> {
         self.task = nil
         self.taskRequiredResult = task
     }
-    
 
     /**
      Exponential delay value with jitter. Output is in milliseconds.

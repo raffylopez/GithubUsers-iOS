@@ -1,8 +1,4 @@
 //
-//  AmiiboCharacterListViewCell.swift
-//  RDLAmiiboApp
-//
-//  Created by Volare on 4/16/21.
 //  Copyright © 2021 Raf. All rights reserved.
 //
 
@@ -20,10 +16,6 @@ class UserTableViewCellBase: UITableViewCell, UserCell {
         setupViews()
         setupLayout()
     }
-    
-//    internal func setUser(user: User) {
-//        self.user = user
-//    }
 
     internal func updateCell() {
         self.lblName.text = user.login ?? ""
@@ -93,7 +85,6 @@ class UserTableViewCellBase: UITableViewCell, UserCell {
             spinner.centerYAnchor.constraint(equalTo: imgCharacter.centerYAnchor).isActive = true
             spinner.centerXAnchor.constraint(equalTo: imgCharacter.centerXAnchor).isActive = true
         }
-//        spinner.startAnimating()
     }
     
     internal func setupLayout() {
@@ -125,13 +116,11 @@ class UserTableViewCellBase: UITableViewCell, UserCell {
                     UIView.transition(with: self.imgViewChar, duration: 0.25, options: .transitionCrossDissolve, animations: {
                         self.imgViewChar.image = image
                     }, completion: { _ in
-                        //                        self.spinner.stopAnimating()
                     })
                 }
             case .cache:
                 OperationQueue.main.addOperation {
                     self.imgViewChar.image = image
-                    //                    self.spinner.stopAnimating()
                 }
             }
             return
@@ -148,7 +137,6 @@ extension UserTableViewCellBase {
     override func prepareForReuse() {
         imgViewChar.backgroundColor = .systemGray5
         imgViewChar.image = nil
-//        spinner.startAnimating()
     }
     
     fileprivate func makeImageVisible(img: UIImage) {

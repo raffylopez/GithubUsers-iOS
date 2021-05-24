@@ -1,18 +1,13 @@
 //
-//  Created by Volare on 4/17/21.
+//  UsersViewModel.swift
+//  RAF_GithubUsersApp
+//
 //  Copyright © 2021 Raf. All rights reserved.
 //
 
 import Foundation
 import UIKit
 import CoreData
-
-enum LastDataSource {
-    case network
-    case offline
-    case parkedFromSearch
-    case unspecified
-}
 
 class UsersViewModel {
     /* MARK: - Properties */
@@ -62,10 +57,6 @@ class UsersViewModel {
     }
     let userInfoProvider: UserInfoProvider = CoreDataService.shared
 
-//    lazy var needsMoreData: Bool = {
-//        return self.usersDatabaseService.getUserCount() == self.users.count
-//    }()
-    
     var needsMoreData: Bool {
         if let lastUser = users.last {
             return lastUser.id == since
@@ -95,16 +86,12 @@ class UsersViewModel {
         self.apiService = apiService
         self.usersDatabaseService = databaseService
         imageStore = ImageStore()
-//        self.updateFromDiskSource { }
     }
  
     let confOfflineIncrements: Int = 30
     var runoff: Int {
         return usersDatabaseService.getUserCount() % confOfflineIncrements
     }
-//    public func clearUsers() {
-//        self.users.removeAll(keepingCapacity: false)
-//    }
     
     public func clearUsers() {
         self.users = []
@@ -115,8 +102,6 @@ class UsersViewModel {
             self.usersDatabaseService.getUsers (limit: nil){ result in
                 switch result {
                 case let .success(users):
-//                    self.filteredUsers = users
-//                    self.switchToFiltered()
                     self.filteredUsers = users
                     break
                 case .failure:
@@ -165,7 +150,6 @@ class UsersViewModel {
                 if let user = combinedUsers.last {
                     self.since = Int(user.id)
                 }
-//                self.currentStartIndex = combinedUsers.count
                 completion?()
             case let .failure(error):
                 completion?()
@@ -355,7 +339,7 @@ class UsersViewModel {
                         return user
                     }
                     
-                    do { // TODO: transfer to sync method
+                    do { 
                         if privateMOC.hasChanges {
                             try privateMOC.save()
                         }

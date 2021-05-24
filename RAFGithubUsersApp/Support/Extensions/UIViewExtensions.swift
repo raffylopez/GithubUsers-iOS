@@ -1,8 +1,7 @@
 //
-//  StringExtensions.swift
-//  RDLAmiiboApp
+//  UIView.swift
+//  RAF_GithubUsersApp
 //
-//  Created by Volare on 4/16/21.
 //  Copyright © 2021 Raf. All rights reserved.
 //
 

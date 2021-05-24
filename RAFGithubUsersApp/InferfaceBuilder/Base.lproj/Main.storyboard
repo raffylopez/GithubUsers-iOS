@@ -16,10 +16,10 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IfO-mm-Bb9">
-                                <rect key="frame" x="0.0" y="-22" width="414" height="1034"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="1012"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8bC-Xf-vdC">
-                                        <rect key="frame" x="0.0" y="-22" width="414" height="1000"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="1000"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iN0-bL-dAB">
                                                 <rect key="frame" x="122" y="28" width="170" height="170"/>
@@ -327,8 +327,8 @@
                                     </view>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="8bC-Xf-vdC" firstAttribute="top" secondItem="IfO-mm-Bb9" secondAttribute="top" constant="-22" id="3lx-m9-Oqg"/>
-                                    <constraint firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" constant="-22" id="8fu-CG-cqC"/>
+                                    <constraint firstItem="8bC-Xf-vdC" firstAttribute="top" secondItem="IfO-mm-Bb9" secondAttribute="top" id="3lx-m9-Oqg"/>
+                                    <constraint firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" id="8fu-CG-cqC"/>
                                     <constraint firstItem="8bC-Xf-vdC" firstAttribute="leading" secondItem="IfO-mm-Bb9" secondAttribute="leading" id="QYc-9J-WiX"/>
                                     <constraint firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" id="Xnp-oI-hRw"/>
                                 </constraints>
@@ -339,7 +339,7 @@
                             <constraint firstItem="IfO-mm-Bb9" firstAttribute="bottom" secondItem="2r8-oJ-iAO" secondAttribute="bottom" constant="12" id="4X1-y2-Qcf"/>
                             <constraint firstItem="2r8-oJ-iAO" firstAttribute="trailing" secondItem="IfO-mm-Bb9" secondAttribute="trailing" id="GQR-0a-17H"/>
                             <constraint firstItem="8bC-Xf-vdC" firstAttribute="width" secondItem="08M-sb-dJx" secondAttribute="width" id="cdV-YF-Q9v"/>
-                            <constraint firstItem="2r8-oJ-iAO" firstAttribute="top" secondItem="IfO-mm-Bb9" secondAttribute="top" constant="22" id="g0F-Nq-C2Z"/>
+                            <constraint firstItem="2r8-oJ-iAO" firstAttribute="top" secondItem="IfO-mm-Bb9" secondAttribute="top" id="g0F-Nq-C2Z"/>
                             <constraint firstItem="IfO-mm-Bb9" firstAttribute="leading" secondItem="2r8-oJ-iAO" secondAttribute="leading" id="o4G-qA-pkF"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="2r8-oJ-iAO"/>

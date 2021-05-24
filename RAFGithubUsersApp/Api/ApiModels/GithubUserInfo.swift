@@ -1,9 +1,7 @@
 //
-//  GithubUser.swift
-//  RAFGithubUsersApp
-//
-//  Created by Volare on 5/11/21.
+//  GithubUserInfo.swift
 //  Copyright © 2021 Raf. All rights reserved.
+//
 
 import Foundation
 

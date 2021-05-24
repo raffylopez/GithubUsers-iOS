@@ -1,10 +1,5 @@
 //
-//  User+CoreDataProperties.swift
-//  RAFGithubUsersApp
-//
-//  Created by Volare on 5/17/21.
 //  Copyright © 2021 Raf. All rights reserved.
-//
 //
 
 import Foundation

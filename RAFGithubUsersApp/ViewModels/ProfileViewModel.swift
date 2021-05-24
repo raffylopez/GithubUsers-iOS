@@ -1,8 +1,7 @@
 //
-//  AmiiboElementsViewModel.swift
-//  RDLAmiiboApp
+//  ProfileViewModel.swift
+//  RAF_GithubUsersApp
 //
-//  Created by Volare on 4/17/21.
 //  Copyright © 2021 Raf. All rights reserved.
 //
 
@@ -10,7 +9,6 @@ import Foundation
 import UIKit
 import CoreData
 
-// MARK: - AmiiboElementsViewModel
 class ProfileViewModel {
     
     init(cell: UserTableViewCellBase, apiService: GithubUsersApi, databaseService: UserInfoProvider) {
@@ -36,7 +34,6 @@ class ProfileViewModel {
     let databaseService: UserInfoProvider
     var isFetchInProgress: Bool = false {
         didSet {
-            print("Fetch in progress: \(isFetchInProgress)")
             if (isFetchInProgress) {
                 onFetchInProgress()
                 delegate?.onFetchInProgress()
@@ -98,7 +95,7 @@ class ProfileViewModel {
                         self.user.userInfo = UserInfo(from: githubUserInfo, moc: privateMOC)
                     }
 
-                    do { // TODO: transfer to sync method
+                    do {
                         if privateMOC.hasChanges {
                             try privateMOC.save()
                         }
@@ -123,16 +120,6 @@ class ProfileViewModel {
             }
 
         }
-//        let onTaskError: ((Int, Int, Error)->Void)? = { attemptCount, delayTillNext, error in
-//            self.isFetchInProgress = false
-//            completion?(.failure(error))
-//            self.delegate?.onRetryError(n: attemptCount, nextAttemptInMilliseconds: delayTillNext, error: error)
-//        }
-//
-//        let queue = DispatchQueue(label: "serialized_queue", qos: .background)
-//        let retryAttempts = 5
-//        ScheduledTask(task: self.apiService.fetchUserDetails).retryWithBackoff(times: retryAttempts, taskParam: login, queue: queue, onTaskSuccess: onTaskSuccess, onTaskError: onTaskError)
-        
     }
 
     /**
@@ -160,7 +147,6 @@ class ProfileViewModel {
         
         let task = session.dataTask(with: request) { data, _, error in
             let result = self.processImageRequest(data: data, error: error)
-            // Save to cache
             if case let .success(image) = result {
                 self.imageStore.setImage(forKey: key, image: image.0)
             }

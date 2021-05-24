@@ -1,8 +1,7 @@
 //
-//  RAFGithubUsersAppTests.swift
-//  RAFGithubUsersAppTests
+//  UserDataModelTest.swift
+//  RAF_GithubUsersApp
 //
-//  Created by Volare on 5/11/21.
 //  Copyright © 2021 Raf. All rights reserved.
 //
 
@@ -11,24 +10,56 @@ import CoreData
 @testable import GithubApp
 
 class UserInfoDataModelTest: XCTestCase {
+    var persistentContainer: NSPersistentContainer!
+    var context: NSManagedObjectContext!
+    var entityDescription: NSEntityDescription!
 
-    // MARK: - Core Data stack
-    
-    private static let persistentContainerName = "RAFGithubUsersApp"
-    private lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: Self.persistentContainerName )
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-            if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-        })
-        return container
-    }()
-    
-    // MARK: - Core Data Saving support
-    
     private func saveContext () {
-        let context = persistentContainer.viewContext
+    }
+    
+    // MARK: - Utility methods
+    private func fetchUserInfoUsing(name: String, context: NSManagedObjectContext) throws -> UserInfo?  {
+        let fetchRequest: NSFetchRequest<UserInfo> = UserInfo.fetchRequest()
+        let predicate = NSPredicate(format: "\(#keyPath(UserInfo.name)) == %@", name)
+        fetchRequest.predicate = predicate
+        let result = try? context.fetch(fetchRequest)
+        return result?.first
+    }
+    
+    // MARK: - Test setup
+    override func setUp() {
+        /* Setup an in-memory persistent store */
+        persistentContainer = {
+            let container = NSPersistentContainer(name:  "RAFGithubUsersApp" )
+            let description = NSPersistentStoreDescription()
+            description.url = URL(fileURLWithPath: "/dev/null")
+            container.persistentStoreDescriptions = [description]
+            
+            container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+                if let error = error as NSError? {
+                    fatalError("Unresolved error \(error), \(error.userInfo)")
+                }
+            })
+            return container
+        }()
+        context = persistentContainer.viewContext
+        entityDescription = NSEntityDescription.entity(forEntityName: String.init(describing: UserInfo.self), in: persistentContainer.viewContext)
+    }
+    
+    override func tearDown() {
+        try? super.tearDownWithError()
+        persistentContainer = nil
+        context = nil
+        entityDescription = nil
+    }
+    
+    // MARK: - Test cases
+    func testCreate() throws {
+        let userInfo = UserInfo(entity: entityDescription!, insertInto: context)
+        context.performAndWait {
+            userInfo.name = "test_create"
+            userInfo.followers = 200
+        }
         if context.hasChanges {
             do {
                 try context.save()
@@ -37,57 +68,64 @@ class UserInfoDataModelTest: XCTestCase {
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }
+        XCTAssert(userInfo.name == "test_create")
+        XCTAssert(userInfo.followers == 200)
     }
     
-    // MARK: - Utility methods
-    private func fetchUserUsing(id: Int32) throws -> User?  {
-        let fetchRequest: NSFetchRequest<User> = UserInfo.fetchRequest()
-        let predicate = NSPredicate(format: "\(#keyPath(UserInfo.id)) == 111")
-        fetchRequest.predicate = predicate
-        let result = try? persistentContainer.viewContext.fetch(fetchRequest)
-        return result?.first
-    }
-    
-    override func setUpWithError() throws {
-    }
-
-    override func tearDownWithError() throws {
-    }
-
-    // MARK: - Test cases
-    func testCreate() throws {
-        let userInfo = UserInfo(context: persistentContainer.viewContext)
-        persistentContainer.viewContext.performAndWait {
-            userInfo.id = 111
-            userInfo.login = "test"
-        }
-    }
-
     func testFetch() throws {
-        if let userInfo = try? fetchUserUsing(id: 111) {
-            XCTAssert(userInfo.id == 111)
-            XCTAssert(userInfo.login == "test")
+        let userInfo = UserInfo(entity: entityDescription!, insertInto: context)
+        context.performAndWait {
+            userInfo.name = "test_fetch"
+            userInfo.followers = 1000
+        }
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+                let nserror = error as NSError
+                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            }
+        }
+        
+        if let userInfo = try fetchUserInfoUsing(name: "test_fetch", context: context) {
+            XCTAssert(userInfo.name == "test_fetch")
+            XCTAssert(userInfo.followers == 1000)
         }
     }
     
     func testUpdate() throws {
-        if let userInfoForUpdate = try? fetchUserUsing(id: 111) {
-            persistentContainer.viewContext.performAndWait {
-                userInfoForUpdate.id = 111
-                userInfoForUpdate.login = "test"
+        let userInfo = UserInfo(entity: entityDescription!, insertInto: context)
+        context.performAndWait {
+            userInfo.name = "test_update"
+            userInfo.followers = 550
+        }
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+                let nserror = error as NSError
+                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            }
+        }
+        if let userInfoForUpdate = try fetchUserInfoUsing(name: "test_update", context: context) {
+            context.performAndWait {
+                userInfoForUpdate.name = "test_update"
+                userInfoForUpdate.followers = 550
+            }
+        }
+        
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+                let nserror = error as NSError
+                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }
 
-        if let userInfo = try? fetchUserUsing(id: 111) {
-            XCTAssert(userInfo.id == 111)
-            XCTAssert(userInfo.login == "test")
-        }
-    }
-    
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+        if let userInfo = try fetchUserInfoUsing(name: "test_update", context: context) {
+            XCTAssert(userInfo.followers == 550)
+            XCTAssert(userInfo.name == "test_update")
         }
     }
 

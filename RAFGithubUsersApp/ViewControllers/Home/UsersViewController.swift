@@ -1,8 +1,7 @@
 //
-//  ViewController.swift
-//  RAFGithubUsersApp
+//  UsersViewController.swift
+//  RAF_GithubUsersApp
 //
-//  Created by Volare on 5/11/21.
 //  Copyright © 2021 Raf. All rights reserved.
 //
 
@@ -48,15 +47,17 @@ class UsersViewController: UITableViewController {
     }
 
     // MARK: Configure table cell types
-//    typealias StandardTableViewCell = NormalUserTableViewCell
-//    typealias StandardNotedTableViewCell = NoteNormalUserTableViewCell
-//    typealias AlternativeTableViewCell = InvertedUserTableViewCell
-//    typealias AlternativeNotedTableViewCell = NoteInvertedUserTableViewCell
+    typealias StandardTableViewCell = NormalUserTableViewCell
+    typealias StandardNotedTableViewCell = NoteNormalUserTableViewCell
+    typealias AlternativeTableViewCell = InvertedUserTableViewCell
+    typealias AlternativeNotedTableViewCell = NoteInvertedUserTableViewCell
+    
+/*  Debug Variants
     typealias StandardTableViewCell = DebugUserTableViewCell
     typealias StandardNotedTableViewCell = DebugNotedUserTableViewCell
     typealias AlternativeTableViewCell = DebugUserTableViewCell
     typealias AlternativeNotedTableViewCell = DebugNotedUserTableViewCell
-
+*/
     // MARK: - Properties and attributes
     var viewModel: UsersViewModel!
     lazy var search: UISearchController = {
@@ -170,10 +171,6 @@ class UsersViewController: UITableViewController {
         
         /* Callback handler for when data is available in current datasource */
         let onDataAvailable = {
-//            guard self.viewModel.lastDataSource != .parkedFromSearch else {
-//                self.tableView.reloadData()
-//                return
-//            }
             guard !self.targetSource.isEmpty, !self.search.isActive else {
                 self.tableView.reloadData()
                 return
@@ -193,8 +190,6 @@ class UsersViewController: UITableViewController {
                                         self.tableView.alpha = 1
                                         self.tableView?.reloadSections(IndexSet(integer: 0), with: .none)
                     }, completion: { _ in
-                        /* Fix graphical glitch when pull-to-refresh is started when navbar is collapsed */
-//                        self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
                     })
                     self.refreshControl?.endRefreshing()
                     return
@@ -205,7 +200,6 @@ class UsersViewController: UITableViewController {
                 let newIndexPathsToInsert: [IndexPath] = (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
                 let indexPathsToReload = self.visibleIndexPathsToReload(intersecting: newIndexPathsToInsert)
 
-                /**/
                 if self.viewModel.lastDataSource != .parkedFromSearch {
                     /* Ensure slide animations are disabled on row insertion (slide animation used by default on insert) */
                     UIView.setAnimationsEnabled(false)
@@ -226,13 +220,7 @@ class UsersViewController: UITableViewController {
     let titleLabel = UILabel()
     private func setupNavbar() {
         let imgSize = CGFloat(24)
-//        let imgHeight = CGFloat(imgSize)
-//        let imgWidth = CGFloat(imgSize)
         let spacing = CGFloat(5.0)
-//        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: imgWidth, height: imgHeight))
-//        imageView.contentMode = .scaleAspectFit
-//        let img = UIImage(named: "github_splash_light")!
-//        imageView.image = img
         let container = UIView()
         let label = UILabel()
         label.text = "".localized()
@@ -241,13 +229,6 @@ class UsersViewController: UITableViewController {
         label.centerXAnchor.constraint(equalTo: container.centerXAnchor, constant: (imgSize + spacing) / 2).isActive = true
         label.centerYAnchor.constraint(equalTo: container.centerYAnchor).isActive = true
         
-//        UIHelper.initializeView(view: imageView, parent: container)
-//        imageView.rightAnchor.constraint(equalTo: label.leftAnchor, constant: spacing * -1).isActive = true
-//        imageView.centerYAnchor.constraint(equalTo: container.centerYAnchor).isActive = true
-//        imageView.widthAnchor.constraint(equalToConstant: imgSize).isActive = true
-//        imageView.heightAnchor.constraint(equalToConstant: imgSize).isActive = true
-        
-//        self.navigationItem.titleView = container
         titleLabel.font = UIFont.fontAwesome(ofSize: 20, style: .brands)
         titleLabel.text = String.fontAwesomeIcon(name: .github)
         
@@ -256,14 +237,11 @@ class UsersViewController: UITableViewController {
         self.navigationItem.titleView = titleLabel
         self.navigationItem.titleView?.isUserInteractionEnabled = true
         self.navigationItem.titleView?.addGestureRecognizer(tapNavIcon)
-        //        let bbi: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .bookmarks, target: self, action: #selector(tableViewScrollToTop))
-        //        let leftBarItem: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(tableViewScrollToTop))
-        //        let rightBarItem: UIBarButtonItem = UIBarButtonItem(image: img.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: nil)
-        //        navigationItem.leftBarButtonItem = leftBarItem
         self.navigationItem.searchController = search
         self.title = "Browse Users".localized()
-//        let leftBarItem = UIBarButtonItem(title: "Refresh Stale".localized(), style: .plain, target: self, action: #selector(self.refreshStaleOnDemand))
-//        self.navigationItem.leftBarButtonItem = leftBarItem
+        /* DEBUG: Refresh stale items easy-access
+        let leftBarItem = UIBarButtonItem(title: "Refresh Stale".localized(), style: .plain, target: self, action: #selector(self.refreshStaleOnDemand))
+        self.navigationItem.leftBarButtonItem = leftBarItem */
     }
     
     func refreshStaleOnScroll(imageFetchCompletion: (((UIImage, ImageSource))->Void)? = nil, completion: @escaping ()->Void) {
@@ -327,7 +305,7 @@ class UsersViewController: UITableViewController {
     private func clearData() {
         self.viewModel.clearData()
         self.viewModel.imageStore.removeAllImages()
-        self.tableView.reloadData() // TODO
+        self.tableView.reloadData()
     }
     
     // MARK: - Selector targets
@@ -395,14 +373,6 @@ class UsersViewController: UITableViewController {
         self.viewModel.updateUsers {
             ToastAlertMessageDisplay.main.hideToastActivity()
         }
-        //        self.viewModel.fetchUsers { result in
-        //            DispatchQueue.main.async {
-        //                self.refreshControl?.endRefreshing()
-        //                if case let .failure(error) = result {
-        //                    print(error) // TODO
-        //                }
-        //            }
-        //        }
     }
     var isRefreshing = false
 
@@ -468,11 +438,9 @@ class UsersViewController: UITableViewController {
 }
 
 // MARK: - Delegate Methods
-// MARK: • UITableViewDatasource methods
 extension UsersViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard !self.targetSource.isEmpty && self.targetSource.count - 1 >= indexPath.row else {
-//            self.tableView.reloadData()
             return UITableViewCell()
         }
         
@@ -518,8 +486,6 @@ extension UsersViewController: UserListTableViewCellDelegate {
 
 extension UsersViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-        // TODO
-//        self.viewModel.clearUsers()
         self.viewModel.lastDataSource = .parkedFromSearch
         guard let text = searchController.searchBar.text else {
             return
@@ -532,9 +498,10 @@ extension UsersViewController: UISearchResultsUpdating {
 
 extension UsersViewController: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-//        if confPrefetchingEnabled && indexPaths.contains(where: isLoadingCell) {
-//            fetchAdditionalTableData()
-//        }
+        /* TODO: Future enhancement for look-ahead prefetching
+        if confPrefetchingEnabled && indexPaths.contains(where: isLoadingCell) {
+            fetchAdditionalTableData()
+        } */
     }
 }
 
@@ -561,18 +528,15 @@ extension UsersViewController: ViewModelDelegate {
     
     func onDataAvailable() {
         DispatchQueue.main.async {
-//            let rightBarItem = UIBarButtonItem(title: "Scroll to Top".localized(), style: .plain, target: self, action: #selector(self.tableViewScrollToTop))
-//            self.navigationItem.rightBarButtonItem = rightBarItem
+            /* NOTE: Supplanted by navtitle click-to-scroll-up
+            let rightBarItem = UIBarButtonItem(title: "Scroll to Top".localized(), style: .plain, target: self, action: #selector(self.tableViewScrollToTop))
+            self.navigationItem.rightBarButtonItem = rightBarItem */
         }
     }
     
-    func onFetchInProgress() {
-        //
-    }
+    func onFetchInProgress() { }
     
-    func onFetchDone() {
-        //
-    }
+    func onFetchDone() { }
 }
 
 extension UsersViewController: ProfileViewDelegate {

@@ -1,8 +1,8 @@
 //
-//  UIHelper.swift
-//  RDLAmiiboApp
+//  ConnectionMonitor.swift
+//  RAF_GithubUsersApp
 //
-//  Created by Volare on 4/16/21.
+//
 //  Copyright © 2021 Raf. All rights reserved.
 //
 
@@ -85,3 +85,10 @@ class ConnectionMonitor {
         }
     }
 }
+enum LastDataSource {
+    case network
+    case offline
+    case parkedFromSearch
+    case unspecified
+}
+

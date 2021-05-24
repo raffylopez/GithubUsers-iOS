@@ -1,8 +1,7 @@
 //
 //  SkelHelper.swift
-//  RAFGithubUsersApp
+//  RAF_GithubUsersApp
 //
-//  Created by Volare on 5/24/21.
 //  Copyright © 2021 Raf. All rights reserved.
 //
 

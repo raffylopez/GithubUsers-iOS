@@ -1,8 +1,4 @@
 //
-//  ImageStore.swift
-//  LootLogger2
-//
-//  Created by Volare on 2/28/21.
 //  Copyright © 2021 Raf. All rights reserved.
 //
 
@@ -32,9 +28,7 @@ extension CoreDataService: UserInfoProvider {
         if let existingInfo = fetchedUserInfo?.first {
             return existingInfo
         }
-        
         return nil
-        
     }
 
     func getUserInfo(with id: Int) -> UserInfo? {
@@ -50,9 +44,7 @@ extension CoreDataService: UserInfoProvider {
         if let existingInfo = fetchedUserInfo?.first {
             return existingInfo
         }
-        
         return nil
-        
     }
     
     func translate(from apiUser: GithubUserInfo) -> UserInfo {

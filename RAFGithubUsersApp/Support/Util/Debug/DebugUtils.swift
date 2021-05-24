@@ -1,8 +1,7 @@
 //
 //  DebugUtils.swift
-//  RAFGithubUsersApp
+//  RAF_GithubUsersApp
 //
-//  Created by Volare on 5/19/21.
 //  Copyright © 2021 Raf. All rights reserved.
 //
 

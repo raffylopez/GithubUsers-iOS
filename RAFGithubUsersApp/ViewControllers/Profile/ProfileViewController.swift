@@ -1,8 +1,7 @@
 //
-//  ViewController.swift
-//  RAFGithubUsersApp
+//  ProfileViewController.swift
+//  RAF_GithubUsersApp
 //
-//  Created by Volare on 5/11/21.
 //  Copyright © 2021 Raf. All rights reserved.
 //
 
@@ -249,17 +248,11 @@ extension ProfileViewController: ViewModelDelegate {
         }
     }
     
-    func onRetryError(n: Int, nextAttemptInMilliseconds: Int, error: Error) {
-        print("\(#function)")
-    }
+    func onRetryError(n: Int, nextAttemptInMilliseconds: Int, error: Error) { }
     
-    func onFetchInProgress() {
-        print("\(#function)")
-    }
+    func onFetchInProgress() { }
     
-    func onFetchDone() {
-        print("\(#function)")
-    }
+    func onFetchDone() { }
     
 }
 

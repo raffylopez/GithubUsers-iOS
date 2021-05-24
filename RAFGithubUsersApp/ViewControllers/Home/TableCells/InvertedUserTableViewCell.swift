@@ -1,8 +1,7 @@
 //
-//  AmiiboCharacterListViewCell.swift
-//  RDLAmiiboApp
+//  InvertedUserTableViewCell.swift
+//  RAF_GithubUsersApp
 //
-//  Created by Volare on 4/16/21.
 //  Copyright © 2021 Raf. All rights reserved.
 //
 
@@ -21,7 +20,6 @@ class InvertedUserTableViewCell: UserTableViewCellBase {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
-    
 
     override func update(displaying image: (UIImage, ImageSource)?) {
         DispatchQueue.global().async {

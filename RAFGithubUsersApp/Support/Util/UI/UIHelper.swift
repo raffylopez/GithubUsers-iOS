@@ -1,8 +1,7 @@
 //
 //  UIHelper.swift
-//  RDLAmiiboApp
+//  RAF_GithubUsersApp
 //
-//  Created by Volare on 4/16/21.
 //  Copyright © 2021 Raf. All rights reserved.
 //
 
@@ -37,7 +36,6 @@ enum UIHelper {
         if prepend {
             let mutableAttributedText = NSMutableAttributedString(attributedString: labelText)
             iconTextAttributed.append(mutableAttributedText)
-            print(iconTextAttributed)
         }
         DispatchQueue.main.async {
             label.attributedText = iconTextAttributed

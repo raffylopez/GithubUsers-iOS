@@ -1,8 +1,7 @@
 //
 //  ImageStore.swift
-//  LootLogger2
+//  RAF_GithubUsersApp
 //
-//  Created by Volare on 2/28/21.
 //  Copyright © 2021 Raf. All rights reserved.
 //
 
