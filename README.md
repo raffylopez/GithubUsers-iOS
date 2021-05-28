@@ -31,35 +31,35 @@ image is downloading at the moment can be displayed by enabling verbose network 
 
 ## BONUS
 
-- __[ ✓ OK] Exponential backoff ​must be used ​​when trying to reload the data__
+- __[ ✓ OK ] Exponential backoff ​must be used ​​when trying to reload the data__
     
     Exponential backoff used for reloading stale data when HTTP server failure occurs to avoid pommeling the backend. Transport errors are handled by periodic async connectivity timer
 
-- __[ ✓ OK] Any data fetch should utilize ​Result types.​__
+- __[ ✓ OK ] Any data fetch should utilize ​Result types.​__
 
-- __[ ✓ OK] CoreData stack implementation must use ​two managed contexts​ - 1.​main context​ to be used for reading data and feeding into UI 2. write (​background) context​ - that is
+- __[ ✓ OK ] CoreData stack implementation must use ​two managed contexts​ - 1.​main context​ to be used for reading data and feeding into UI 2. write (​background) context​ - that is
 used for writing data.__
 
    Private background MOC for write queries, viewContext for read queries
 
-- __[ ✓ OK] All CoreData ​write​ queries must be ​queued​ while allowing one concurrent query at__
+- __[ ✓ OK ] All CoreData ​write​ queries must be ​queued​ while allowing one concurrent query at__
 any time.
 
    Uses `performAndWait` with private MOC to synchronize on writing
 
-- __[ ✓ OK] Coordinator and/or MVVM patterns are used.__
+- __[ ✓ OK ] Coordinator and/or MVVM patterns are used.__
 
    Utilizes MVVM
 
-- __[ ✓ OK] Users list UI must be done in code and Profile - with Interface Builder.__
+- __[ ✓ OK ] Users list UI must be done in code and Profile - with Interface Builder.__
  
     VFL and layout anchor constraints for home (code), storyboard for profile
 
-- __[ ✓ OK] Items in users list are greyed out a bit for seen profiles (seen status being saved to db).__
+- __[ ✓ OK ] Items in users list are greyed out a bit for seen profiles (seen status being saved to db).__
 
-- __[ ✓ OK] The app has to support ​dark mode​__
+- __[ ✓ OK ] The app has to support ​dark mode​__
 
-- __[ ✓ OK] Empty views such as list items (while data is still loading) should have Loading__ Shimmer aka ​Skeletons​ ~
+- __[ ✓ OK ] Empty views such as list items (while data is still loading) should have Loading__ Shimmer aka ​Skeletons​ ~
 [https://miro.medium.com/max/4000/0\*s7uxK77a0FY43NLe.png](https://miro.medium.com/max/4000/0*s7uxK77a0FY43NLe.png)​​resembling​ final
 views​.__
 
