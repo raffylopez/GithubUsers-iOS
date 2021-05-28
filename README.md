@@ -15,47 +15,55 @@ project is using any code dependency manager.
 
 5. Please indicate which bonus tasks (see next section) have you completed.
 
+## Raf's notes:
+
+- The project uses Carthage for dependency management. (UPDATED 2021-05-28: Carthage binaries now
+included with project for quick builds. Should prevent `No Such Module` errors when `carthage update` 
+is not executed prior)
+- Scroll to top implemented by tapping on navbar title icon
+- Image color inversion routine may slow down list rendering (may need a refresh due to image caching)
+- Debug flags can be activated in AppConfig.plist, including visual reloading of table cell data
+- In line with requirements, the app uses `DispatchSemaphore`s to ensure that only one network call 
+is performed at a time for each server source. This means that image loading happens sequentially and 
+synchronously, and is by nature slower than when performed asynchronously. Verbosity to indicate which
+image is downloading at the moment can be displayed by enabling verbose network calls in AppConfig.plist 
+(`DBG_VERBOSE_NETWORK_CALLS`).
+
 ## BONUS
 
-- __[OK] Exponential backoff ​must be used ​​when trying to reload the data__
+- __[ ✓ OK] Exponential backoff ​must be used ​​when trying to reload the data__
     
     Exponential backoff used for reloading stale data when HTTP server failure occurs to avoid pommeling the backend. Transport errors are handled by periodic async connectivity timer
 
-- __[OK] Any data fetch should utilize ​Result types.​__
+- __[ ✓ OK] Any data fetch should utilize ​Result types.​__
 
-- __[OK] CoreData stack implementation must use ​two managed contexts​ - 1.​main context​ to be used for reading data and feeding into UI 2. write (​background) context​ - that is
+- __[ ✓ OK] CoreData stack implementation must use ​two managed contexts​ - 1.​main context​ to be used for reading data and feeding into UI 2. write (​background) context​ - that is
 used for writing data.__
 
    Private background MOC for write queries, viewContext for read queries
 
-- __[OK] All CoreData ​write​ queries must be ​queued​ while allowing one concurrent query at__
+- __[ ✓ OK] All CoreData ​write​ queries must be ​queued​ while allowing one concurrent query at__
 any time.
 
    Uses `performAndWait` with private MOC to synchronize on writing
 
-- __[OK] Coordinator and/or MVVM patterns are used.__
+- __[ ✓ OK] Coordinator and/or MVVM patterns are used.__
 
    Utilizes MVVM
 
-- __[OK] Users list UI must be done in code and Profile - with Interface Builder.__
+- __[ ✓ OK] Users list UI must be done in code and Profile - with Interface Builder.__
  
     VFL and layout anchor constraints for home (code), storyboard for profile
 
-- __[OK] Items in users list are greyed out a bit for seen profiles (seen status being saved to db).__
+- __[ ✓ OK] Items in users list are greyed out a bit for seen profiles (seen status being saved to db).__
 
-- __[OK] The app has to support ​dark mode​__
+- __[ ✓ OK] The app has to support ​dark mode​__
 
-- __[OK] Empty views such as list items (while data is still loading) should have Loading__ Shimmer aka ​Skeletons​ ~
+- __[ ✓ OK] Empty views such as list items (while data is still loading) should have Loading__ Shimmer aka ​Skeletons​ ~
 [https://miro.medium.com/max/4000/0\*s7uxK77a0FY43NLe.png](https://miro.medium.com/max/4000/0*s7uxK77a0FY43NLe.png)​​resembling​ final
 views​.__
 
    Partially implemented. Profile view uses shimmer
-
-## Raf's notes:
-
-- Scroll to top implemented by tapping on navbar title icon
-- Image color inversion routine may slow down list rendering (may need a refresh due to image caching)
-- Debug flags can be activated in AppConfig.plist, including visual reloading of table cell data
 
 ## Reference Specs (All tasks complete)
 

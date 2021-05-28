@@ -1,0 +1,11 @@
+{
+  "commitish" : "1.15.0",
+  "iOS" : [
+    {
+      "hash" : "ff29ad4ae215a9d523c4cec467b387827b6469d011c8b0f4d2286ea57b3e9af2",
+      "name" : "SkeletonView",
+      "linking" : "dynamic",
+      "swiftToolchainVersion" : "5.2.4 (swiftlang-1103.0.32.9 clang-1103.0.32.53)"
+    }
+  ]
+}

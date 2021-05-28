@@ -37,7 +37,6 @@ class UsersViewModel {
     
     var isFetchInProgress: Bool = false {
         didSet {
-            print(isFetchInProgress)
             if (isFetchInProgress) {
                 onFetchInProgress()
                 delegate?.onFetchInProgress()

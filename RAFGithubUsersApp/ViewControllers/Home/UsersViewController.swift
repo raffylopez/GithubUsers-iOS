@@ -322,7 +322,6 @@ class UsersViewController: UITableViewController {
     // MARK: - Selector targets
     
     @objc func onNetworkReachable() {
-        print("Refreshing stale entries...")
         self.viewModel.refreshStale { result in
             DispatchQueue.main.async {
                 let contentOffset = self.tableView.contentOffset

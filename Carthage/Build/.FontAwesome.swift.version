@@ -1,0 +1,11 @@
+{
+  "commitish" : "1.9.1",
+  "iOS" : [
+    {
+      "hash" : "a2036464a7b52746b6f83e1a4f260a10ad213410f566c63586f8bbad180b76d9",
+      "name" : "FontAwesome",
+      "linking" : "dynamic",
+      "swiftToolchainVersion" : "5.2.4 (swiftlang-1103.0.32.9 clang-1103.0.32.53)"
+    }
+  ]
+}
