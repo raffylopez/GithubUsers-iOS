@@ -2,6 +2,25 @@
 
 # 🚀 tawk.to iOS Developer Test - Raf Lopez
 
+## Raf's notes:
+
+- The project uses Carthage for dependency management. 
+   - UPDATED 2021-05-28: Carthage binaries now included with project for quick builds. 
+   Should prevent `No Such Module` errors when `carthage update` 
+   is not executed prior)
+   - UPDATED 2021-06-09: For compatibility with Xcode 12.3+, .framework files have been
+   converted into platform-independent .xcframework files
+
+- Scroll to top implemented by tapping on navbar title icon
+- Debug flags can be activated in AppConfig.plist, including visual reloading of table cell data
+- Image color inversion routine may slow down list rendering but can be disabled
+through `DBG_DISABLE_IMAGE_INVERT` in AppConfig.plist (may need a refresh due to image caching)
+- In line with requirements, the app uses `DispatchSemaphore`s to ensure that only one network call 
+is performed at a time for each server source. This means that image loading happens sequentially and 
+synchronously, and is by nature slower than when performed asynchronously. Verbosity to indicate which
+image is downloading at the moment can be displayed by enabling verbose network calls in AppConfig.plist 
+(`DBG_VERBOSE_NETWORK_CALLS`).
+
 ## Submit your work
 
 1. Make sure code is running on both - simulator and real device.
@@ -14,20 +33,6 @@
 project is using any code dependency manager.
 
 5. Please indicate which bonus tasks (see next section) have you completed.
-
-## Raf's notes:
-
-- The project uses Carthage for dependency management. (UPDATED 2021-05-28: Carthage binaries now
-included with project for quick builds. Should prevent `No Such Module` errors when `carthage update` 
-is not executed prior)
-- Scroll to top implemented by tapping on navbar title icon
-- Image color inversion routine may slow down list rendering (may need a refresh due to image caching)
-- Debug flags can be activated in AppConfig.plist, including visual reloading of table cell data
-- In line with requirements, the app uses `DispatchSemaphore`s to ensure that only one network call 
-is performed at a time for each server source. This means that image loading happens sequentially and 
-synchronously, and is by nature slower than when performed asynchronously. Verbosity to indicate which
-image is downloading at the moment can be displayed by enabling verbose network calls in AppConfig.plist 
-(`DBG_VERBOSE_NETWORK_CALLS`).
 
 ## BONUS
 

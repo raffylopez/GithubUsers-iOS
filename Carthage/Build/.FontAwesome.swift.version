@@ -2,10 +2,18 @@
   "commitish" : "1.9.1",
   "iOS" : [
     {
-      "hash" : "a2036464a7b52746b6f83e1a4f260a10ad213410f566c63586f8bbad180b76d9",
+      "swiftToolchainVersion" : "5.3.2 (swiftlang-1200.0.45 clang-1200.0.32.28)",
+      "hash" : "3df6909cb2f754af1347b1c168e6e61bf053b6277e5133288988308a2b021f76",
       "name" : "FontAwesome",
-      "linking" : "dynamic",
-      "swiftToolchainVersion" : "5.2.4 (swiftlang-1103.0.32.9 clang-1103.0.32.53)"
+      "container" : "FontAwesome.xcframework",
+      "identifier" : "ios-arm64_i386_x86_64-simulator"
+    },
+    {
+      "swiftToolchainVersion" : "5.3.2 (swiftlang-1200.0.45 clang-1200.0.32.28)",
+      "hash" : "80b914a7df42d69a2547687abcfeacbd69ba2c8d5de4a74a6ceff420d9417e8f",
+      "name" : "FontAwesome",
+      "container" : "FontAwesome.xcframework",
+      "identifier" : "ios-arm64_armv7"
     }
   ]
 }
