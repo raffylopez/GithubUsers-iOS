@@ -1,4 +1,7 @@
-# 📱 Simple Github Users Client with Persistence (iOS)
+# Github Users Client with Persistence (iOS)
+Github Users Client with CoreData Persistence
+
+![Screen Shot 2021-06-17 at 2 09 32 PM](https://user-images.githubusercontent.com/9276000/122341404-03b1b300-cf76-11eb-9cbd-5c4a7a599e2f.png)
 
 ## Notes:
 
