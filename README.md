@@ -1,4 +1,4 @@
-# 🚀 Simple Github Users Client with Persistence (MVVM)
+# 🚀 Simple Github Users Client with Persistence (iOS)
 
 ## Notes:
 
