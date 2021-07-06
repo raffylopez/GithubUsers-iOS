@@ -1,0 +1,24 @@
+PODS:
+  - FontAwesome.swift (1.9.1)
+  - ReachabilitySwift (5.0.0)
+  - SkeletonView (1.15.0)
+
+DEPENDENCIES:
+  - FontAwesome.swift (= 1.9.1)
+  - ReachabilitySwift
+  - SkeletonView (= 1.15.0)
+
+SPEC REPOS:
+  trunk:
+    - FontAwesome.swift
+    - ReachabilitySwift
+    - SkeletonView
+
+SPEC CHECKSUMS:
+  FontAwesome.swift: 6b52cb7be66eacd28cbfaa0ca7ffd0de4a186a1d
+  ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
+  SkeletonView: cac18a3ac4f893b09d99e65072d806ef08377aae
+
+PODFILE CHECKSUM: c8e9344df63431441ceb3ab2ab2b846b46bbffb4
+
+COCOAPODS: 1.10.1
