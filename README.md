@@ -10,6 +10,7 @@ Github Users Client with CoreData Persistence
    Should prevent `No Such Module` errors when `carthage update` 
    is not executed prior)
    - UPDATED 2021-06-09: For compatibility with Xcode 12.3+, .framework files have been
+   - UPDATED 2021-07-06: Converted project to use Cocoapods
    converted into platform-independent .xcframework files
 - Scroll to top implemented by tapping on navbar title icon
 - Debug flags can be activated in AppConfig.plist, including visual reloading of table cell data
