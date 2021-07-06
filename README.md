@@ -3,10 +3,11 @@ Github Users Client with CoreData Persistence
 
 ![Screen Shot 2021-06-17 at 2 09 32 PM](https://user-images.githubusercontent.com/9276000/122341404-03b1b300-cf76-11eb-9cbd-5c4a7a599e2f.png)
 ## Installation:
-Change to project directory, then:
+1. Change to project directory, then:
 ```
 $ chmod +x ./build.sh && ./build.sh
 ```
+2. Build and run .xcworkspace
 
 ## Notes:
 

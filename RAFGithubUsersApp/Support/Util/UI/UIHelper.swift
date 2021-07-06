@@ -7,7 +7,7 @@
 
 import Foundation
 import UIKit
-import FontAwesome
+import FontAwesome_swift
 
 // MARK: - UIHelper
 enum UIHelper {
