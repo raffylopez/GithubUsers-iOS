@@ -1,6 +1,0 @@
-framework module Pods_RAFGithubUsersAppTests {
-  umbrella header "Pods-RAFGithubUsersAppTests-umbrella.h"
-
-  export *
-  module * { export * }
-}

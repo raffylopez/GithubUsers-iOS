@@ -7,7 +7,7 @@
 
 import UIKit
 import SkeletonView
-import FontAwesome_swift
+import FontAwesome
 
 /**
  User details view controller. Safe to augment with XIB.

@@ -2,22 +2,17 @@
 Github Users Client with CoreData Persistence
 
 ![Screen Shot 2021-06-17 at 2 09 32 PM](https://user-images.githubusercontent.com/9276000/122341404-03b1b300-cf76-11eb-9cbd-5c4a7a599e2f.png)
-## Installation:
-1. Change to project directory, then:
-```
-$ chmod +x ./build.sh && ./build.sh
-```
-2. Build and run .xcworkspace
 
 ## Notes:
 
-- The project uses Carthage for dependency management. 
-   - UPDATED 2021-05-28: Carthage binaries now included with project for quick builds. 
+- The project uses SPM (Swift Package Manager) for dependency management. 
+   - ~~UPDATED 2021-05-28: Carthage binaries now included with project for quick builds. 
    Should prevent `No Such Module` errors when `carthage update` 
-   is not executed prior)
-   - UPDATED 2021-06-09: For compatibility with Xcode 12.3+, .framework files have been
-   converted into platform-independent .xcframework files
-   - UPDATED 2021-07-06: Converted project to use Cocoapods
+   is not executed prior)~~
+   - ~~UPDATED 2021-06-09: For compatibility with Xcode 12.3+, .framework files have been
+   converted into platform-independent .xcframework files~~
+   - ~~UPDATED 2021-07-06: Converted project to use Cocoapods~~
+   - UPDATED 2021-07-06: Converted project to use SPM
 - Scroll to top implemented by tapping on navbar title icon
 - Debug flags can be activated in AppConfig.plist, including visual reloading of table cell data
 - Image color inversion routine may slow down list rendering but can be disabled

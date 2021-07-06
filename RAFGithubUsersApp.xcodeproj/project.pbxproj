@@ -3,12 +3,19 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5944B3201791FD7CCA6A2DAC /* Pods_RAFGithubUsersApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 680968E6A4643C56E22C319A /* Pods_RAFGithubUsersApp.framework */; };
-		67D4A552DF8A271B05B41BF8 /* Pods_RAFGithubUsersAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E741B26E9181653152031C4B /* Pods_RAFGithubUsersAppTests.framework */; };
+		E104CC2626940D9000958B68 /* SkeletonView in Frameworks */ = {isa = PBXBuildFile; productRef = E104CC2526940D9000958B68 /* SkeletonView */; };
+		E104CC2B26940E1300958B68 /* Reachability in Frameworks */ = {isa = PBXBuildFile; productRef = E104CC2A26940E1300958B68 /* Reachability */; };
+		E104CC3026940E7C00958B68 /* FontAwesome in Frameworks */ = {isa = PBXBuildFile; productRef = E104CC2F26940E7C00958B68 /* FontAwesome */; };
+		E104CC3E2694107800958B68 /* Font Awesome 5 Free-Regular-400.otf in Resources */ = {isa = PBXBuildFile; fileRef = E104CC3B2694107700958B68 /* Font Awesome 5 Free-Regular-400.otf */; };
+		E104CC3F2694107800958B68 /* Font Awesome 5 Free-Regular-400.otf in Resources */ = {isa = PBXBuildFile; fileRef = E104CC3B2694107700958B68 /* Font Awesome 5 Free-Regular-400.otf */; };
+		E104CC402694107800958B68 /* Font Awesome 5 Free-Solid-900.otf in Resources */ = {isa = PBXBuildFile; fileRef = E104CC3C2694107700958B68 /* Font Awesome 5 Free-Solid-900.otf */; };
+		E104CC412694107800958B68 /* Font Awesome 5 Free-Solid-900.otf in Resources */ = {isa = PBXBuildFile; fileRef = E104CC3C2694107700958B68 /* Font Awesome 5 Free-Solid-900.otf */; };
+		E104CC422694107800958B68 /* Font Awesome 5 Brands-Regular-400.otf in Resources */ = {isa = PBXBuildFile; fileRef = E104CC3D2694107800958B68 /* Font Awesome 5 Brands-Regular-400.otf */; };
+		E104CC432694107800958B68 /* Font Awesome 5 Brands-Regular-400.otf in Resources */ = {isa = PBXBuildFile; fileRef = E104CC3D2694107800958B68 /* Font Awesome 5 Brands-Regular-400.otf */; };
 		E1066EF1265B25790091691E /* SkelHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1066EF0265B25790091691E /* SkelHelper.swift */; };
 		E11B89B1265ABEBF009A38A1 /* GithubUsersAppNavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11B89B0265ABEBF009A38A1 /* GithubUsersAppNavController.swift */; };
 		E11B89B3265AE6D8009A38A1 /* AppConnectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11B89B2265AE6D7009A38A1 /* AppConnectionState.swift */; };
@@ -94,15 +101,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		680968E6A4643C56E22C319A /* Pods_RAFGithubUsersApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RAFGithubUsersApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		932A86274D289BC51686BC60 /* Pods-RAFGithubUsersAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RAFGithubUsersAppTests.release.xcconfig"; path = "Target Support Files/Pods-RAFGithubUsersAppTests/Pods-RAFGithubUsersAppTests.release.xcconfig"; sourceTree = "<group>"; };
-		95E6191A841F72EF08F12F22 /* Pods-RAFGithubUsersApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RAFGithubUsersApp.release.xcconfig"; path = "Target Support Files/Pods-RAFGithubUsersApp/Pods-RAFGithubUsersApp.release.xcconfig"; sourceTree = "<group>"; };
-		A5F6EB81C5C783424F7BD0E9 /* Pods-RAFGithubUsersAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RAFGithubUsersAppTests.debug.xcconfig"; path = "Target Support Files/Pods-RAFGithubUsersAppTests/Pods-RAFGithubUsersAppTests.debug.xcconfig"; sourceTree = "<group>"; };
-		DE18A3578E427672790D65EF /* Pods-RAFGithubUsersApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RAFGithubUsersApp.debug.xcconfig"; path = "Target Support Files/Pods-RAFGithubUsersApp/Pods-RAFGithubUsersApp.debug.xcconfig"; sourceTree = "<group>"; };
+		E104CC3B2694107700958B68 /* Font Awesome 5 Free-Regular-400.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Font Awesome 5 Free-Regular-400.otf"; sourceTree = "<group>"; };
+		E104CC3C2694107700958B68 /* Font Awesome 5 Free-Solid-900.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Font Awesome 5 Free-Solid-900.otf"; sourceTree = "<group>"; };
+		E104CC3D2694107800958B68 /* Font Awesome 5 Brands-Regular-400.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Font Awesome 5 Brands-Regular-400.otf"; sourceTree = "<group>"; };
 		E1066EF0265B25790091691E /* SkelHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkelHelper.swift; sourceTree = "<group>"; };
-		E10EACF626703BDC00E4881A /* FontAwesome.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = FontAwesome.xcframework; path = Carthage/Build/FontAwesome.xcframework; sourceTree = "<group>"; };
-		E10EACF726703BDD00E4881A /* Reachability.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Reachability.xcframework; path = Carthage/Build/Reachability.xcframework; sourceTree = "<group>"; };
-		E10EACF826703BDD00E4881A /* SkeletonView.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SkeletonView.xcframework; path = Carthage/Build/SkeletonView.xcframework; sourceTree = "<group>"; };
 		E11B89B0265ABEBF009A38A1 /* GithubUsersAppNavController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GithubUsersAppNavController.swift; sourceTree = "<group>"; };
 		E11B89B2265AE6D7009A38A1 /* AppConnectionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConnectionState.swift; sourceTree = "<group>"; };
 		E12437772656A94A004C4DCA /* NoteInvertedUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteInvertedUserTableViewCell.swift; sourceTree = "<group>"; };
@@ -182,7 +184,6 @@
 		E1FA38FC264B1BB7001EFA5C /* JSONSchemaSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONSchemaSupport.swift; sourceTree = "<group>"; };
 		E1FA3909264BA390001EFA5C /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E1FA390A264BA390001EFA5C /* UserInfo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserInfo+CoreDataClass.swift"; sourceTree = "<group>"; };
-		E741B26E9181653152031C4B /* Pods_RAFGithubUsersAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RAFGithubUsersAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -190,7 +191,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5944B3201791FD7CCA6A2DAC /* Pods_RAFGithubUsersApp.framework in Frameworks */,
+				E104CC2626940D9000958B68 /* SkeletonView in Frameworks */,
+				E104CC2B26940E1300958B68 /* Reachability in Frameworks */,
+				E104CC3026940E7C00958B68 /* FontAwesome in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -198,23 +201,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				67D4A552DF8A271B05B41BF8 /* Pods_RAFGithubUsersAppTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		B2EA0620A284AB33A69144B3 /* Pods */ = {
+		E104CC392694105800958B68 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
-				DE18A3578E427672790D65EF /* Pods-RAFGithubUsersApp.debug.xcconfig */,
-				95E6191A841F72EF08F12F22 /* Pods-RAFGithubUsersApp.release.xcconfig */,
-				A5F6EB81C5C783424F7BD0E9 /* Pods-RAFGithubUsersAppTests.debug.xcconfig */,
-				932A86274D289BC51686BC60 /* Pods-RAFGithubUsersAppTests.release.xcconfig */,
+				E104CC3A2694106900958B68 /* FontAwesome */,
 			);
-			name = Pods;
-			path = Pods;
+			path = Assets;
+			sourceTree = "<group>";
+		};
+		E104CC3A2694106900958B68 /* FontAwesome */ = {
+			isa = PBXGroup;
+			children = (
+				E104CC3D2694107800958B68 /* Font Awesome 5 Brands-Regular-400.otf */,
+				E104CC3B2694107700958B68 /* Font Awesome 5 Free-Regular-400.otf */,
+				E104CC3C2694107700958B68 /* Font Awesome 5 Free-Solid-900.otf */,
+			);
+			path = FontAwesome;
 			sourceTree = "<group>";
 		};
 		E146CC26264D877600C3FA51 /* FFBadgedBarButtonItem */ = {
@@ -272,18 +280,6 @@
 			path = TableCells;
 			sourceTree = "<group>";
 		};
-		E1510C82264CF45000E59C35 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				E10EACF626703BDC00E4881A /* FontAwesome.xcframework */,
-				E10EACF726703BDD00E4881A /* Reachability.xcframework */,
-				E10EACF826703BDD00E4881A /* SkeletonView.xcframework */,
-				680968E6A4643C56E22C319A /* Pods_RAFGithubUsersApp.framework */,
-				E741B26E9181653152031C4B /* Pods_RAFGithubUsersAppTests.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		E1510C85264CF75800E59C35 /* InferfaceBuilder */ = {
 			isa = PBXGroup;
 			children = (
@@ -299,8 +295,6 @@
 				E160EBBB264A6D44002820EC /* RAFGithubUsersApp */,
 				E160EBD5264A6D47002820EC /* RAFGithubUsersAppTests */,
 				E160EBBA264A6D44002820EC /* Products */,
-				E1510C82264CF45000E59C35 /* Frameworks */,
-				B2EA0620A284AB33A69144B3 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -316,6 +310,7 @@
 		E160EBBB264A6D44002820EC /* RAFGithubUsersApp */ = {
 			isa = PBXGroup;
 			children = (
+				E104CC392694105800958B68 /* Assets */,
 				E146CC34264D937600C3FA51 /* GithubApp.entitlements */,
 				E1510C85264CF75800E59C35 /* InferfaceBuilder */,
 				E1FA38FE264B1F19001EFA5C /* Persistence */,
@@ -596,18 +591,21 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E160EBDB264A6D47002820EC /* Build configuration list for PBXNativeTarget "RAFGithubUsersApp" */;
 			buildPhases = (
-				3B33D6D1979B5DF16C70932A /* [CP] Check Pods Manifest.lock */,
 				E160EBB5264A6D44002820EC /* Sources */,
 				E160EBB6264A6D44002820EC /* Frameworks */,
 				E160EBB7264A6D44002820EC /* Resources */,
 				E1510C81264CF36700E59C35 /* ShellScript */,
-				70E0CFB4A680435EA56829C0 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = RAFGithubUsersApp;
+			packageProductDependencies = (
+				E104CC2526940D9000958B68 /* SkeletonView */,
+				E104CC2A26940E1300958B68 /* Reachability */,
+				E104CC2F26940E7C00958B68 /* FontAwesome */,
+			);
 			productName = RAFGithubUsersApp;
 			productReference = E160EBB9264A6D44002820EC /* GithubApp.app */;
 			productType = "com.apple.product-type.application";
@@ -616,7 +614,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E160EBDE264A6D47002820EC /* Build configuration list for PBXNativeTarget "RAFGithubUsersAppTests" */;
 			buildPhases = (
-				26C184D339F324092323257F /* [CP] Check Pods Manifest.lock */,
 				E160EBCE264A6D47002820EC /* Sources */,
 				E160EBCF264A6D47002820EC /* Frameworks */,
 				E160EBD0264A6D47002820EC /* Resources */,
@@ -660,6 +657,11 @@
 				Base,
 			);
 			mainGroup = E160EBB0264A6D44002820EC;
+			packageReferences = (
+				E104CC2426940D9000958B68 /* XCRemoteSwiftPackageReference "SkeletonView" */,
+				E104CC2926940E1300958B68 /* XCRemoteSwiftPackageReference "Reachability" */,
+				E104CC2E26940E7C00958B68 /* XCRemoteSwiftPackageReference "FontAwesome" */,
+			);
 			productRefGroup = E160EBBA264A6D44002820EC /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -677,10 +679,13 @@
 			files = (
 				E189A165264AD86600CBD45A /* AppConfig.plist in Resources */,
 				E160EBCC264A6D46002820EC /* LaunchScreen.storyboard in Resources */,
+				E104CC3E2694107800958B68 /* Font Awesome 5 Free-Regular-400.otf in Resources */,
 				E160EBC9264A6D46002820EC /* Assets.xcassets in Resources */,
 				E18EC672265BCD17003D0668 /* fakeuserinfo.json in Resources */,
 				E160EBC4264A6D44002820EC /* Main.storyboard in Resources */,
 				E1F6E027264D648700A023A8 /* fakeuserslist.json in Resources */,
+				E104CC422694107800958B68 /* Font Awesome 5 Brands-Regular-400.otf in Resources */,
+				E104CC402694107800958B68 /* Font Awesome 5 Free-Solid-900.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -688,75 +693,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E104CC432694107800958B68 /* Font Awesome 5 Brands-Regular-400.otf in Resources */,
 				E1510C61264BFAD700E59C35 /* fakeuserslist.json in Resources */,
+				E104CC3F2694107800958B68 /* Font Awesome 5 Free-Regular-400.otf in Resources */,
 				E18EC673265BCD18003D0668 /* fakeuserinfo.json in Resources */,
+				E104CC412694107800958B68 /* Font Awesome 5 Free-Solid-900.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		26C184D339F324092323257F /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-RAFGithubUsersAppTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		3B33D6D1979B5DF16C70932A /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-RAFGithubUsersApp-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		70E0CFB4A680435EA56829C0 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-RAFGithubUsersApp/Pods-RAFGithubUsersApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-RAFGithubUsersApp/Pods-RAFGithubUsersApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RAFGithubUsersApp/Pods-RAFGithubUsersApp-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		E1510C81264CF36700E59C35 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1002,7 +949,6 @@
 		};
 		E160EBDC264A6D47002820EC /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DE18A3578E427672790D65EF /* Pods-RAFGithubUsersApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1028,7 +974,6 @@
 		};
 		E160EBDD264A6D47002820EC /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 95E6191A841F72EF08F12F22 /* Pods-RAFGithubUsersApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1053,7 +998,6 @@
 		};
 		E160EBDF264A6D47002820EC /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A5F6EB81C5C783424F7BD0E9 /* Pods-RAFGithubUsersAppTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1076,7 +1020,6 @@
 		};
 		E160EBE0264A6D47002820EC /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 932A86274D289BC51686BC60 /* Pods-RAFGithubUsersAppTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1128,6 +1071,51 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E104CC2426940D9000958B68 /* XCRemoteSwiftPackageReference "SkeletonView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Juanpe/SkeletonView";
+			requirement = {
+				kind = exactVersion;
+				version = 1.15.0;
+			};
+		};
+		E104CC2926940E1300958B68 /* XCRemoteSwiftPackageReference "Reachability" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ashleymills/Reachability.swift";
+			requirement = {
+				kind = exactVersion;
+				version = 5.1.0;
+			};
+		};
+		E104CC2E26940E7C00958B68 /* XCRemoteSwiftPackageReference "FontAwesome" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/thii/FontAwesome.swift";
+			requirement = {
+				kind = exactVersion;
+				version = 1.9.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E104CC2526940D9000958B68 /* SkeletonView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E104CC2426940D9000958B68 /* XCRemoteSwiftPackageReference "SkeletonView" */;
+			productName = SkeletonView;
+		};
+		E104CC2A26940E1300958B68 /* Reachability */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E104CC2926940E1300958B68 /* XCRemoteSwiftPackageReference "Reachability" */;
+			productName = Reachability;
+		};
+		E104CC2F26940E7C00958B68 /* FontAwesome */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E104CC2E26940E7C00958B68 /* XCRemoteSwiftPackageReference "FontAwesome" */;
+			productName = FontAwesome;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		E160EBC5264A6D44002820EC /* RAFGithubUsersApp.xcdatamodeld */ = {
